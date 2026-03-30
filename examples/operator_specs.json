@@ -1,0 +1,5 @@
+[
+  { "name": "reduction_sum" },
+  { "name": "softmax" },
+  { "name": "layernorm" }
+]
