@@ -1,36 +1,35 @@
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
 import sys
 from pathlib import Path
 from typing import Any, Dict, List
 
 
-def load_registry_module(repo_root: Path):
+def ensure_repo_root_on_sys_path() -> Path:
     """
-    Load computation-structure/registry.py directly by path.
-
-    This avoids the normal Python import issue caused by the hyphen in
-    'computation-structure'.
+    Ensure the repository root is on sys.path so that package imports work
+    when this script is executed directly.
     """
-    registry_path = repo_root / "computation-structure" / "registry.py"
-    if not registry_path.exists():
-        raise FileNotFoundError(f"Registry file not found: {registry_path}")
+    script_path = Path(__file__).resolve()
+    repo_root = script_path.parent.parent
 
-    spec = importlib.util.spec_from_file_location("esl_registry", registry_path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Could not create import spec for: {registry_path}")
+    repo_root_str = str(repo_root)
+    if repo_root_str not in sys.path:
+        sys.path.insert(0, repo_root_str)
 
-    module = importlib.util.module_from_spec(spec)
+    return repo_root
 
-    # 중요: dataclass 등은 __module__ 기반으로 sys.modules를 참조할 수 있다.
-    # exec_module 전에 등록해 둬야 한다.
-    sys.modules[spec.name] = module
 
-    spec.loader.exec_module(module)
-    return module
+ensure_repo_root_on_sys_path()
+
+from computation_structure.registry import (  # noqa: E402
+    get_operator_profile_dict,
+    has_operator,
+    list_supported_operators,
+)
+
 
 def load_input_specs(input_path: Path) -> List[Dict[str, Any]]:
     """Load operator specs from a JSON file."""
@@ -56,7 +55,6 @@ def load_input_specs(input_path: Path) -> List[Dict[str, Any]]:
 
 def analyze_operators(
     specs: List[Dict[str, Any]],
-    registry_module,
     include_unknown: bool = False,
 ) -> List[Dict[str, Any]]:
     """Analyze each operator spec using the registry."""
@@ -65,8 +63,8 @@ def analyze_operators(
     for item in specs:
         name = item["name"]
 
-        if registry_module.has_operator(name):
-            results.append(registry_module.get_operator_profile_dict(name))
+        if has_operator(name):
+            results.append(get_operator_profile_dict(name))
             continue
 
         unknown_result = {
@@ -74,7 +72,7 @@ def analyze_operators(
             "status": "unknown_operator",
             "message": (
                 f"Operator '{name}' is not registered. "
-                f"Supported operators: {registry_module.list_supported_operators()}"
+                f"Supported operators: {list_supported_operators()}"
             ),
         }
 
@@ -90,7 +88,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Analyze operator specs and attach computation structures, "
-            "preservation classes, and possible primitives."
+            "preservation classes, possible primitives, and pipeline."
         )
     )
     parser.add_argument(
@@ -121,17 +119,12 @@ def main() -> int:
     parser = build_arg_parser()
     args = parser.parse_args()
 
-    script_path = Path(__file__).resolve()
-    repo_root = script_path.parent.parent
-
     try:
-        registry_module = load_registry_module(repo_root)
         input_path = Path(args.input_json).resolve()
         specs = load_input_specs(input_path)
 
         results = analyze_operators(
             specs=specs,
-            registry_module=registry_module,
             include_unknown=args.include_unknown,
         )
 
