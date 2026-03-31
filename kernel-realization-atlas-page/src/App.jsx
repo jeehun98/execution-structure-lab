@@ -3,12 +3,12 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import PageShell from "./components/layout/PageShell";
 import AnalysisNewPage from "./pages/AnalysisNewPage";
 import AtlasHomePage from "./pages/AtlasHomePage";
-import AtlasOverviewNewPage from "./pages/AtlasOverviewNewPage";
 import HardwareEvidencePage from "./pages/HardwareEvidencePage";
 import InvariantsPage from "./pages/InvariantsPage";
 import MemoryNewPage from "./pages/MemoryNewPage";
 import OperatorsNewPage from "./pages/OperatorsNewPage";
 import PropertiesNewPage from "./pages/PropertiesNewPage";
+import ComputationStructuresPage from "./pages/ComputationStructuresPage";
 
 export default function App() {
   return (
@@ -21,15 +21,6 @@ export default function App() {
           element={
             <PageShell>
               <AtlasHomePage />
-            </PageShell>
-          }
-        />
-
-        <Route
-          path="/atlas-overview-new"
-          element={
-            <PageShell>
-              <AtlasOverviewNewPage />
             </PageShell>
           }
         />
@@ -84,6 +75,15 @@ export default function App() {
           element={
             <PageShell>
               <MemoryNewPage />
+            </PageShell>
+          }
+        />
+
+        <Route
+          path="/computation-structures"
+          element={
+            <PageShell>
+              <ComputationStructuresPage />
             </PageShell>
           }
         />

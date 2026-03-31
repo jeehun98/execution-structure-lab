@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { MENU_PANELS } from "./nav/navConfig";
+import AtlasMenuPanel from "./nav/AtlasMenuPanel";
 
 export default function MegaMenu({ activeMenuKey, isOpen }) {
   if (!isOpen || !activeMenuKey) return null;
@@ -7,12 +8,22 @@ export default function MegaMenu({ activeMenuKey, isOpen }) {
   const panel = MENU_PANELS[activeMenuKey];
   if (!panel) return null;
 
+  if (activeMenuKey === "atlas") {
+    return (
+      <div className="border-t border-white/10 bg-neutral-950">
+        <div className="mx-auto max-w-7xl px-6 py-8">
+          <AtlasMenuPanel panel={panel} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="border-t border-white/10 bg-neutral-950">
       <div className="mx-auto grid max-w-7xl grid-cols-12 gap-8 px-6 py-8">
         <div className="col-span-3">
           <p className="text-xs uppercase tracking-[0.2em] text-neutral-500">
-            Explore
+            탐색
           </p>
           <h2 className="mt-3 text-2xl font-semibold text-white">
             {panel.title}
@@ -36,7 +47,7 @@ export default function MegaMenu({ activeMenuKey, isOpen }) {
                     <div className="text-sm font-medium text-white">
                       {link.label}
                     </div>
-                    <div className="mt-1 text-sm text-neutral-400">
+                    <div className="mt-1 text-sm leading-6 text-neutral-400">
                       {link.desc}
                     </div>
                   </Link>
@@ -52,7 +63,7 @@ export default function MegaMenu({ activeMenuKey, isOpen }) {
             className="block rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:bg-white/10"
           >
             <div className="text-xs uppercase tracking-[0.2em] text-lime-400">
-              Featured
+              주요 보기
             </div>
             <div className="mt-3 text-lg font-semibold text-white">
               {panel.featured.title}
