@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 const evidenceSections = [
   {
-    title: "Hardware Characterization",
-    desc: "GPU의 실제 하드웨어 거동을 측정하고, 메모리 계층·접근 패턴·스케줄링 특성을 관찰합니다.",
+    title: "Hardware Response Patterns",
+    desc: "GPU의 반응을 스펙이 아니라 측정된 거동으로 읽습니다. memory hierarchy, access pattern, scheduling 특성이 실제 실행에서 어떤 비용과 제약으로 나타나는지 추적합니다.",
     items: [
       "Stride sweep / coalescing",
       "Cache line / locality",
@@ -13,8 +13,8 @@ const evidenceSections = [
     ],
   },
   {
-    title: "Execution Primitive Lab",
-    desc: "연산 primitive 단위에서 realization 가능성과 비용 구조를 관찰합니다.",
+    title: "Execution Primitive Evidence",
+    desc: "primitive 단위에서 realization 가능성과 비용 구조를 봅니다. 목표는 요소를 나열하는 것이 아니라, 어떤 구현 조합이 실제 GPU에서 더 나은지 판단할 단서를 모으는 것입니다.",
     items: [
       "Reduction topology",
       "Streaming update",
@@ -25,35 +25,35 @@ const evidenceSections = [
   },
 ];
 
+const chips = [
+  "Hardware Probing",
+  "Measured Response",
+  "Memory Behavior",
+  "Scheduling Clues",
+  "Realization Evidence",
+];
+
 const experimentCards = [
   {
     title: "Global Stride Sweep",
-    desc: "stride 변화에 따라 메모리 접근 비용과 coalescing 양상을 측정합니다.",
+    desc: "stride 변화에 따라 memory access cost와 coalescing 양상이 어떻게 바뀌는지 측정합니다.",
     href: "/analysis-new",
   },
   {
     title: "Fixed-Work Stride Sweep",
-    desc: "총 작업량을 고정한 상태에서 stride 변화만 분리해 hardware response를 확인합니다.",
+    desc: "총 작업량을 고정한 채 stride만 바꿔 hardware response를 더 분리해 관찰합니다.",
     href: "/analysis-new",
   },
   {
     title: "Shared Memory Bank Conflict",
-    desc: "shared memory 인덱싱 패턴에 따른 bank conflict와 성능 저하를 비교합니다.",
+    desc: "indexing pattern에 따라 bank conflict가 어떻게 생기고 성능에 어떻게 반영되는지 비교합니다.",
     href: "/analysis-new",
   },
   {
     title: "Execution Primitive Profiles",
-    desc: "reduction, streaming, tile staging 등의 primitive별 realization 특성을 정리합니다.",
+    desc: "reduction, streaming, tile staging 등의 primitive가 어떤 realization 특성과 비용 구조를 갖는지 정리합니다.",
     href: "/operators-new",
   },
-];
-
-const chips = [
-  "Measured Behavior",
-  "GPU Probing",
-  "Memory Access",
-  "Scheduling",
-  "Execution Primitives",
 ];
 
 export default function HardwareEvidencePage() {
@@ -65,13 +65,17 @@ export default function HardwareEvidencePage() {
         </p>
 
         <h1 className="mt-4 max-w-5xl text-4xl font-semibold leading-tight text-white lg:text-6xl">
-          측정된 하드웨어 거동과 실행 primitive의 증거 층
+          불투명한 GPU 거동을 역추적해
+          <br className="hidden lg:block" />
+          realization 선택 근거를 만드는 층
         </h1>
 
         <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-400">
-          이 페이지는 GPU가 실제로 어떻게 반응하는지를 측정 기반으로 정리합니다.
-          단순한 이론 설명이 아니라, probing kernel과 실험 결과를 통해 memory,
-          scheduling, execution primitive의 실재를 관찰하는 층입니다.
+          이 페이지는 GPU가 실제로 어떻게 반응하는지를 측정 기반으로 다룹니다.
+          단순한 성능 수치 정리가 아니라, probing kernel과 실험 결과를 통해
+          memory, scheduling, execution primitive의 작동 단서를 역으로 읽어냅니다.
+          여기서 얻은 관찰은 특정 연산과 구현 상황에서 어떤 realization이 더
+          적절한지 판단하는 근거로 이어집니다.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3 text-sm text-neutral-300">
@@ -113,11 +117,13 @@ export default function HardwareEvidencePage() {
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-xl font-semibold text-white">Representative Experiments</h2>
+          <h2 className="text-xl font-semibold text-white">
+            왜 이 층이 필요한가
+          </h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-400">
-            대표 probing 실험을 통해 hardware response와 execution pattern을
-            읽어낼 수 있습니다. 이후 analysis와 operator realization 페이지로
-            이어지도록 연결합니다.
+            대표 probing 실험을 통해 hardware response와 execution pattern을 읽습니다.
+            이 결과는 analysis와 operator realization 페이지로 이어지며,
+            realization 비교와 선택의 근거가 됩니다.
           </p>
         </div>
 
@@ -139,12 +145,17 @@ export default function HardwareEvidencePage() {
 
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 lg:col-span-2">
-          <h2 className="text-xl font-semibold text-white">Why this layer matters</h2>
+          <h2 className="text-xl font-semibold text-white">
+            Why this layer matters
+          </h2>
           <p className="mt-3 text-sm leading-7 text-neutral-400">
-            의미적으로 허용되는 변환이 언제나 좋은 실행으로 이어지지는 않습니다.
+            의미적으로 허용되는 변환이 항상 좋은 실행으로 이어지지는 않습니다.
             실제 GPU의 memory hierarchy, bank mapping, transaction behavior,
             issue pattern은 realization quality를 크게 바꿉니다. 그래서 Atlas는
-            의미 계층 위에 hardware evidence를 별도 층으로 둡니다.
+            의미 계층과 별도로 hardware evidence를 두고, 불투명한 실행 메커니즘을
+            probing과 측정으로 역추적합니다. 이 층의 목적은 하드웨어를 설명하는
+            데서 끝나지 않고, 어떤 구현 방식이 더 적절한지 판단할 근거를 만드는
+            데 있습니다.
           </p>
         </div>
 
@@ -155,7 +166,7 @@ export default function HardwareEvidencePage() {
               to="/properties-new"
               className="block rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-neutral-300 transition hover:border-lime-400/40 hover:text-white"
             >
-              최적화 의미 체계 보기
+              변환 성질 보기
             </Link>
             <Link
               to="/operators-new"
@@ -167,7 +178,7 @@ export default function HardwareEvidencePage() {
               to="/analysis-new"
               className="block rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-neutral-300 transition hover:border-lime-400/40 hover:text-white"
             >
-              실현 실험실 보기
+              실현 비교 실험 보기
             </Link>
           </div>
         </div>

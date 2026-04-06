@@ -143,6 +143,62 @@ export const MENU_PANELS = {
     },
   },
 
+  structures: {
+    title: "공통 계산 구조",
+    sections: [
+      {
+        title: "구조로 분류하기",
+        links: [
+          {
+            label: "공통 계산 구조",
+            href: "/computation-structures",
+            desc: "개별 연산자보다 먼저, 반복적으로 나타나는 상위 계산 구조로 operator를 분류합니다.",
+          },
+          {
+            label: "Reduction",
+            href: "/computation-structures#reduction",
+            desc: "여러 값을 하나의 결과나 요약으로 축약하는 계산 구조",
+          },
+          {
+            label: "Streaming Accumulation",
+            href: "/computation-structures#streaming-accumulation",
+            desc: "부분 상태를 순차적으로 갱신하며 결과를 형성하는 계산 구조",
+          },
+          {
+            label: "Mergeable Summary",
+            href: "/computation-structures#mergeable-summary",
+            desc: "부분 요약들을 결합해 전체 결과를 구성할 수 있는 구조",
+          },
+          {
+            label: "Weighted Aggregation",
+            href: "/computation-structures#weighted-aggregation",
+            desc: "값들의 가중된 기여를 반영해 결과를 형성하는 계산 구조",
+          },
+        ],
+      },
+      {
+        title: "다음 계층으로 연결",
+        links: [
+          {
+            label: "연산자 구현",
+            href: "/operators-new",
+            desc: "공통 계산 구조가 각 operator에서 어떤 조합으로 나타나는지 봅니다.",
+          },
+          {
+            label: "메모리 관점",
+            href: "/memory-new",
+            desc: "계산 구조를 저장, 재사용, intermediate 관점에서 다시 읽습니다.",
+          },
+        ],
+      },
+    ],
+    featured: {
+      title: "공통 계산 구조",
+      desc: "주어진 operator들을 더 상위의 계산 구조로 분류하고 해석합니다.",
+      href: "/computation-structures",
+    },
+  },
+
   semantics: {
     title: "의미와 규칙",
     sections: [
@@ -196,62 +252,6 @@ export const MENU_PANELS = {
       title: "의미와 규칙",
       desc: "무엇이 가능해지는지와 어디까지 허용되는지를 함께 봅니다.",
       href: "/properties-new",
-    },
-  },
-
-  structures: {
-    title: "공통 계산 구조",
-    sections: [
-      {
-        title: "구조 읽기",
-        links: [
-          {
-            label: "공통 계산 구조",
-            href: "/computation-structures",
-            desc: "연산자 이름보다 먼저 반복적으로 등장하는 계산 패턴을 읽습니다.",
-          },
-          {
-            label: "Reduction",
-            href: "/computation-structures#reduction",
-            desc: "누적, 축약, 결합 구조를 중심으로 읽기",
-          },
-          {
-            label: "Streaming Accumulation",
-            href: "/computation-structures#streaming-accumulation",
-            desc: "전체 결과를 만들지 않고 진행 상태를 누적하는 구조",
-          },
-          {
-            label: "Mergeable Summary",
-            href: "/computation-structures#mergeable-summary",
-            desc: "부분 결과를 합쳐 전체 의미를 유지하는 요약 구조",
-          },
-          {
-            label: "Weighted Aggregation",
-            href: "/computation-structures#weighted-aggregation",
-            desc: "가중 결합과 정규화가 함께 들어가는 구조",
-          },
-        ],
-      },
-      {
-        title: "다음으로 연결",
-        links: [
-          {
-            label: "연산자 구현",
-            href: "/operators-new",
-            desc: "공통 구조가 개별 operator에서 어떻게 나타나는지 보기",
-          },
-          {
-            label: "메모리 관점",
-            href: "/memory-new",
-            desc: "계산 구조를 traffic, reuse, residency로 다시 읽기",
-          },
-        ],
-      },
-    ],
-    featured: {
-      title: "공통 계산 구조",
-      desc: "개별 연산자보다 먼저, 반복적으로 나타나는 계산의 형태를 읽습니다.",
-      href: "/computation-structures",
     },
   },
 
