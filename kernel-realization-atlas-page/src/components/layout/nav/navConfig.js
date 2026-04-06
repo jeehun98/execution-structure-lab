@@ -14,13 +14,6 @@ export const NAV_ITEMS = [
     shortDesc: "측정된 GPU 거동",
   },
   {
-    key: "semantics",
-    label: "의미와 규칙",
-    href: "/properties-new",
-    panel: "semantics",
-    shortDesc: "변환 가능성과 보존 조건",
-  },
-  {
     key: "structures",
     label: "계산 구조",
     href: "/computation-structures",
@@ -28,11 +21,25 @@ export const NAV_ITEMS = [
     shortDesc: "공통 계산 패턴",
   },
   {
+    key: "properties",
+    label: "변환 규칙",
+    href: "/properties-new",
+    panel: "properties",
+    shortDesc: "허용되는 재배열과 분해",
+  },
+  {
+    key: "invariants",
+    label: "보존 조건",
+    href: "/invariants",
+    panel: "invariants",
+    shortDesc: "구조가 유지해야 하는 경계",
+  },
+  {
     key: "operators",
     label: "연산자",
     href: "/operators-new",
     panel: "operators",
-    shortDesc: "구현 방식과 실행 경로",
+    shortDesc: "구조 조합과 실현 경로",
   },
   {
     key: "analysis",
@@ -73,26 +80,26 @@ export const MENU_PANELS = {
             desc: "측정된 GPU 거동과 실행 근거",
           },
           {
-            label: "최적화 규칙",
+            label: "공통 계산 구조",
+            href: "/computation-structures",
+            desc: "여러 연산자에 반복적으로 나타나는 계산 패턴",
+          },
+          {
+            label: "변환 규칙",
             href: "/properties-new",
-            desc: "변환을 가능하게 하는 연산의 성질",
+            desc: "구조 위에서 허용되는 재배열, 분해, 결합 방식",
           },
           {
             label: "보존 조건",
             href: "/invariants",
-            desc: "변환 과정에서 반드시 유지되어야 하는 조건",
-          },
-          {
-            label: "공통 계산 구조",
-            href: "/computation-structures",
-            desc: "여러 연산자에 반복적으로 나타나는 계산 패턴",
+            desc: "구조가 변환 속에서도 유지해야 하는 경계",
           },
         ],
       },
     ],
     featured: {
       title: "아틀라스 홈",
-      desc: "실행에서 최적화, 보존, 하드웨어 관찰, 계산 구조, 구현, 생성까지 전체 흐름으로 읽습니다.",
+      desc: "실행에서 구조, 변환, 보존, 연산자, 실현 비교까지 전체 흐름으로 읽습니다.",
       href: "/atlas-new",
     },
   },
@@ -124,9 +131,9 @@ export const MENU_PANELS = {
         title: "다음으로 연결",
         links: [
           {
-            label: "최적화 규칙",
-            href: "/properties-new",
-            desc: "하드웨어 근거에서 변환 가능성으로 이동",
+            label: "공통 계산 구조",
+            href: "/computation-structures",
+            desc: "하드웨어 근거 위에서 반복 계산 패턴으로 이동",
           },
           {
             label: "실험 분석",
@@ -180,14 +187,14 @@ export const MENU_PANELS = {
         title: "다음 계층으로 연결",
         links: [
           {
-            label: "연산자 구현",
-            href: "/operators-new",
-            desc: "공통 계산 구조가 각 operator에서 어떤 조합으로 나타나는지 봅니다.",
+            label: "변환 규칙",
+            href: "/properties-new",
+            desc: "공통 계산 구조 위에서 어떤 재배열과 분해가 가능한지 봅니다.",
           },
           {
-            label: "메모리 관점",
-            href: "/memory-new",
-            desc: "계산 구조를 저장, 재사용, intermediate 관점에서 다시 읽습니다.",
+            label: "보존 조건",
+            href: "/invariants",
+            desc: "구조가 변환 속에서도 유지되어야 하는 경계를 봅니다.",
           },
         ],
       },
@@ -199,109 +206,175 @@ export const MENU_PANELS = {
     },
   },
 
-  semantics: {
-    title: "의미와 규칙",
+  properties: {
+    title: "변환 규칙",
     sections: [
       {
-        title: "최적화 규칙",
+        title: "변환 가능성",
         links: [
           {
-            label: "최적화 규칙",
+            label: "변환 규칙",
             href: "/properties-new",
-            desc: "연산이 어떤 변환 가능성을 가지는지 정리",
+            desc: "구조 위에서 어떤 재배열, 분해, 결합이 가능한지 정리",
           },
           {
             label: "재배열 가능성",
             href: "/properties-new#reordering-properties",
-            desc: "연산 순서가 바뀔 수 있는 경우",
+            desc: "구조가 내부 계산 순서나 결합 방식을 다시 배치할 수 있는 경우",
           },
           {
             label: "스트리밍 가능성",
             href: "/properties-new#streaming-properties",
-            desc: "전체 materialization 없이 처리할 수 있는 경우",
+            desc: "전체 materialization 없이 진행할 수 있는 구조적 조건",
           },
           {
             label: "융합과 on-chip 유지",
             href: "/properties-new#fusion-properties",
-            desc: "중간 메모리 이동을 줄일 수 있는 경우",
+            desc: "중간 이동을 줄이며 더 긴 realization path를 구성할 수 있는 경우",
           },
         ],
       },
       {
-        title: "보존 조건",
+        title: "다음 계층으로 연결",
         links: [
           {
             label: "보존 조건",
             href: "/invariants",
-            desc: "의미적, 구조적, 수치적 경계를 정리",
+            desc: "가능한 변환이 어디까지 허용되는지 확인",
           },
           {
-            label: "의미 보존",
-            href: "/invariants#semantic-invariants",
-            desc: "변환 이후에도 바뀌면 안 되는 의미",
-          },
-          {
-            label: "수치 안정 경계",
-            href: "/invariants#numerical-invariants",
-            desc: "numeric drift와 안정성의 허용 범위",
+            label: "연산자 해석",
+            href: "/operators-new",
+            desc: "변환 가능성이 실제 operator와 realization branch에서 어떻게 묶이는지 보기",
           },
         ],
       },
     ],
     featured: {
-      title: "의미와 규칙",
-      desc: "무엇이 가능해지는지와 어디까지 허용되는지를 함께 봅니다.",
+      title: "변환 규칙",
+      desc: "계산 구조 위에서 무엇이 가능해질 수 있는지를 정리합니다.",
       href: "/properties-new",
     },
   },
 
-  operators: {
-    title: "연산자 구현",
+  invariants: {
+    title: "보존 조건",
     sections: [
       {
-        title: "연산자 계열",
+        title: "구조의 경계",
         links: [
           {
-            label: "연산자 구현",
-            href: "/operators-new",
-            desc: "고정된 커널이 아니라 여러 구현 경로를 가진 대상으로 탐색",
+            label: "보존 조건",
+            href: "/invariants",
+            desc: "계산 구조가 변환 속에서도 유지해야 하는 경계를 정리",
           },
           {
-            label: "Dense Compute",
-            href: "/operators-new#dense-compute-operators",
-            desc: "tiling과 residency 구조가 강한 GEMM 계열",
+            label: "의미 경계",
+            href: "/invariants#meaning-boundaries",
+            desc: "summary의 의미, 축, 범위, aggregation 대상이 유지되어야 하는 조건",
           },
           {
-            label: "Reduction 중심 연산자",
-            href: "/operators-new#reduction-centric-operators",
-            desc: "reduction topology와 accumulation 거동이 중요한 연산자",
+            label: "의존성 경계",
+            href: "/invariants#dependency-boundaries",
+            desc: "fusion, tiling, streaming 이후에도 깨지면 안 되는 구조적 관계",
           },
           {
-            label: "Attention 계열",
-            href: "/operators-new#attention-like-operators",
-            desc: "streaming과 weighted reduction 중심의 구현 구조",
+            label: "수치 경계",
+            href: "/invariants#numerical-boundaries",
+            desc: "accumulation, rescaling, normalization의 허용 범위와 안정성",
           },
         ],
       },
       {
-        title: "다음으로 연결",
+        title: "구조별 보기",
         links: [
           {
-            label: "실험 분석",
-            href: "/analysis-new",
-            desc: "구현 variant가 실제로 어떻게 달라지는지 비교",
+            label: "Reduction Invariants",
+            href: "/invariants#reduction-invariants",
+            desc: "축약 구조가 유지해야 하는 결합 규칙과 summary consistency",
           },
           {
-            label: "메모리 관점",
-            href: "/memory-new",
-            desc: "연산자를 memory movement와 reuse 관점에서 다시 읽기",
+            label: "Streaming Invariants",
+            href: "/invariants#streaming-invariants",
+            desc: "partial state와 global merge가 같은 규칙을 따르는지 확인",
+          },
+          {
+            label: "Mergeable Summary Invariants",
+            href: "/invariants#mergeable-summary-invariants",
+            desc: "부분 요약과 전체 요약이 같은 해석 안에서 결합 가능한지 확인",
           },
         ],
       },
     ],
     featured: {
-      title: "연산자 구현",
-      desc: "각 연산자를 성질, 보존 조건, 실행 경로를 가진 구조로 해석합니다.",
+      title: "보존 조건",
+      desc: "가능한 변환이 실제로 어디까지 허용되는지를 구조 기준으로 정리합니다.",
+      href: "/invariants",
+    },
+  },
+
+  operators: {
+    title: "연산자 해석",
+    sections: [
+      {
+        title: "해석의 축",
+        links: [
+          {
+            label: "연산자 해석",
+            href: "/operators-new",
+            desc: "operator를 고정된 API 이름이 아니라 구조 조합과 realization path의 결절점으로 읽는 페이지",
+          },
+          {
+            label: "Structure Composition",
+            href: "/operators-new#structure-composition",
+            desc: "하나의 operator 안에 어떤 computation structure들이 함께 결합되어 있는지 읽기",
+          },
+          {
+            label: "Property Profile",
+            href: "/operators-new#property-profile",
+            desc: "구조 조합 위에서 어떤 변환 가능성이 강하게 나타나는지 읽기",
+          },
+          {
+            label: "Invariant Boundaries",
+            href: "/operators-new#invariant-boundaries",
+            desc: "가능한 변환이 실제로 어디까지 허용되는지를 가르는 의미·구조·수치 경계",
+          },
+          {
+            label: "Realization Branches",
+            href: "/operators-new#realization-branches",
+            desc: "같은 operator가 어떤 구현 분기와 실행 경로로 갈라지는지 읽기",
+          },
+        ],
+      },
+      {
+        title: "사례로 보는 매핑",
+        links: [
+          {
+            label: "Dense Compute Chains",
+            href: "/operators-new#dense-compute-chains",
+            desc: "dense local accumulation, tiling, residency, epilogue fusion이 결합된 사례",
+          },
+          {
+            label: "Reduction / Statistics Families",
+            href: "/operators-new#reduction-statistics-families",
+            desc: "summary formation과 accumulation order가 realization을 크게 바꾸는 사례",
+          },
+          {
+            label: "Normalization Families",
+            href: "/operators-new#normalization-families",
+            desc: "reduction, rescaling, elementwise transform이 함께 작동하는 사례",
+          },
+          {
+            label: "Attention / Weighted Aggregation Families",
+            href: "/operators-new#attention-weighted-aggregation-families",
+            desc: "streaming accumulation과 weighted aggregation이 realization 분기를 만드는 사례",
+          },
+        ],
+      },
+    ],
+    featured: {
+      title: "연산자 해석",
+      desc: "앞선 structure, property, invariant 층이 실제 operator와 realization branch 안에서 어떻게 묶이는지 보여 줍니다.",
       href: "/operators-new",
     },
   },
@@ -320,12 +393,12 @@ export const MENU_PANELS = {
           {
             label: "Variant 비교",
             href: "/analysis-new#variant-comparison",
-            desc: "서로 다른 구현 경로의 차이를 읽기",
+            desc: "서로 다른 realization branch가 실제 구현에서 어떻게 갈라지는지 읽기",
           },
           {
             label: "Metric 해석",
             href: "/analysis-new#metric-interpretation",
-            desc: "측정된 숫자가 실제로 무엇을 의미하는지 이해",
+            desc: "측정된 숫자가 실제 realization 차이와 무엇을 의미하는지 이해",
           },
         ],
       },
@@ -352,7 +425,7 @@ export const MENU_PANELS = {
     ],
     featured: {
       title: "실험 분석",
-      desc: "성질과 연산자 해석을 실제 구현 비교와 측정 결과로 연결합니다.",
+      desc: "구조 해석과 연산자 매핑이 실제 구현 비교와 측정 결과에서 어떻게 드러나는지 연결합니다.",
       href: "/analysis-new",
     },
   },
@@ -403,9 +476,8 @@ export const MENU_PANELS = {
     ],
     featured: {
       title: "메모리 관점",
-      desc: "하드웨어, 의미, 연산자, 실험을 memory movement와 reuse 기준으로 다시 읽습니다.",
+      desc: "하드웨어, 구조, 연산자, 실험을 memory movement와 reuse 기준으로 다시 읽습니다.",
       href: "/memory-new",
     },
   },
 };
-

@@ -6,7 +6,7 @@ const chips = [
   "Properties",
   "Invariants",
   "Operators",
-  "Realization",
+  "Analysis",
   "Generation",
 ];
 
@@ -20,24 +20,24 @@ const flowSteps = [
     desc: "개별 operator보다 먼저, 여러 연산에 반복적으로 나타나는 계산 골격을 식별합니다. reduction, streaming accumulation, mergeable summary 같은 구조는 연산을 다시 분류하는 상위 기준이 됩니다.",
   },
   {
-    title: "구조적 성질",
-    desc: "계산 구조 위에서 어떤 재배열, 분해, 결합, 타일링이 허용될 수 있는지를 정리합니다. 이 층은 무엇이 가능해질 수 있는지를 설명합니다.",
+    title: "변환 규칙",
+    desc: "계산 구조 위에서 어떤 재배열, 분해, 결합, streaming, fusion이 허용될 수 있는지를 정리합니다. 이 층은 무엇이 가능해질 수 있는지를 설명합니다.",
   },
   {
     title: "보존 조건",
-    desc: "구현이 달라져도 유지되어야 하는 의미와 수치적 일관성을 정리합니다. 이 층은 무엇을 바꿀 수 있는지가 아니라, 무엇을 끝까지 지켜야 하는지를 설명합니다.",
+    desc: "구현이 달라져도 유지되어야 하는 의미, dependency, 수치적 일관성을 정리합니다. 이 층은 무엇을 바꿀 수 있는지가 아니라, 무엇을 끝까지 지켜야 하는지를 설명합니다.",
   },
   {
     title: "연산자 해석",
-    desc: "각 operator를 독립된 이름으로 보지 않고, 어떤 computation structure와 property, invariant의 조합으로 이루어지는지 다시 해석합니다. 연산자는 여기서 구조적 조합의 결과로 읽힙니다.",
+    desc: "각 operator를 독립된 이름으로 보지 않고, 어떤 computation structure, property, invariant의 조합으로 이루어지는지 다시 읽습니다. 연산자는 여기서 구조적 조합과 realization branch의 결절점으로 해석됩니다.",
   },
   {
     title: "실현과 비교",
-    desc: "같은 구조적 해석이 실제 구현에서는 어떤 realization들로 나타날 수 있는지 비교합니다. variant와 metric은 단순한 성능 수치가 아니라, 실현 선택의 차이를 드러내는 근거가 됩니다.",
+    desc: "같은 구조적 해석이 실제 구현에서는 어떤 realization들로 나타나는지 비교합니다. variant와 metric은 단순한 성능 수치가 아니라, 실현 선택의 차이를 드러내는 근거가 됩니다.",
   },
   {
     title: "생성",
-    desc: "계산 구조, 성질, 보존 조건, 실현 경로를 조합해 특정 상황에 맞는 realization 선택과 generation 규칙을 구성합니다. 이 단계에서 Atlas는 설명 체계를 넘어 compiler 혹은 kernel generator의 기준으로 확장됩니다.",
+    desc: "계산 구조, 변환 규칙, 보존 조건, 실현 경로를 조합해 특정 상황에 맞는 realization 선택과 generation 규칙을 구성합니다. 이 단계에서 Atlas는 설명 체계를 넘어 compiler 혹은 kernel generator의 기준으로 확장됩니다.",
   },
 ];
 
@@ -47,8 +47,8 @@ const principles = [
     desc: "개별 operator 이름보다, 그 아래에서 반복적으로 나타나는 계산 구조를 먼저 파악합니다.",
   },
   {
-    title: "구조, 성질, 보존, 실현을 분리해 다룬다",
-    desc: "계산 구조 자체와, 그 위에서 허용되는 성질, 반드시 유지되어야 하는 조건, 실제 realization 형태를 서로 다른 층으로 구분해 읽습니다.",
+    title: "구조, 변환, 보존, 실현을 분리해 다룬다",
+    desc: "계산 구조 자체와, 그 위에서 허용되는 변환, 반드시 유지되어야 하는 조건, 실제 realization 형태를 서로 다른 층으로 구분해 읽습니다.",
   },
   {
     title: "측정은 실현 이해의 일부다",
@@ -62,29 +62,29 @@ const principles = [
 
 const primaryCards = [
   {
+    title: "하드웨어 관찰",
+    desc: "측정과 probing을 통해 realization 선택에 필요한 실행 단서를 추적합니다.",
+    href: "/hardware-evidence",
+  },
+  {
     title: "공통 계산 구조",
     desc: "operator 아래에서 반복되는 계산 골격을 먼저 식별합니다.",
     href: "/computation-structures",
   },
   {
     title: "변환 규칙",
-    desc: "구조 위에서 허용되는 재배열, 분해, 결합 방식을 정리합니다.",
+    desc: "구조 위에서 허용되는 재배열, 분해, 결합, streaming 방식을 정리합니다.",
     href: "/properties-new",
   },
   {
     title: "보존 조건",
-    desc: "구현이 달라져도 유지되어야 하는 의미와 수치 조건을 다룹니다.",
+    desc: "구현이 달라져도 유지되어야 하는 의미, dependency, 수치 경계를 다룹니다.",
     href: "/invariants",
   },
   {
-    title: "연산자 실현 경로",
-    desc: "각 operator를 구조와 realization 후보의 조합으로 다시 해석합니다.",
+    title: "연산자 해석",
+    desc: "각 operator를 structure, property, invariant, realization branch의 결절점으로 다시 읽습니다.",
     href: "/operators-new",
-  },
-  {
-    title: "하드웨어 관찰",
-    desc: "측정과 probing을 통해 realization 선택에 필요한 실행 단서를 추적합니다.",
-    href: "/hardware-evidence",
   },
   {
     title: "구현 비교 실험",
@@ -93,7 +93,7 @@ const primaryCards = [
   },
   {
     title: "메모리 관점",
-    desc: "intermediate, 재사용, 재구성을 중심으로 전체 구조를 다시 읽습니다.",
+    desc: "앞선 층들을 intermediate, reuse, traffic 관점에서 다시 읽습니다.",
     href: "/memory-new",
   },
 ];
@@ -115,7 +115,7 @@ export default function AtlasHomePage() {
         <p className="mt-6 max-w-4xl text-lg leading-8 text-neutral-400">
           이 Atlas는 AI 연산을 개별 operator의 목록으로 보지 않습니다.
           대신 여러 연산에 반복적으로 나타나는 공통 계산 구조를 먼저 읽고,
-          그 위에서 허용되는 변환 성질과 반드시 유지되어야 하는 보존 조건을
+          그 위에서 허용되는 변환 규칙과 반드시 유지되어야 하는 보존 조건을
           분리해 정리합니다. 이렇게 얻은 구조적 해석은 각 operator를 다시
           분류하는 데서 멈추지 않고, 가능한 realization과 구현 변형을 구성하며,
           나아가 compiler 혹은 kernel generation 방향까지 연결됩니다.
@@ -140,9 +140,9 @@ export default function AtlasHomePage() {
             같은 수학적 연산이라도, 어떤 계산 구조로 읽느냐에 따라 허용되는
             변환, 유지해야 하는 조건, 선택 가능한 realization은 달라집니다.
             이 Atlas는 연산을 하나의 이름으로 고정해 설명하지 않고, 구조,
-            성질, 보존, 실현의 층으로 다시 나누어 해석합니다. 이 계층적 해석은
-            단순한 분류를 위한 것이 아니라, 새로운 구현 방식을 조직하고 generation
-            규칙까지 구성하기 위한 기반입니다.
+            변환, 보존, 실현의 층으로 다시 나누어 해석합니다. 이 계층적 해석은
+            단순한 분류를 위한 것이 아니라, 새로운 구현 방식을 조직하고
+            generation 규칙까지 구성하기 위한 기반입니다.
           </p>
         </div>
       </section>
@@ -228,12 +228,12 @@ export default function AtlasHomePage() {
         <div>
           <h2 className="text-xl font-semibold text-white">추천 탐색 순서</h2>
           <p className="max-w-4xl text-sm leading-7 text-neutral-400">
-            처음에는 공통 계산 구조에서 출발해, 그 위에서 어떤 변환이 허용되는지와
-            무엇을 보존해야 하는지를 먼저 보는 흐름이 가장 자연스럽습니다.
-            이후 연산자 실현 경로, 하드웨어 관찰, 구현 비교를 통해 realization 계층을
-            다시 읽고, 마지막에 메모리 관점과 generation 관점으로 전체를 재구성하면
-            이 Atlas가 단순한 분류 체계가 아니라 구현 방식을 조직하는 프레임이라는 점이
-            더 분명해집니다.
+            공통 계산 구조에서 출발해 변환 규칙과 보존 조건을 먼저 읽고, 이후
+            연산자 해석과 구현 비교를 통해 realization 계층을 확인하는 흐름이
+            가장 자연스럽습니다. 하드웨어 관찰은 이 흐름 전체에 실제 실행
+            근거를 제공하고, 마지막에 메모리 관점과 generation 관점으로 다시
+            보면 Atlas가 단순한 분류 체계가 아니라 구현 방식을 조직하는
+            프레임이라는 점이 더 분명해집니다.
           </p>
         </div>
       </section>
