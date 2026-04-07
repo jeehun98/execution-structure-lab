@@ -18,14 +18,14 @@ export const NAV_ITEMS = [
     label: "계산 구조",
     href: "/computation-structures",
     panel: "structures",
-    shortDesc: "공통 계산 패턴",
+    shortDesc: "공통 계산 형식",
   },
   {
     key: "properties",
-    label: "변환 규칙",
+    label: "변환 가능성",
     href: "/properties-new",
     panel: "properties",
-    shortDesc: "허용되는 재배열과 분해",
+    shortDesc: "구조 위에서 가능한 재구성",
   },
   {
     key: "invariants",
@@ -36,21 +36,21 @@ export const NAV_ITEMS = [
   },
   {
     key: "operators",
-    label: "연산자",
+    label: "연산자 해석",
     href: "/operators-new",
     panel: "operators",
-    shortDesc: "구조 조합과 실현 경로",
+    shortDesc: "구조 조합과 실현 분기",
   },
   {
     key: "analysis",
-    label: "실험 분석",
+    label: "실현 비교",
     href: "/analysis-new",
     panel: "analysis",
     shortDesc: "variant 비교와 metric 해석",
   },
   {
     key: "memory",
-    label: "메모리",
+    label: "메모리 관점",
     href: "/memory-new",
     panel: "memory",
     shortDesc: "traffic, reuse, residency 관점",
@@ -82,24 +82,24 @@ export const MENU_PANELS = {
           {
             label: "공통 계산 구조",
             href: "/computation-structures",
-            desc: "여러 연산자에 반복적으로 나타나는 계산 패턴",
+            desc: "여러 연산자에 반복적으로 나타나는 계산 형식",
           },
           {
-            label: "변환 규칙",
+            label: "변환 가능성",
             href: "/properties-new",
-            desc: "구조 위에서 허용되는 재배열, 분해, 결합 방식",
+            desc: "구조 위에서 어떤 재배열, 분해, 결합, streaming이 가능해지는지 정리",
           },
           {
             label: "보존 조건",
             href: "/invariants",
-            desc: "구조가 변환 속에서도 유지해야 하는 경계",
+            desc: "구조가 변환 속에서도 유지해야 하는 의미·구조·수치 경계",
           },
         ],
       },
     ],
     featured: {
       title: "아틀라스 홈",
-      desc: "실행에서 구조, 변환, 보존, 연산자, 실현 비교까지 전체 흐름으로 읽습니다.",
+      desc: "실행 기반에서 구조, 변환 가능성, 보존 조건, 연산자 해석, 실현 비교까지 전체 흐름으로 읽습니다.",
       href: "/atlas-new",
     },
   },
@@ -133,12 +133,12 @@ export const MENU_PANELS = {
           {
             label: "공통 계산 구조",
             href: "/computation-structures",
-            desc: "하드웨어 근거 위에서 반복 계산 패턴으로 이동",
+            desc: "하드웨어 근거 위에서 반복 계산 형식으로 이동",
           },
           {
-            label: "실험 분석",
+            label: "실현 비교",
             href: "/analysis-new",
-            desc: "측정된 근거가 실제 구현 선택에 어떻게 이어지는지 확인",
+            desc: "측정된 근거가 실제 구현 선택과 variant 차이로 어떻게 이어지는지 확인",
           },
         ],
       },
@@ -187,9 +187,9 @@ export const MENU_PANELS = {
         title: "다음 계층으로 연결",
         links: [
           {
-            label: "변환 규칙",
+            label: "변환 가능성",
             href: "/properties-new",
-            desc: "공통 계산 구조 위에서 어떤 재배열과 분해가 가능한지 봅니다.",
+            desc: "공통 계산 구조 위에서 어떤 재구성이 가능한지 봅니다.",
           },
           {
             label: "보존 조건",
@@ -201,21 +201,21 @@ export const MENU_PANELS = {
     ],
     featured: {
       title: "공통 계산 구조",
-      desc: "주어진 operator들을 더 상위의 계산 구조로 분류하고 해석합니다.",
+      desc: "주어진 operator들을 더 상위의 계산 형식으로 분류하고 해석합니다.",
       href: "/computation-structures",
     },
   },
 
   properties: {
-    title: "변환 규칙",
+    title: "변환 가능성",
     sections: [
       {
-        title: "변환 가능성",
+        title: "가능한 재구성",
         links: [
           {
-            label: "변환 규칙",
+            label: "변환 가능성",
             href: "/properties-new",
-            desc: "구조 위에서 어떤 재배열, 분해, 결합이 가능한지 정리",
+            desc: "구조 위에서 어떤 재배열, 분해, 결합, streaming, fusion이 가능해지는지 정리",
           },
           {
             label: "재배열 가능성",
@@ -251,8 +251,8 @@ export const MENU_PANELS = {
       },
     ],
     featured: {
-      title: "변환 규칙",
-      desc: "계산 구조 위에서 무엇이 가능해질 수 있는지를 정리합니다.",
+      title: "변환 가능성",
+      desc: "계산 구조 위에서 무엇을 바꿀 수 있는지를 정리합니다.",
       href: "/properties-new",
     },
   },
@@ -380,13 +380,13 @@ export const MENU_PANELS = {
   },
 
   analysis: {
-    title: "실험 분석",
+    title: "실현 비교",
     sections: [
       {
-        title: "탐색",
+        title: "비교 탐색",
         links: [
           {
-            label: "실험 분석",
+            label: "실현 비교",
             href: "/analysis-new",
             desc: "구현 variant와 측정 결과를 비교하는 페이지",
           },
@@ -424,7 +424,7 @@ export const MENU_PANELS = {
       },
     ],
     featured: {
-      title: "실험 분석",
+      title: "실현 비교",
       desc: "구조 해석과 연산자 매핑이 실제 구현 비교와 측정 결과에서 어떻게 드러나는지 연결합니다.",
       href: "/analysis-new",
     },
@@ -434,7 +434,7 @@ export const MENU_PANELS = {
     title: "메모리 관점",
     sections: [
       {
-        title: "메모리로 읽기",
+        title: "메모리로 다시 읽기",
         links: [
           {
             label: "메모리 관점",
@@ -476,7 +476,7 @@ export const MENU_PANELS = {
     ],
     featured: {
       title: "메모리 관점",
-      desc: "하드웨어, 구조, 연산자, 실험을 memory movement와 reuse 기준으로 다시 읽습니다.",
+      desc: "하드웨어, 구조, 연산자, 실현 비교를 memory movement와 reuse 기준으로 다시 읽습니다.",
       href: "/memory-new",
     },
   },
