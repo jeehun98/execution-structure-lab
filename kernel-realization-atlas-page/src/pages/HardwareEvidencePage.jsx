@@ -1,38 +1,151 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { hardwareChips } from "../data/hardware/chips";
+import { hardwareOverview } from "../data/hardware/overview";
 import { hardwareEvidenceSections } from "../data/hardware/sections";
 import { hardwareExperiments } from "../data/hardware/experiments";
 
-export default function HardwareEvidencePage() {
-  const [selectedId, setSelectedId] = useState(hardwareExperiments[0].id);
+function formatKeyLabel(key) {
+  return key
+    .replace(/([A-Z])/g, " $1")
+    .replace(/_/g, " ")
+    .trim();
+}
 
-  const selectedExperiment = useMemo(
-    () =>
-      hardwareExperiments.find((experiment) => experiment.id === selectedId) ??
-      hardwareExperiments[0],
-    [selectedId]
+function DetailList({ title, items = [] }) {
+  if (!items?.length) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+      <h4 className="text-lg font-semibold text-white">{title}</h4>
+      <ul className="mt-4 space-y-3 text-sm text-neutral-300">
+        {items.map((item, index) => (
+          <li
+            key={`${title}-${index}`}
+            className="rounded-xl border border-white/10 bg-black/20 px-4 py-3 leading-6"
+          >
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
+}
+
+function KernelShapeTable({ kernelShape }) {
+  if (!kernelShape) return null;
+
+  const entries = Object.entries(kernelShape).filter(
+    ([, value]) =>
+      value !== undefined &&
+      value !== null &&
+      value !== "" &&
+      !(Array.isArray(value) && value.length === 0)
+  );
+
+  if (!entries.length) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+      <h4 className="text-lg font-semibold text-white">Kernel structure</h4>
+      <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
+        <div className="divide-y divide-white/10">
+          {entries.map(([key, value]) => (
+            <div
+              key={key}
+              className="grid gap-2 px-4 py-4 md:grid-cols-[180px_minmax(0,1fr)]"
+            >
+              <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+                {formatKeyLabel(key)}
+              </div>
+              <div className="text-sm leading-6 text-neutral-300">
+                {Array.isArray(value) ? value.join(", ") : String(value)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ExperimentNavCard({ experiment, active, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full rounded-xl border px-4 py-4 text-left transition ${
+        active
+          ? "border-lime-400/50 bg-lime-400/10"
+          : "border-white/10 bg-black/20 hover:border-lime-400/30 hover:bg-white/[0.06]"
+      }`}
+    >
+      <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+        {experiment.category}
+      </div>
+      <div className="mt-2 text-base font-semibold text-white">
+        {experiment.label}
+      </div>
+      <div className="mt-2 text-sm leading-6 text-neutral-400">
+        {experiment.summary}
+      </div>
+    </button>
+  );
+}
+
+function NextLinks({ links = [] }) {
+  if (!links?.length) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+      <h4 className="text-lg font-semibold text-white">다음 연결 경로</h4>
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            to={link.href}
+            className="rounded-xl border border-white/10 bg-black/20 px-4 py-4 text-sm text-neutral-300 transition hover:border-lime-400/40 hover:text-white"
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function HardwareEvidencePage() {
+  const [selectedId, setSelectedId] = useState(hardwareExperiments[0]?.id ?? null);
+
+  const selectedExperiment = useMemo(() => {
+    return (
+      hardwareExperiments.find((experiment) => experiment.id === selectedId) ??
+      hardwareExperiments[0] ??
+      null
+    );
+  }, [selectedId]);
+
+  if (!selectedExperiment) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-neutral-300">
+        No hardware experiments found.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-14">
       <section className="py-8">
         <p className="text-sm uppercase tracking-[0.2em] text-lime-400">
-          Hardware Evidence
+          {hardwareOverview.eyebrow}
         </p>
 
         <h1 className="mt-4 max-w-5xl text-4xl font-semibold leading-tight text-white lg:text-6xl">
-          불투명한 GPU 거동을 역추적해
-          <br className="hidden lg:block" />
-          realization 선택 근거를 확보하는 층
+          {hardwareOverview.title}
         </h1>
 
         <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-400">
-          이 페이지는 GPU가 실제로 어떻게 반응하는지를 측정 기반으로 다룹니다.
-          단순한 성능 수치 정리가 아니라, probing kernel과 실험 결과를 통해
-          memory, scheduling, execution primitive의 작동 단서를 역으로 읽어냅니다.
-          여기서 얻은 관찰은 어떤 구현 방식이 실제로 성립하고, 어떤 realization이
-          더 적절한지 판단하는 근거로 이어집니다.
+          {hardwareOverview.description}
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3 text-sm text-neutral-300">
@@ -76,11 +189,7 @@ export default function HardwareEvidencePage() {
         <div>
           <h2 className="text-xl font-semibold text-white">왜 이 층이 필요한가</h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-400">
-            의미적으로 허용되는 변환이 항상 좋은 실행으로 이어지지는 않습니다.
-            probing 실험은 hardware response와 execution pattern을 직접 드러내고,
-            어떤 realization이 실제 GPU에서 더 적절한지 판단할 근거를 제공합니다.
-            이 결과는 analysis와 operator realization 페이지로 이어지며,
-            realization 비교와 선택의 출발점이 됩니다.
+            {hardwareOverview.whyItMatters}
           </p>
         </div>
       </section>
@@ -89,8 +198,9 @@ export default function HardwareEvidencePage() {
         <div>
           <h2 className="text-xl font-semibold text-white">Experiment Explorer</h2>
           <p className="mt-2 max-w-4xl text-sm leading-6 text-neutral-400">
-            왼쪽에서 실험을 선택하면, 오른쪽에서 해당 실험의 목적, 관찰 포인트,
-            출력 형태, 그리고 다음 연결 경로를 바로 확인할 수 있습니다.
+            실험을 선택하면, 목적과 질문뿐 아니라 probe 설계 방식, 핵심 커널 구조,
+            관찰된 결과 요약, 그리고 realization 판단으로 이어지는 해석까지 함께
+            볼 수 있습니다.
           </p>
         </div>
 
@@ -102,32 +212,14 @@ export default function HardwareEvidencePage() {
               </div>
 
               <div className="space-y-3">
-                {hardwareExperiments.map((experiment) => {
-                  const active = experiment.id === selectedId;
-
-                  return (
-                    <button
-                      key={experiment.id}
-                      type="button"
-                      onClick={() => setSelectedId(experiment.id)}
-                      className={`w-full rounded-xl border px-4 py-4 text-left transition ${
-                        active
-                          ? "border-lime-400/50 bg-lime-400/10"
-                          : "border-white/10 bg-black/20 hover:border-lime-400/30 hover:bg-white/[0.06]"
-                      }`}
-                    >
-                      <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
-                        {experiment.category}
-                      </div>
-                      <div className="mt-2 text-base font-semibold text-white">
-                        {experiment.label}
-                      </div>
-                      <div className="mt-2 text-sm leading-6 text-neutral-400">
-                        {experiment.summary}
-                      </div>
-                    </button>
-                  );
-                })}
+                {hardwareExperiments.map((experiment) => (
+                  <ExperimentNavCard
+                    key={experiment.id}
+                    experiment={experiment}
+                    active={experiment.id === selectedId}
+                    onClick={() => setSelectedId(experiment.id)}
+                  />
+                ))}
               </div>
             </div>
           </aside>
@@ -165,52 +257,53 @@ export default function HardwareEvidencePage() {
               </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                <h4 className="text-lg font-semibold text-white">관찰 포인트</h4>
-                <ul className="mt-4 space-y-3 text-sm text-neutral-300">
-                  {selectedExperiment.observe.map((item) => (
-                    <li
-                      key={item}
-                      className="rounded-xl border border-white/10 bg-black/20 px-4 py-3"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <DetailList
+              title="How the probe is built"
+              items={selectedExperiment.method}
+            />
 
+            <KernelShapeTable kernelShape={selectedExperiment.kernelShape} />
+
+            {selectedExperiment.codeSnippet ? (
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
                 <h4 className="text-lg font-semibold text-white">
-                  예상 출력 / 정리 형태
+                  Key kernel excerpt
                 </h4>
-                <ul className="mt-4 space-y-3 text-sm text-neutral-300">
-                  {selectedExperiment.outputs.map((item) => (
-                    <li
-                      key={item}
-                      className="rounded-xl border border-white/10 bg-black/20 px-4 py-3"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-3 text-sm leading-6 text-neutral-400">
+                  전체 구현을 모두 펼치기보다, 이 probe의 핵심이 드러나는 코드 조각만
+                  보여줍니다.
+                </p>
+                <pre className="mt-4 overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-sm leading-6 text-neutral-200">
+                  <code>{selectedExperiment.codeSnippet}</code>
+                </pre>
               </div>
+            ) : null}
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              <DetailList
+                title="관찰 포인트"
+                items={selectedExperiment.observe}
+              />
+              <DetailList
+                title="예상 출력 / 정리 형태"
+                items={selectedExperiment.outputs}
+              />
             </div>
 
-            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-              <h4 className="text-lg font-semibold text-white">다음 연결 경로</h4>
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
-                {selectedExperiment.nextLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className="rounded-xl border border-white/10 bg-black/20 px-4 py-4 text-sm text-neutral-300 transition hover:border-lime-400/40 hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+            <div className="grid gap-6 lg:grid-cols-2">
+              <DetailList
+                title="Observed results"
+                items={selectedExperiment.resultHighlights}
+              />
+              <DetailList
+                title="Interpretation"
+                items={selectedExperiment.interpretation}
+              />
             </div>
+
+            <DetailList title="Caveats" items={selectedExperiment.caveats} />
+
+            <NextLinks links={selectedExperiment.nextLinks} />
           </div>
         </div>
       </section>
@@ -221,13 +314,7 @@ export default function HardwareEvidencePage() {
             Why this layer matters
           </h2>
           <p className="mt-3 text-sm leading-7 text-neutral-400">
-            추상적으로 허용되는 변환과 실제로 좋은 realization은 다를 수 있습니다.
-            GPU의 memory hierarchy, bank mapping, transaction behavior, issue pattern은
-            구현 품질을 크게 바꾸며, 이 차이는 연산 의미만으로는 드러나지 않습니다.
-            그래서 Atlas는 의미 계층과 별도로 hardware evidence를 두고, 불투명한
-            실행 메커니즘을 probing과 측정으로 역추적합니다. 이 층의 목적은
-            하드웨어를 설명하는 데서 끝나지 않고, 어떤 구현 방식이 실제로 더
-            적절한지 판단할 근거를 만드는 데 있습니다.
+            {hardwareOverview.whyItMatters}
           </p>
         </div>
 

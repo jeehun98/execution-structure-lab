@@ -1,7 +1,6 @@
 export const hardwareChips = [
-  "Hardware Probing",
-  "Measured Response",
-  "Memory Behavior",
-  "Scheduling Clues",
-  "Realization Evidence",
+  "NVIDIA GeForce RTX 3060",
+  "NVIDIA GeForce RTX 3080 Ti Laptop GPU",
+  "Compute Capability 8.6",
+  "CUDA / Nsight Compute / Nsight Systems",
 ];
