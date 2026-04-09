@@ -1,65 +1,84 @@
 #pragma once
 
-#include "probe/probe_result.hpp"
-#include "common/device_info.hpp"
-
 #include <string>
 #include <vector>
 
-// -------------------------------
-// naive version
-// -------------------------------
-GlobalStrideSweepConfig load_global_stride_sweep_config(const std::string& path);
-GlobalStrideSweepResult run_global_stride_sweep(const GlobalStrideSweepConfig& config);
-void write_global_stride_sweep_result_json(const GlobalStrideSweepResult& result);
+namespace probe::global_stride_sweep {
 
-void launch_global_stride_sweep_kernel(
-    const float* d_input,
-    float* d_output,
-    int n,
-    int stride,
-    int inner_iters,
-    int grid_size,
-    int block_size);
+enum class StrideMode {
+  WrappedFixedWork,
+  BoundedNoWrap,
+  WrappedOffsetSweep,
+};
 
-// -------------------------------
-// fixed-work version
-// -------------------------------
-struct GlobalStrideSweepFixedWorkConfig {
+struct Config {
   int device_id = 0;
-  int n = 0;
+  int n = 1 << 24;
   int block_size = 256;
-  int grid_size = 0;
-  int warmup = 10;
-  int repeat = 50;
+  int grid_size = 256;
+  int warmup = 5;
+  int repeat = 30;
   int inner_iters = 1;
-  int total_accesses = 0;
+  int total_accesses = 1 << 24;
   int base_offset = 0;
+
   std::vector<int> strides;
-  std::string output_path;
+
+  bool run_wrapped = true;
+  bool run_bounded = true;
+  bool run_offset_sweep = false;
+
+  std::vector<int> offset_values;
+  std::vector<int> offset_representative_strides;
+
+  std::string output_path = "results/raw/global_stride_sweep_test.json";
 };
 
-struct GlobalStrideSweepFixedWorkPoint {
-  int stride = 0;
-  double avg_ms = 0.0;
+struct Result {
+  std::string mode;
+  int stride = 1;
+  int base_offset = 0;
+  float avg_ms = 0.0f;
+
   int launched_threads = 0;
-  int total_accesses = 0;
-  int accesses_per_thread = 0;
   int active_threads = 0;
-  std::size_t total_bytes_requested = 0;
+  int accesses_per_thread = 0;
+
+  long long requested_total_accesses = 0;
+  long long actual_total_accesses = 0;
+  long long total_bytes_requested = 0;
+  long long total_bytes_actual = 0;
+
+  long long warp_address_span_bytes = 0;
+  long long unique_index_upper_bound = 0;
+  long long estimated_footprint_bytes = 0;
+
+  bool wraps_address_space = false;
+
+  double checksum = 0.0;
+  double output_mean = 0.0;
+  double output_max_abs = 0.0;
 };
 
-struct GlobalStrideSweepFixedWorkResult {
-  GlobalStrideSweepFixedWorkConfig config;
-  DeviceInfo device;
-  std::vector<GlobalStrideSweepFixedWorkPoint> points;
+struct SuiteResult {
+  std::string probe = "global_stride_sweep_suite";
+
+  struct DeviceInfo {
+    int device_id = 0;
+    std::string name;
+    std::string compute_capability;
+    int sm_count = 0;
+    long long global_mem_bytes = 0;
+  } device;
+
+  Config config;
+  std::vector<Result> results;
 };
 
-GlobalStrideSweepFixedWorkConfig load_global_stride_sweep_fixed_work_config(const std::string& path);
-GlobalStrideSweepFixedWorkResult run_global_stride_sweep_fixed_work(const GlobalStrideSweepFixedWorkConfig& config);
-void write_global_stride_sweep_fixed_work_result_json(const GlobalStrideSweepFixedWorkResult& result);
+SuiteResult run(const Config& config);
+void write_json(const SuiteResult& suite, const std::string& output_path);
 
-void launch_global_stride_sweep_fixed_work_kernel(
+void launch_global_stride_sweep_wrapped_kernel(
     const float* d_input,
     float* d_output,
     int n,
@@ -70,3 +89,17 @@ void launch_global_stride_sweep_fixed_work_kernel(
     int accesses_per_thread,
     int launched_threads,
     int block_size);
+
+void launch_global_stride_sweep_bounded_kernel(
+    const float* d_input,
+    float* d_output,
+    int n,
+    int stride,
+    int inner_iters,
+    int total_accesses,
+    int base_offset,
+    int accesses_per_thread,
+    int launched_threads,
+    int block_size);
+
+}  // namespace probe::global_stride_sweep

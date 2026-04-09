@@ -1,7 +1,7 @@
 # ninja log v5
 61	664	7974055162451051	CMakeFiles/global_stride_sweep_probe.dir/src/main/probe_runner.cpp.obj	e324f96443a3b0bf
-74	679	7974062968860896	CMakeFiles/probe_runner.dir/src/main/probe_runner.cpp.obj	afb3ae8d3a6ffe68
 63	1440	7974062976442707	CMakeFiles/global_stride_sweep_lib.dir/src/probes/global_stride_sweep/host.cpp.obj	1e6f0251d12fe2a1
+74	679	7974062968860896	CMakeFiles/probe_runner.dir/src/main/probe_runner.cpp.obj	afb3ae8d3a6ffe68
 37	710	7973239094978249	CMakeFiles/probe_common.dir/src/common/device_info.cpp.obj	5b9a7b98b0a89064
 711	767	7973239095511180	lib/probe_common.lib	92ca4a43701b3e85
 68	6023	7974063022010244	CMakeFiles/global_stride_sweep_lib.dir/src/probes/global_stride_sweep/kernel.cu.obj	409d5d65c4c017b2
@@ -9,3 +9,9 @@
 8794	8862	7974063050668370	lib/global_stride_sweep_lib.lib	41a5c0fe50721744
 8863	9012	7974063052022643	bin/probe_runner.exe	63a7394352e710a1
 665	808	7974055163697317	bin/global_stride_sweep_probe.exe	49b53bf4297377a
+31	1386	7974121455200433	CMakeFiles/global_stride_sweep_lib.dir/src/probes/global_stride_sweep/host.cpp.obj	1e6f0251d12fe2a1
+42	1551	7974121456820870	CMakeFiles/probe_runner.dir/src/main/probe_runner.cpp.obj	afb3ae8d3a6ffe68
+37	5507	7974121496184405	CMakeFiles/global_stride_sweep_lib.dir/src/probes/global_stride_sweep/kernel.cu.obj	409d5d65c4c017b2
+5508	7804	7974121519323280	CMakeFiles/global_stride_sweep_lib.dir/cmake_device_link.obj	91fe89bb145d953f
+7805	7872	7974121520059297	lib/global_stride_sweep_lib.lib	41a5c0fe50721744
+7872	8025	7974121521443680	bin/probe_runner.exe	63a7394352e710a1
