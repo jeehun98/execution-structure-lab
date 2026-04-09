@@ -1,0 +1,157 @@
+{
+  "probe": "global_stride_sweep_bounded_fixed_work",
+  "device": {
+    "device_id": 0,
+    "name": "NVIDIA GeForce RTX 3080 Ti Laptop GPU",
+    "compute_capability": "8.6",
+    "sm_count": 58,
+    "global_mem_bytes": 17179344896
+  },
+  "config": {
+    "device_id": 0,
+    "n": 16777216,
+    "block_size": 256,
+    "grid_size": 256,
+    "warmup": 5,
+    "repeat": 30,
+    "inner_iters": 1,
+    "requested_total_accesses": 16777216,
+    "base_offset": 0,
+    "output_path": "results/raw/global_stride_sweep_bounded.json",
+    "strides": [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+  },
+  "results": [
+    {
+      "stride": 1,
+      "avg_ms": 0.170423,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 67108864,
+      "warp_address_span_bytes": 128
+    },
+    {
+      "stride": 2,
+      "avg_ms": 0.160868,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 8388608,
+      "accesses_per_thread": 128,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 33554432,
+      "warp_address_span_bytes": 256
+    },
+    {
+      "stride": 4,
+      "avg_ms": 0.159507,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 4194304,
+      "accesses_per_thread": 64,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 16777216,
+      "warp_address_span_bytes": 512
+    },
+    {
+      "stride": 8,
+      "avg_ms": 0.159332,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 2097152,
+      "accesses_per_thread": 32,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 8388608,
+      "warp_address_span_bytes": 1024
+    },
+    {
+      "stride": 16,
+      "avg_ms": 0.0854891,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 1048576,
+      "accesses_per_thread": 16,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 4194304,
+      "warp_address_span_bytes": 2048
+    },
+    {
+      "stride": 32,
+      "avg_ms": 0.0455637,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 524288,
+      "accesses_per_thread": 8,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 2097152,
+      "warp_address_span_bytes": 4096
+    },
+    {
+      "stride": 64,
+      "avg_ms": 0.026976,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 262144,
+      "accesses_per_thread": 4,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 1048576,
+      "warp_address_span_bytes": 8192
+    },
+    {
+      "stride": 128,
+      "avg_ms": 0.0216928,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 131072,
+      "accesses_per_thread": 2,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 524288,
+      "warp_address_span_bytes": 16384
+    },
+    {
+      "stride": 256,
+      "avg_ms": 0.0223413,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 65536,
+      "accesses_per_thread": 1,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 262144,
+      "warp_address_span_bytes": 32768
+    },
+    {
+      "stride": 512,
+      "avg_ms": 0.0153397,
+      "launched_threads": 65536,
+      "active_threads": 32768,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 32768,
+      "accesses_per_thread": 1,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 131072,
+      "warp_address_span_bytes": 65536
+    },
+    {
+      "stride": 1024,
+      "avg_ms": 0.0097024,
+      "launched_threads": 65536,
+      "active_threads": 16384,
+      "requested_total_accesses": 16777216,
+      "actual_total_accesses": 16384,
+      "accesses_per_thread": 1,
+      "total_bytes_requested": 67108864,
+      "total_bytes_actual": 65536,
+      "warp_address_span_bytes": 131072
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "probe": "global_stride_sweep_fixed_work",
+  "device": {
+    "device_id": 0,
+    "name": "NVIDIA GeForce RTX 3080 Ti Laptop GPU",
+    "compute_capability": "8.6",
+    "sm_count": 58,
+    "global_mem_bytes": 17179344896
+  },
+  "config": {
+    "device_id": 0,
+    "n": 16777216,
+    "block_size": 256,
+    "grid_size": 256,
+    "warmup": 5,
+    "repeat": 30,
+    "inner_iters": 1,
+    "total_accesses": 16777216,
+    "base_offset": 0,
+    "output_path": "results/raw/global_stride_sweep_fixed_work.json",
+    "strides": [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]
+  },
+  "results": [
+    {
+      "stride": 1,
+      "avg_ms": 0.192361,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 2,
+      "avg_ms": 0.316533,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 4,
+      "avg_ms": 0.643952,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 8,
+      "avg_ms": 1.33539,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 16,
+      "avg_ms": 1.3247,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 32,
+      "avg_ms": 1.37443,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 64,
+      "avg_ms": 1.87641,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 128,
+      "avg_ms": 1.27609,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 256,
+      "avg_ms": 0.717994,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 512,
+      "avg_ms": 0.317558,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    },
+    {
+      "stride": 1024,
+      "avg_ms": 0.3536,
+      "launched_threads": 65536,
+      "active_threads": 65536,
+      "total_accesses": 16777216,
+      "accesses_per_thread": 256,
+      "total_bytes_requested": 67108864
+    }
+  ]
+}

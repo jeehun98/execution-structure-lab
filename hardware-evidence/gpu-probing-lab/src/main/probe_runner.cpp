@@ -7,7 +7,8 @@
 static void print_usage() {
   std::cout
     << "Usage:\n"
-    << "  probe_runner --probe global_stride_sweep --config <config_path>\n";
+    << "  probe_runner --probe global_stride_sweep --config <config_path>\n"
+    << "  probe_runner --probe global_stride_sweep_fixed_work --config <config_path>\n";
 }
 
 int main(int argc, char** argv) {
@@ -33,6 +34,14 @@ int main(int argc, char** argv) {
       auto config = load_global_stride_sweep_config(config_path);
       auto result = run_global_stride_sweep(config);
       write_global_stride_sweep_result_json(result);
+      std::cout << "[done] wrote result to " << config.output_path << std::endl;
+      return 0;
+    }
+
+    if (probe == "global_stride_sweep_fixed_work") {
+      auto config = load_global_stride_sweep_fixed_work_config(config_path);
+      auto result = run_global_stride_sweep_fixed_work(config);
+      write_global_stride_sweep_fixed_work_result_json(result);
       std::cout << "[done] wrote result to " << config.output_path << std::endl;
       return 0;
     }

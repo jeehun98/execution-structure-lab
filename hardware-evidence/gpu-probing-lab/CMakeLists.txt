@@ -14,7 +14,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(CUDAToolkit REQUIRED)
 
 # ------------------------------------------------------------
-# common
+# common library
 # ------------------------------------------------------------
 add_library(probe_common
     src/common/device_info.cpp
@@ -31,8 +31,13 @@ target_link_libraries(probe_common
         CUDA::cudart
 )
 
+set_target_properties(probe_common PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+)
+
 # ------------------------------------------------------------
-# global_stride_sweep implementation library
+# bounded global stride sweep library
 # ------------------------------------------------------------
 add_library(global_stride_sweep_lib
     src/probes/global_stride_sweep/host.cpp
@@ -54,6 +59,8 @@ target_link_libraries(global_stride_sweep_lib
 set_target_properties(global_stride_sweep_lib PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
 )
 
 # ------------------------------------------------------------
@@ -74,32 +81,6 @@ target_link_libraries(probe_runner
         global_stride_sweep_lib
 )
 
-# ------------------------------------------------------------
-# optional standalone executable
-# ------------------------------------------------------------
-add_executable(global_stride_sweep_probe
-    src/main/probe_runner.cpp
-)
-
-target_include_directories(global_stride_sweep_probe
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-)
-
-target_link_libraries(global_stride_sweep_probe
-    PRIVATE
-        global_stride_sweep_lib
-)
-
-# ------------------------------------------------------------
-# outputs
-# ------------------------------------------------------------
-set_target_properties(probe_common global_stride_sweep_lib PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
-)
-
-set_target_properties(probe_runner global_stride_sweep_probe PROPERTIES
+set_target_properties(probe_runner PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/bin
 )

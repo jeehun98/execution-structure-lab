@@ -22,11 +22,5 @@
   "command": "C:\\PROGRA~1\\MICROS~4\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1442~1.344\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\owner\\Desktop\\execution-structure-lab\\hardware-evidence\\gpu-probing-lab\\include -IC:\\Users\\owner\\Desktop\\execution-structure-lab\\hardware-evidence\\gpu-probing-lab\\src -external:I\"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\include\" -external:W0 /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD /FoCMakeFiles\\probe_runner.dir\\src\\main\\probe_runner.cpp.obj /FdCMakeFiles\\probe_runner.dir\\ /FS -c C:\\Users\\owner\\Desktop\\execution-structure-lab\\hardware-evidence\\gpu-probing-lab\\src\\main\\probe_runner.cpp",
   "file": "C:\\Users\\owner\\Desktop\\execution-structure-lab\\hardware-evidence\\gpu-probing-lab\\src\\main\\probe_runner.cpp",
   "output": "CMakeFiles\\probe_runner.dir\\src\\main\\probe_runner.cpp.obj"
-},
-{
-  "directory": "C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build",
-  "command": "C:\\PROGRA~1\\MICROS~4\\2022\\COMMUN~1\\VC\\Tools\\MSVC\\1442~1.344\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IC:\\Users\\owner\\Desktop\\execution-structure-lab\\hardware-evidence\\gpu-probing-lab\\include -IC:\\Users\\owner\\Desktop\\execution-structure-lab\\hardware-evidence\\gpu-probing-lab\\src -external:I\"C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v12.6\\include\" -external:W0 /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD /FoCMakeFiles\\global_stride_sweep_probe.dir\\src\\main\\probe_runner.cpp.obj /FdCMakeFiles\\global_stride_sweep_probe.dir\\ /FS -c C:\\Users\\owner\\Desktop\\execution-structure-lab\\hardware-evidence\\gpu-probing-lab\\src\\main\\probe_runner.cpp",
-  "file": "C:\\Users\\owner\\Desktop\\execution-structure-lab\\hardware-evidence\\gpu-probing-lab\\src\\main\\probe_runner.cpp",
-  "output": "CMakeFiles\\global_stride_sweep_probe.dir\\src\\main\\probe_runner.cpp.obj"
 }
 ]
