@@ -1,15 +1,57 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { hardwareChips } from "../data/hardware/chips";
 import { hardwareOverview } from "../data/hardware/overview";
 import { hardwareEvidenceSections } from "../data/hardware/sections";
-import { hardwareExperiments } from "../data/hardware/experiments";
+import {
+  hardwareExperiments,
+  hardwareExperimentsIntro,
+} from "../data/hardware/experiments";
 
 function formatKeyLabel(key) {
   return key
     .replace(/([A-Z])/g, " $1")
     .replace(/_/g, " ")
     .trim();
+}
+
+function formatMetricLabel(key) {
+  return key
+    .replace(/_/g, " ")
+    .replace(/([A-Z])/g, " $1")
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+    .trim();
+}
+
+function formatMetricValue(value) {
+  if (typeof value !== "number") return String(value);
+
+  if (Math.abs(value) >= 1_000_000_000) {
+    return `${(value / 1_000_000_000).toFixed(2)}B`;
+  }
+  if (Math.abs(value) >= 1_000_000) {
+    return `${(value / 1_000_000).toFixed(2)}M`;
+  }
+  if (Math.abs(value) >= 1_000) {
+    return `${(value / 1_000).toFixed(2)}K`;
+  }
+  if (Math.abs(value) < 1 && value !== 0) {
+    return value.toFixed(4);
+  }
+  if (!Number.isInteger(value)) {
+    return value.toFixed(3);
+  }
+  return String(value);
 }
 
 function DetailList({ title, items = [] }) {
@@ -114,6 +156,105 @@ function NextLinks({ links = [] }) {
   );
 }
 
+function ChartCard({ chart, data = [] }) {
+  if (!chart || !data?.length || !chart.xKey || !chart.yKeys?.length) return null;
+
+  const strokePalette = [
+    "#84cc16",
+    "#22c55e",
+    "#38bdf8",
+    "#a78bfa",
+    "#f59e0b",
+    "#f472b6",
+  ];
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+      <h4 className="text-lg font-semibold text-white">{chart.title}</h4>
+      {chart.summary ? (
+        <p className="mt-3 text-sm leading-6 text-neutral-400">{chart.summary}</p>
+      ) : null}
+
+      <div className="mt-4 h-72 rounded-xl border border-white/10 bg-black/20 p-4">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
+            <XAxis
+              dataKey={chart.xKey}
+              stroke="rgba(255,255,255,0.55)"
+              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
+            />
+            <YAxis
+              stroke="rgba(255,255,255,0.55)"
+              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
+              tickFormatter={formatMetricValue}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "rgba(10,10,10,0.95)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: "12px",
+                color: "#fff",
+              }}
+              formatter={(value, name) => [
+                formatMetricValue(value),
+                formatMetricLabel(name),
+              ]}
+              labelFormatter={(label) =>
+                `${formatMetricLabel(chart.xKey)}: ${label}`
+              }
+            />
+            <Legend
+              formatter={(value) => (
+                <span className="text-sm text-neutral-300">
+                  {formatMetricLabel(value)}
+                </span>
+              )}
+            />
+            {chart.yKeys.map((key, index) => (
+              <Line
+                key={key}
+                type="monotone"
+                dataKey={key}
+                stroke={strokePalette[index % strokePalette.length]}
+                strokeWidth={2}
+                dot={{ r: 3 }}
+                activeDot={{ r: 5 }}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
+
+function ChartSection({ charts = [], chartData = [] }) {
+  if (!charts?.length || !chartData?.length) return null;
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h4 className="text-lg font-semibold text-white">Response charts</h4>
+        <p className="mt-2 text-sm leading-6 text-neutral-400">
+          텍스트 요약만으로는 놓치기 쉬운 시간 곡선, footprint 변화, actual work
+          collapse를 지표 그래프로 함께 확인합니다.
+        </p>
+      </div>
+
+      <div className="grid gap-6">
+        {charts.map((chart, index) => (
+          <ChartCard
+            key={`${chart.title}-${index}`}
+            chart={chart}
+            data={chartData}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function HardwareEvidencePage() {
   const [selectedId, setSelectedId] = useState(hardwareExperiments[0]?.id ?? null);
 
@@ -198,17 +339,29 @@ export default function HardwareEvidencePage() {
         <div>
           <h2 className="text-xl font-semibold text-white">Experiment Explorer</h2>
           <p className="mt-2 max-w-4xl text-sm leading-6 text-neutral-400">
-            실험을 선택하면, 목적과 질문뿐 아니라 probe 설계 방식, 핵심 커널 구조,
-            관찰된 결과 요약, 그리고 realization 판단으로 이어지는 해석까지 함께
-            볼 수 있습니다.
+            각 실험은 단순 benchmark 카드가 아니라, 특정 주소 구조나 계산 구조에 대해
+            GPU가 어떤 반응을 보이는지를 읽기 위한 probe입니다. 실험을 선택하면 probe
+            설계 방식, 핵심 커널 구조, 관찰된 결과, 그리고 그 결과가 어떤 execution
+            constraint와 realization 판단으로 이어지는지까지 함께 볼 수 있습니다.
           </p>
         </div>
+
+        {hardwareExperimentsIntro ? (
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+            <h3 className="text-lg font-semibold text-white">
+              {hardwareExperimentsIntro.title}
+            </h3>
+            <p className="mt-3 max-w-5xl text-sm leading-7 text-neutral-400">
+              {hardwareExperimentsIntro.desc}
+            </p>
+          </div>
+        ) : null}
 
         <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
           <aside className="xl:sticky xl:top-24 xl:self-start">
             <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
               <div className="mb-3 text-xs uppercase tracking-[0.18em] text-lime-400/80">
-                Experiments
+                Probe Set
               </div>
 
               <div className="space-y-3">
@@ -279,6 +432,11 @@ export default function HardwareEvidencePage() {
               </div>
             ) : null}
 
+            <ChartSection
+              charts={selectedExperiment.charts}
+              chartData={selectedExperiment.chartData}
+            />
+
             <div className="grid gap-6 lg:grid-cols-2">
               <DetailList
                 title="관찰 포인트"
@@ -302,6 +460,7 @@ export default function HardwareEvidencePage() {
             </div>
 
             <DetailList title="Caveats" items={selectedExperiment.caveats} />
+            <DetailList title="Next probes" items={selectedExperiment.nextProbes} />
 
             <NextLinks links={selectedExperiment.nextLinks} />
           </div>
