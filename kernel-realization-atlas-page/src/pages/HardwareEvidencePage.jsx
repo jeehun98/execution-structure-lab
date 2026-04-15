@@ -12,7 +12,6 @@ import {
 } from "recharts";
 import { hardwareChips } from "../data/hardware/chips";
 import { hardwareOverview } from "../data/hardware/overview";
-import { hardwareEvidenceSections } from "../data/hardware/sections";
 import {
   hardwareExperiments,
   hardwareExperimentsIntro,
@@ -89,7 +88,7 @@ function KernelShapeTable({ kernelShape }) {
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <h4 className="text-lg font-semibold text-white">Kernel structure</h4>
+      <h4 className="text-lg font-semibold text-white">핵심 커널 구조</h4>
       <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
         <div className="divide-y divide-white/10">
           {entries.map(([key, value]) => (
@@ -235,10 +234,10 @@ function ChartSection({ charts = [], chartData = [] }) {
   return (
     <div className="space-y-6">
       <div>
-        <h4 className="text-lg font-semibold text-white">Response charts</h4>
+        <h4 className="text-lg font-semibold text-white">응답 지표 그래프</h4>
         <p className="mt-2 text-sm leading-6 text-neutral-400">
-          텍스트 요약만으로는 놓치기 쉬운 시간 곡선, footprint 변화, actual work
-          collapse를 지표 그래프로 함께 확인합니다.
+          시간 곡선, footprint 변화, actual work collapse처럼 텍스트만으로는
+          놓치기 쉬운 반응을 그래프로 함께 확인합니다.
         </p>
       </div>
 
@@ -286,7 +285,11 @@ export default function HardwareEvidencePage() {
         </h1>
 
         <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-400">
-          {hardwareOverview.description}
+          각 실험은 하나의 커널 코드를 기준으로 GPU 반응의 일부를 검증하도록 구성됩니다.
+          중요한 것은 성능 수치 자체보다, 각 코드와 측정된 반응을 통해 하드웨어의
+          성능 특성, 제약, 병목, 실행 메커니즘의 단서를 역으로 읽어내는 것입니다.
+          이 페이지는 그 결과를 해석하고, 다른 하드웨어에서 같은 실험을 보았을 때도
+          어떤 차이를 어떻게 읽어야 하는지에 대한 기준을 함께 제공합니다.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3 text-sm text-neutral-300">
@@ -301,48 +304,15 @@ export default function HardwareEvidencePage() {
         </div>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-2">
-        {hardwareEvidenceSections.map((section) => (
-          <div
-            key={section.title}
-            className="rounded-2xl border border-white/10 bg-white/5 p-6"
-          >
-            <h2 className="text-2xl font-semibold text-white">{section.title}</h2>
-            <p className="mt-3 text-sm leading-6 text-neutral-400">
-              {section.desc}
-            </p>
-
-            <ul className="mt-6 space-y-3 text-sm text-neutral-300">
-              {section.items.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-xl border border-white/10 bg-black/20 px-4 py-3"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </section>
-
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-xl font-semibold text-white">왜 이 층이 필요한가</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-neutral-400">
-            {hardwareOverview.whyItMatters}
-          </p>
-        </div>
-      </section>
-
       <section className="space-y-5">
         <div>
           <h2 className="text-xl font-semibold text-white">Experiment Explorer</h2>
           <p className="mt-2 max-w-4xl text-sm leading-6 text-neutral-400">
-            각 실험은 단순 benchmark 카드가 아니라, 특정 주소 구조나 계산 구조에 대해
-            GPU가 어떤 반응을 보이는지를 읽기 위한 probe입니다. 실험을 선택하면 probe
-            설계 방식, 핵심 커널 구조, 관찰된 결과, 그리고 그 결과가 어떤 execution
-            constraint와 realization 판단으로 이어지는지까지 함께 볼 수 있습니다.
+            각 실험은 하나의 커널 코드를 기준으로 하드웨어 반응을 관찰하고, 그 반응
+            뒤에 있는 성능 특성, 제약, 병목, 실행 메커니즘의 단서를 역추적하기 위한
+            probe입니다. 실험을 선택하면 코드 구조와 관찰 결과, 그 결과에 대한 해석을
+            함께 보며, 다른 하드웨어에서 같은 실험을 실행했을 때 어떤 차이를 어떤 의미로
+            읽어야 하는지까지 참고할 수 있습니다.
           </p>
         </div>
 
@@ -411,7 +381,7 @@ export default function HardwareEvidencePage() {
             </div>
 
             <DetailList
-              title="How the probe is built"
+              title="Probe 구성 방식"
               items={selectedExperiment.method}
             />
 
@@ -420,11 +390,11 @@ export default function HardwareEvidencePage() {
             {selectedExperiment.codeSnippet ? (
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
                 <h4 className="text-lg font-semibold text-white">
-                  Key kernel excerpt
+                  핵심 커널 발췌
                 </h4>
                 <p className="mt-3 text-sm leading-6 text-neutral-400">
-                  전체 구현을 모두 펼치기보다, 이 probe의 핵심이 드러나는 코드 조각만
-                  보여줍니다.
+                  전체 구현보다, 이 실험의 반응을 만드는 핵심 코드 조각에
+                  집중합니다.
                 </p>
                 <pre className="mt-4 overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-sm leading-6 text-neutral-200">
                   <code>{selectedExperiment.codeSnippet}</code>
@@ -443,24 +413,30 @@ export default function HardwareEvidencePage() {
                 items={selectedExperiment.observe}
               />
               <DetailList
-                title="예상 출력 / 정리 형태"
+                title="예상 출력 형태"
                 items={selectedExperiment.outputs}
               />
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
               <DetailList
-                title="Observed results"
+                title="관찰된 결과"
                 items={selectedExperiment.resultHighlights}
               />
               <DetailList
-                title="Interpretation"
+                title="해석"
                 items={selectedExperiment.interpretation}
               />
             </div>
 
-            <DetailList title="Caveats" items={selectedExperiment.caveats} />
-            <DetailList title="Next probes" items={selectedExperiment.nextProbes} />
+            <DetailList
+              title="한계와 주의점"
+              items={selectedExperiment.caveats}
+            />
+            <DetailList
+              title="후속 실험"
+              items={selectedExperiment.nextProbes}
+            />
 
             <NextLinks links={selectedExperiment.nextLinks} />
           </div>
@@ -470,15 +446,18 @@ export default function HardwareEvidencePage() {
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 lg:col-span-2">
           <h2 className="text-xl font-semibold text-white">
-            Why this layer matters
+            이 레이어가 다음 판단으로 이어지는 방식
           </h2>
           <p className="mt-3 text-sm leading-7 text-neutral-400">
-            {hardwareOverview.whyItMatters}
+            하드웨어 실험은 단순한 측정 결과 보관소가 아닙니다. 여기서 얻은
+            반응 패턴은 어떤 변환이 실제로 유효한지, 어떤 연산자 실현 경로가
+            병목을 줄이는지, 어떤 비교 실험이 의미 있는지를 판단하는 근거가
+            됩니다.
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-          <h2 className="text-xl font-semibold text-white">Next paths</h2>
+          <h2 className="text-xl font-semibold text-white">다음 경로</h2>
           <div className="mt-4 space-y-3 text-sm">
             <Link
               to="/properties-new"
