@@ -12,9 +12,9 @@ const chips = [
 
 const layers = [
   {
-    title: "실행 기반",
-    desc: "연산이 실제로 놓이는 framework, runtime, backend, kernel execution 조건을 정리하고, hardware evidence와 probing을 통해 realization 선택에 필요한 물리적 제약과 실행 단서를 확보합니다.",
-    href: "/execution-foundation",
+    title: "하드웨어 관찰",
+    desc: "GPU 성능 측정과 probing을 통해 실제 실행 특성과 병목의 단서를 수집하고, 관찰된 결과를 다시 하드웨어 메커니즘과 실행 제약 수준으로 역추적합니다.",
+    href: "/hardware-evidence",
   },
   {
     title: "공통 계산 구조",

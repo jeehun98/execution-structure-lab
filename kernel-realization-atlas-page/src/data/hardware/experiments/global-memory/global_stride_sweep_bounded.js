@@ -1,6 +1,6 @@
-const globalStrideSweepBoundedNoWrap = {
+const globalStrideSweepBounded = {
   id: "global-stride-sweep-bounded-no-wrap",
-  category: "Memory Response",
+  category: "Global Memory",
   label: "Global Stride Sweep (Bounded No-Wrap)",
   summary:
     "주소를 wrap-around 하지 않는 조건에서 stride를 키우며, usable work envelope와 actual work가 어떻게 빠르게 붕괴하는지 관찰합니다. 이 실험은 pure stride penalty를 측정하기보다, bounded address range 안에서 실제 수행량 감소가 시간 곡선을 어떻게 바꾸는지 읽기 위한 probe입니다.",
@@ -180,7 +180,7 @@ output[tid] = acc;`,
       xKey: "stride",
       yKeys: ["actual_total_accesses", "total_bytes_actual"],
       summary:
-        "Stride 증가와 함께 실제 유효 access 수와 actual bytes가 얼마나 빠르게 줄어드는지 봅니다. 이 감소 속도는 시간 곡선을 해석하는 핵심 기준입니다.",
+        "stride 증가와 함께 실제 유효 access 수와 actual bytes가 얼마나 빠르게 줄어드는지 봅니다. 이 감소 속도는 시간 곡선을 해석하는 핵심 기준입니다.",
     },
     {
       title: "Stride vs Active Threads / Warp Span",
@@ -192,10 +192,10 @@ output[tid] = acc;`,
   ],
 
   resultHighlights: [
-    "Stride가 증가할수록 actual_total_accesses가 16777216에서 16384까지 급격히 감소합니다.",
+    "stride가 증가할수록 actual_total_accesses가 16777216에서 16384까지 급격히 감소합니다.",
     "total_bytes_actual도 64MB에서 64KB까지 줄어들어, 큰 stride 구간의 시간 감소가 실제 수행량 축소와 강하게 연결됩니다.",
-    "Stride 1~8 구간은 warp span이 커지는데도 실행 시간이 거의 평평해, address dispersion 비용이 work 감소에 가려질 수 있음을 보여줍니다.",
-    "Stride 512와 1024에서는 active_threads가 32768, 16384로 줄어들어, 큰 stride 구간은 더 이상 fixed-work 비교가 아닙니다.",
+    "stride 1~8 구간은 warp span이 커지는데도 실행 시간이 거의 평평해, address dispersion 비용이 work 감소에 가려질 수 있음을 보여줍니다.",
+    "stride 512와 1024에서는 active_threads가 32768, 16384로 줄어들어, 큰 stride 구간은 더 이상 fixed-work 비교가 아닙니다.",
     "따라서 이 결과는 pure stride penalty 곡선이 아니라, no-wrap 조건에서 usable work envelope가 어떻게 무너지는지 보여주는 곡선으로 읽는 편이 맞습니다.",
   ],
 
@@ -208,12 +208,12 @@ output[tid] = acc;`,
     "다른 하드웨어에서 같은 probe를 실행할 때는 절대 시간만 비교하지 말고, actual_total_accesses, total_bytes_actual, active_threads 감소 속도와 time curve의 상대적 형태를 함께 봐야 합니다.",
     "예를 들어 큰 stride에서도 시간이 충분히 떨어지지 않는다면, 해당 하드웨어에서는 bounded work collapse보다 per-access overhead나 memory-side latency cost가 더 오래 지배하고 있을 수 있습니다.",
     "반대로 시간 감소가 work collapse와 거의 같은 비율로 빠르게 일어난다면, 이 구간의 곡선은 stride penalty보다 usable work reduction을 더 직접적으로 반영하고 있을 가능성이 큽니다.",
-    "Wrapped fixed-work 결과와 bounded no-wrap 결과를 함께 비교하면, 시간 회복이 reuse 때문인지 usable work collapse 때문인지 하드웨어별로 더 분리해서 읽을 수 있습니다.",
+    "wrapped fixed-work 결과와 bounded no-wrap 결과를 함께 비교하면, 시간 회복이 reuse 때문인지 usable work collapse 때문인지 하드웨어별로 더 분리해서 읽을 수 있습니다.",
   ],
 
   caveats: [
     "actual_total_accesses와 total_bytes_actual가 stride에 따라 크게 달라지므로, avg_ms를 stride별 memory efficiency 비교로 직접 사용하면 오해가 생깁니다.",
-    "Stride 512와 1024에서는 active_threads도 감소해, 큰 stride 구간은 더욱 비대칭적인 실행 조건이 됩니다.",
+    "stride 512와 1024에서는 active_threads도 감소해, 큰 stride 구간은 더욱 비대칭적인 실행 조건이 됩니다.",
     "이 결과만으로는 coalescing penalty, cache response, TLB 효과를 분리해서 말할 수 없습니다.",
     "다른 하드웨어와 비교할 때도 절대 시간 수치만으로 결론 내리기보다, 동일 stride에서 actual work collapse와 time curve의 결합 형태를 함께 봐야 합니다.",
     "순수한 no-wrap fixed-work stride penalty를 보려면 stride별로 total_accesses를 재조정하거나 별도의 fixed-work no-wrap probe가 필요합니다.",
@@ -234,4 +234,4 @@ output[tid] = acc;`,
   ],
 };
 
-export default globalStrideSweepBoundedNoWrap;
+export default globalStrideSweepBounded;

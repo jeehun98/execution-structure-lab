@@ -1,21 +1,22 @@
 const globalStrideSweepFixedWork = {
   id: "global-stride-sweep-fixed-work",
-  category: "Memory Response",
+  category: "Global Memory",
   label: "Global Stride Sweep (Wrapped Fixed Work)",
   summary:
-    "같은 총 work를 유지한 채 stride만 바꾸어, warp address continuity 붕괴와 wrap-around reuse가 함께 만드는 memory response curve를 읽습니다.",
+    "같은 총 work를 유지한 채 stride만 바꾸어, warp address continuity 붕괴와 wrap-around reuse가 함께 만드는 memory response curve를 읽습니다. 이 실험은 workload 차이가 아닌 address layout 변화에 대한 하드웨어 반응을 보기 위한 probe입니다.",
 
   question:
     "같은 양의 global load를 유지한 상태에서 주소 간격이 달라질 때, GPU는 어느 구간에서 dispersion cost를 크게 드러내고, 어느 구간에서 wrap-around reuse 때문에 다시 다른 반응을 보이는가?",
 
   whyItMatters:
-    "이 실험의 목적은 단순히 stride penalty를 확인하는 것이 아니라, fixed total work를 유지한 상태에서 주소 구조 변화가 어떤 비단조 cost curve를 만드는지 관찰하는 데 있습니다. 여기서 얻는 반응은 warp continuity 붕괴, transaction grouping 악화, footprint collapse, repeated reuse가 실제 곡선을 어떻게 함께 만드는지 판단하는 근거가 됩니다.",
+    "이 실험의 목적은 단순히 stride penalty를 확인하는 것이 아니라, fixed total work를 유지한 상태에서 주소 구조 변화가 어떤 비단조 cost curve를 만드는지 관찰하는 데 있습니다. 여기서 얻는 반응은 warp continuity 붕괴, transaction grouping 악화, footprint collapse, repeated reuse가 실제 곡선을 어떻게 함께 만드는지 판단하는 근거가 됩니다. 또한 bounded no-wrap 결과와 함께 보면, 시간 변화가 usable work collapse 때문인지 wrapped reuse 때문인지 더 분리해서 읽을 수 있습니다.",
 
   method: [
     "모든 stride에서 actual_total_accesses, active_threads, accesses_per_thread, total_bytes_actual를 동일하게 유지합니다.",
     "각 thread는 동일 횟수의 global load를 수행하되, logical access id에 stride를 곱한 뒤 배열 범위 안에서 wrap-around 하도록 구성합니다.",
     "stride를 1에서 1024까지 증가시키며 avg_ms, warp_address_span_bytes, unique_index_upper_bound, estimated_footprint_bytes를 함께 기록합니다.",
     "결과 곡선은 workload 차이가 아니라 wrapped address layout 변화에 대한 hardware response로 읽습니다.",
+    "다른 하드웨어와 비교할 때는 절대 시간만이 아니라 peak 구간, 회복 시작 시점, footprint collapse 속도를 함께 비교합니다.",
   ],
 
   kernelShape: {
@@ -48,16 +49,18 @@ output[tid] = acc;`,
 
   observe: [
     "stride 증가에 따라 시간 곡선이 어떻게 변하는가",
-    "연속 접근 붕괴가 급격한 비용 증가로 나타나는 구간",
+    "연속 접근 붕괴가 급격한 비용 증가로 나타나는 구간이 어디인가",
     "큰 stride에서 footprint collapse와 reuse 증가가 언제부터 곡선을 다시 낮추는가",
     "warp span 증가와 unique footprint 감소가 어떤 전환점을 만드는가",
+    "다른 하드웨어에서 같은 실험을 실행했을 때 peak 위치와 recovery shape가 어떻게 달라지는가",
   ],
 
   outputs: [
-    "stride timing curve",
+    "wrapped fixed-work stride timing curve",
     "warp span vs footprint summary",
-    "wrapped-address response notes",
-    "follow-up probe directions",
+    "dispersion-to-reuse transition notes",
+    "comparison points against bounded no-wrap",
+    "cross-hardware interpretation guide for wrapped results",
   ],
 
   chartData: [
@@ -175,7 +178,7 @@ output[tid] = acc;`,
       xKey: "stride",
       yKeys: ["warp_address_span_bytes"],
       summary:
-        "Stride가 커질수록 warp 내부 주소 분산이 얼마나 빠르게 커지는지 봅니다.",
+        "stride가 커질수록 warp 내부 주소 분산이 얼마나 빠르게 커지는지 봅니다.",
     },
     {
       title: "Stride vs Footprint Collapse",
@@ -196,10 +199,12 @@ output[tid] = acc;`,
 
   interpretation: [
     "이 probe는 전체 work를 고정했기 때문에, 시간 차이를 workload 감소가 아니라 주소 구조 변화에 대한 hardware response로 읽을 수 있습니다.",
-    "Stride 1에서 64까지의 시간 증가는 warp-level continuity 붕괴와 transaction grouping 악화가 실제 비용으로 드러나는 구간으로 볼 수 있습니다.",
+    "stride 1에서 64까지의 시간 증가는 warp-level continuity 붕괴와 transaction grouping 악화가 실제 비용으로 드러나는 구간으로 볼 수 있습니다.",
     "하지만 stride 256 이후의 회복은 coalescing 개선이라기보다 modulo wrap-around로 인한 unique footprint 축소와 repeated reuse 증가의 영향으로 해석하는 편이 정확합니다.",
     "특히 stride 64 부근은 warp span은 충분히 커졌지만 reuse 이득은 아직 압도적이지 않은 중간 전환 구간으로, dispersion penalty가 가장 강하게 드러나는 지점에 가깝습니다.",
     "따라서 이 실험은 expanding-footprint stride penalty 측정보다, wrapped fixed-work 환경에서 GPU가 address dispersion과 repeated reuse에 어떻게 반응하는지 보는 probe로 이해하는 편이 맞습니다.",
+    "bounded no-wrap 결과와 함께 보면, 시간 회복이 실제 memory-path 개선인지, 아니면 wrapped footprint collapse와 reuse 강화 때문인지 더 분리해서 해석할 수 있습니다.",
+    "다른 하드웨어와 비교할 때는 절대 시간보다 peak 위치, recovery 시작 시점, footprint collapse 대비 시간 회복 속도를 함께 봐야 합니다.",
   ],
 
   caveats: [
@@ -207,6 +212,7 @@ output[tid] = acc;`,
     "n과 stride가 모두 2의 거듭제곱이어서 gcd(stride, n)에 따른 aliasing과 footprint collapse가 강하게 나타납니다.",
     "따라서 큰 stride에서의 성능 회복을 단순한 memory-path 효율 향상으로 해석하면 오해가 생길 수 있습니다.",
     "page-scale locality, no-reuse stride penalty, pure expanding-footprint response를 더 직접 보려면 별도의 no-wrap fixed-work probe가 필요합니다.",
+    "이 결과만으로는 cache hit, sector count, TLB, DRAM transaction 변화를 직접 분리해서 확정할 수 없습니다.",
   ],
 
   nextProbes: [
@@ -214,6 +220,7 @@ output[tid] = acc;`,
     "no-wrap fixed-work sweep to separate dispersion cost from reuse collapse",
     "Nsight Compute capture for sector count, L1/L2 hit, and DRAM throughput clues",
     "page-scale stride sweep to expose large-address locality breakdown without wrap-around",
+    "cross-device comparison with normalized peak and recovery overlays",
   ],
 
   nextLinks: [

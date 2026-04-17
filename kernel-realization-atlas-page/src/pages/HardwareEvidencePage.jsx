@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   CartesianGrid,
@@ -13,7 +13,7 @@ import {
 import { hardwareChips } from "../data/hardware/chips";
 import { hardwareOverview } from "../data/hardware/overview";
 import {
-  hardwareExperiments,
+  hardwareExperimentGroups,
   hardwareExperimentsIntro,
 } from "../data/hardware/experiments";
 
@@ -107,6 +107,40 @@ function KernelShapeTable({ kernelShape }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function GroupNavCard({ group, active, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full rounded-xl border px-4 py-4 text-left transition ${
+        active
+          ? "border-lime-400/50 bg-lime-400/10"
+          : "border-white/10 bg-black/20 hover:border-lime-400/30 hover:bg-white/[0.06]"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Category
+          </div>
+          <div className="mt-2 text-base font-semibold text-white">
+            {group.label}
+          </div>
+        </div>
+        <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-neutral-300">
+          {group.experiments?.length ?? 0}
+        </div>
+      </div>
+
+      {group.summary ? (
+        <div className="mt-3 text-sm leading-6 text-neutral-400">
+          {group.summary}
+        </div>
+      ) : null}
+    </button>
   );
 }
 
@@ -254,21 +288,111 @@ function ChartSection({ charts = [], chartData = [] }) {
   );
 }
 
-export default function HardwareEvidencePage() {
-  const [selectedId, setSelectedId] = useState(hardwareExperiments[0]?.id ?? null);
+function GroupOverviewCard({ group }) {
+  if (!group) return null;
 
-  const selectedExperiment = useMemo(() => {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+      <div className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
+        {group.label}
+      </div>
+      <h3 className="mt-3 text-2xl font-semibold text-white">
+        {group.headline || `${group.label} Probe Group`}
+      </h3>
+
+      {group.summary ? (
+        <p className="mt-4 text-sm leading-7 text-neutral-400">{group.summary}</p>
+      ) : null}
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <DetailList title="이 분류가 보는 질문" items={group.questions} />
+        <DetailList title="주요 관찰 신호" items={group.signals} />
+        <DetailList title="해석 가이드" items={group.interpretationGuide} />
+      </div>
+    </div>
+  );
+}
+
+function GroupSummaryGrid({ groups = [], selectedGroupId, onSelect }) {
+  if (!groups?.length) return null;
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {groups.map((group) => {
+        const active = group.id === selectedGroupId;
+
+        return (
+          <button
+            key={group.id}
+            type="button"
+            onClick={() => onSelect(group.id)}
+            className={`rounded-2xl border p-5 text-left transition ${
+              active
+                ? "border-lime-400/50 bg-lime-400/10"
+                : "border-white/10 bg-white/[0.03] hover:border-lime-400/30 hover:bg-white/[0.05]"
+            }`}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-base font-semibold text-white">{group.label}</div>
+              <div className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-300">
+                {group.experiments?.length ?? 0}
+              </div>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-neutral-400">
+              {group.summary}
+            </p>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+export default function HardwareEvidencePage() {
+  const [selectedGroupId, setSelectedGroupId] = useState(
+    hardwareExperimentGroups[0]?.id ?? null
+  );
+  const [selectedExperimentId, setSelectedExperimentId] = useState(null);
+
+  const selectedGroup = useMemo(() => {
     return (
-      hardwareExperiments.find((experiment) => experiment.id === selectedId) ??
-      hardwareExperiments[0] ??
+      hardwareExperimentGroups.find((group) => group.id === selectedGroupId) ??
+      hardwareExperimentGroups[0] ??
       null
     );
-  }, [selectedId]);
+  }, [selectedGroupId]);
 
-  if (!selectedExperiment) {
+  useEffect(() => {
+    if (!selectedGroup) {
+      setSelectedExperimentId(null);
+      return;
+    }
+
+    const hasSelectedExperiment = selectedGroup.experiments?.some(
+      (experiment) => experiment.id === selectedExperimentId
+    );
+
+    if (!hasSelectedExperiment) {
+      setSelectedExperimentId(selectedGroup.experiments?.[0]?.id ?? null);
+    }
+  }, [selectedGroup, selectedExperimentId]);
+
+  const selectedExperiment = useMemo(() => {
+    if (!selectedGroup) return null;
+
+    return (
+      selectedGroup.experiments?.find(
+        (experiment) => experiment.id === selectedExperimentId
+      ) ??
+      selectedGroup.experiments?.[0] ??
+      null
+    );
+  }, [selectedGroup, selectedExperimentId]);
+
+  if (!selectedGroup || !selectedExperiment) {
     return (
       <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-neutral-300">
-        No hardware experiments found.
+        No hardware experiment groups found.
       </div>
     );
   }
@@ -306,13 +430,11 @@ export default function HardwareEvidencePage() {
 
       <section className="space-y-5">
         <div>
-          <h2 className="text-xl font-semibold text-white">Experiment Explorer</h2>
+          <h2 className="text-xl font-semibold text-white">Hardware Probe Atlas</h2>
           <p className="mt-2 max-w-4xl text-sm leading-6 text-neutral-400">
-            각 실험은 하나의 커널 코드를 기준으로 하드웨어 반응을 관찰하고, 그 반응
-            뒤에 있는 성능 특성, 제약, 병목, 실행 메커니즘의 단서를 역추적하기 위한
-            probe입니다. 실험을 선택하면 코드 구조와 관찰 결과, 그 결과에 대한 해석을
-            함께 보며, 다른 하드웨어에서 같은 실험을 실행했을 때 어떤 차이를 어떤 의미로
-            읽어야 하는지까지 참고할 수 있습니다.
+            개별 실험의 나열보다 먼저, 어떤 층위의 하드웨어 반응을 읽고 있는지
+            분류 단위로 구조화합니다. 각 분류 아래에서 probe를 관리하고 추가하며,
+            공통 질문과 공통 해석 기준을 공유한 뒤 개별 실험 상세로 내려갑니다.
           </p>
         </div>
 
@@ -327,27 +449,54 @@ export default function HardwareEvidencePage() {
           </div>
         ) : null}
 
-        <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <GroupSummaryGrid
+          groups={hardwareExperimentGroups}
+          selectedGroupId={selectedGroup.id}
+          onSelect={setSelectedGroupId}
+        />
+
+        <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
           <aside className="xl:sticky xl:top-24 xl:self-start">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-              <div className="mb-3 text-xs uppercase tracking-[0.18em] text-lime-400/80">
-                Probe Set
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <div className="mb-3 text-xs uppercase tracking-[0.18em] text-lime-400/80">
+                  Probe Categories
+                </div>
+
+                <div className="space-y-3">
+                  {hardwareExperimentGroups.map((group) => (
+                    <GroupNavCard
+                      key={group.id}
+                      group={group}
+                      active={group.id === selectedGroup.id}
+                      onClick={() => setSelectedGroupId(group.id)}
+                    />
+                  ))}
+                </div>
               </div>
 
-              <div className="space-y-3">
-                {hardwareExperiments.map((experiment) => (
-                  <ExperimentNavCard
-                    key={experiment.id}
-                    experiment={experiment}
-                    active={experiment.id === selectedId}
-                    onClick={() => setSelectedId(experiment.id)}
-                  />
-                ))}
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <div className="mb-3 text-xs uppercase tracking-[0.18em] text-lime-400/80">
+                  Experiments in {selectedGroup.label}
+                </div>
+
+                <div className="space-y-3">
+                  {selectedGroup.experiments?.map((experiment) => (
+                    <ExperimentNavCard
+                      key={experiment.id}
+                      experiment={experiment}
+                      active={experiment.id === selectedExperiment.id}
+                      onClick={() => setSelectedExperimentId(experiment.id)}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </aside>
 
           <div className="space-y-6">
+            <GroupOverviewCard group={selectedGroup} />
+
             <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
               <div className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
                 {selectedExperiment.category}
