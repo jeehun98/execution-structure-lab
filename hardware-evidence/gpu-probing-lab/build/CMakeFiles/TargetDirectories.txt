@@ -1,5 +1,7 @@
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_common.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/global_stride_sweep_lib.dir
-C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/shared_bank_conflict_stride_lib.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_global_stride.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_shared_bank_conflict_stride.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/edit_cache.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/rebuild_cache.dir

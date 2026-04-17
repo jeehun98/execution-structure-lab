@@ -18,6 +18,7 @@ find_package(CUDAToolkit REQUIRED)
 # ------------------------------------------------------------
 add_library(probe_common
     src/common/device_info.cpp
+    src/common/config_loader.cpp
 )
 
 target_include_directories(probe_common
@@ -37,7 +38,7 @@ set_target_properties(probe_common PROPERTIES
 )
 
 # ------------------------------------------------------------
-# bounded global stride sweep library
+# global stride sweep library
 # ------------------------------------------------------------
 add_library(global_stride_sweep_lib
     src/probes/global_stride_sweep/host.cpp
@@ -64,23 +65,72 @@ set_target_properties(global_stride_sweep_lib PROPERTIES
 )
 
 # ------------------------------------------------------------
-# probe runner
+# shared bank conflict stride library
 # ------------------------------------------------------------
-add_executable(probe_runner
-    src/main/probe_runner.cpp
+add_library(shared_bank_conflict_stride_lib
+    src/probes/shared_bank_conflict_stride/host.cpp
+    src/probes/shared_bank_conflict_stride/kernel.cu
 )
 
-target_include_directories(probe_runner
+target_include_directories(shared_bank_conflict_stride_lib
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(shared_bank_conflict_stride_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(shared_bank_conflict_stride_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+)
+
+# ------------------------------------------------------------
+# global stride probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_global_stride
+    src/main/probe_runner_global_stride.cpp
+)
+
+target_include_directories(probe_runner_global_stride
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(probe_runner
+target_link_libraries(probe_runner_global_stride
     PRIVATE
         global_stride_sweep_lib
 )
 
-set_target_properties(probe_runner PROPERTIES
+set_target_properties(probe_runner_global_stride PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/bin
+)
+
+# ------------------------------------------------------------
+# shared bank conflict stride probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_shared_bank_conflict_stride
+    src/main/probe_runner_shared_bank_conflict_stride.cpp
+)
+
+target_include_directories(probe_runner_shared_bank_conflict_stride
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(probe_runner_shared_bank_conflict_stride
+    PRIVATE
+        shared_bank_conflict_stride_lib
+)
+
+set_target_properties(probe_runner_shared_bank_conflict_stride PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/bin
 )

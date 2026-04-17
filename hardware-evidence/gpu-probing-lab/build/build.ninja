@@ -58,6 +58,15 @@ build CMakeFiles\probe_common.dir\src\common\device_info.cpp.obj: CXX_COMPILER__
   TARGET_COMPILE_PDB = CMakeFiles\probe_common.dir\probe_common.pdb
   TARGET_PDB = lib\probe_common.pdb
 
+build CMakeFiles\probe_common.dir\src\common\config_loader.cpp.obj: CXX_COMPILER__probe_common_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\common\config_loader.cpp || cmake_object_order_depends_target_probe_common
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_common.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_common.dir\src\common
+  TARGET_COMPILE_PDB = CMakeFiles\probe_common.dir\probe_common.pdb
+  TARGET_PDB = lib\probe_common.pdb
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target probe_common
@@ -66,7 +75,7 @@ build CMakeFiles\probe_common.dir\src\common\device_info.cpp.obj: CXX_COMPILER__
 #############################################
 # Link the static library lib\probe_common.lib
 
-build lib\probe_common.lib: CXX_STATIC_LIBRARY_LINKER__probe_common_Release CMakeFiles\probe_common.dir\src\common\device_info.cpp.obj
+build lib\probe_common.lib: CXX_STATIC_LIBRARY_LINKER__probe_common_Release CMakeFiles\probe_common.dir\src\common\device_info.cpp.obj CMakeFiles\probe_common.dir\src\common\config_loader.cpp.obj
   CONFIG = Release
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
   LINK_FLAGS = /machine:x64
@@ -141,44 +150,147 @@ build lib\global_stride_sweep_lib.lib: CXX_STATIC_LIBRARY_LINKER__global_stride_
   TARGET_PDB = lib\global_stride_sweep_lib.pdb
 
 # =============================================================================
-# Object build statements for EXECUTABLE target probe_runner
+# Object build statements for STATIC_LIBRARY target shared_bank_conflict_stride_lib
 
 
 #############################################
-# Order-only phony target for probe_runner
+# Order-only phony target for shared_bank_conflict_stride_lib
 
-build cmake_object_order_depends_target_probe_runner: phony || cmake_object_order_depends_target_global_stride_sweep_lib cmake_object_order_depends_target_probe_common
+build cmake_object_order_depends_target_shared_bank_conflict_stride_lib: phony || cmake_object_order_depends_target_probe_common
 
-build CMakeFiles\probe_runner.dir\src\main\probe_runner.cpp.obj: CXX_COMPILER__probe_runner_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner.cpp || cmake_object_order_depends_target_probe_runner
+build CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\host.cpp.obj: CXX_COMPILER__shared_bank_conflict_stride_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\shared_bank_conflict_stride\host.cpp || cmake_object_order_depends_target_shared_bank_conflict_stride_lib
   CONFIG = Release
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
   INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\probe_runner.dir
-  OBJECT_FILE_DIR = CMakeFiles\probe_runner.dir\src\main
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner.dir\
-  TARGET_PDB = bin\probe_runner.pdb
+  OBJECT_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir
+  OBJECT_FILE_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride
+  TARGET_COMPILE_PDB = CMakeFiles\shared_bank_conflict_stride_lib.dir\shared_bank_conflict_stride_lib.pdb
+  TARGET_PDB = lib\shared_bank_conflict_stride_lib.pdb
+
+build CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\kernel.cu.obj: CUDA_COMPILER__shared_bank_conflict_stride_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\shared_bank_conflict_stride\kernel.cu || cmake_object_order_depends_target_shared_bank_conflict_stride_lib
+  CONFIG = Release
+  DEP_FILE = CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\kernel.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -isystem "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
+  OBJECT_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir
+  OBJECT_FILE_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride
+  TARGET_COMPILE_PDB = CMakeFiles\shared_bank_conflict_stride_lib.dir\shared_bank_conflict_stride_lib.pdb
+  TARGET_PDB = lib\shared_bank_conflict_stride_lib.pdb
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target probe_runner
+# Device Link build statements for STATIC_LIBRARY target shared_bank_conflict_stride_lib
 
 
 #############################################
-# Link the executable bin\probe_runner.exe
+# Link the static library CMakeFiles\shared_bank_conflict_stride_lib.dir\cmake_device_link.obj
 
-build bin\probe_runner.exe: CXX_EXECUTABLE_LINKER__probe_runner_Release CMakeFiles\probe_runner.dir\src\main\probe_runner.cpp.obj | lib\global_stride_sweep_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\global_stride_sweep_lib.lib lib\probe_common.lib
+build CMakeFiles\shared_bank_conflict_stride_lib.dir\cmake_device_link.obj: CXX_STATIC_LIBRARY_DEVICE_LINKER__shared_bank_conflict_stride_lib_Release CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\host.cpp.obj CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\kernel.cu.obj || lib\probe_common.lib
+  LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  LINK_LIBRARIES = lib\probe_common.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
+  OBJECT_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir
+  TARGET_COMPILE_PDB = CMakeFiles\shared_bank_conflict_stride_lib.dir\shared_bank_conflict_stride_lib.pdb
+  TARGET_FILE = CMakeFiles\shared_bank_conflict_stride_lib.dir\cmake_device_link.obj
+  TARGET_PDB = lib\shared_bank_conflict_stride_lib.pdb
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target shared_bank_conflict_stride_lib
+
+
+#############################################
+# Link the static library lib\shared_bank_conflict_stride_lib.lib
+
+build lib\shared_bank_conflict_stride_lib.lib: CXX_STATIC_LIBRARY_LINKER__shared_bank_conflict_stride_lib_Release CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\host.cpp.obj CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\kernel.cu.obj CMakeFiles\shared_bank_conflict_stride_lib.dir\cmake_device_link.obj || lib\probe_common.lib
+  CONFIG = Release
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
+  LINK_FLAGS = /machine:x64
+  OBJECT_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\shared_bank_conflict_stride_lib.dir\shared_bank_conflict_stride_lib.pdb
+  TARGET_FILE = lib\shared_bank_conflict_stride_lib.lib
+  TARGET_PDB = lib\shared_bank_conflict_stride_lib.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target probe_runner_global_stride
+
+
+#############################################
+# Order-only phony target for probe_runner_global_stride
+
+build cmake_object_order_depends_target_probe_runner_global_stride: phony || cmake_object_order_depends_target_global_stride_sweep_lib cmake_object_order_depends_target_probe_common
+
+build CMakeFiles\probe_runner_global_stride.dir\src\main\probe_runner_global_stride.cpp.obj: CXX_COMPILER__probe_runner_global_stride_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_global_stride.cpp || cmake_object_order_depends_target_probe_runner_global_stride
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_global_stride.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_global_stride.dir\src\main
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_global_stride.dir\
+  TARGET_PDB = bin\probe_runner_global_stride.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target probe_runner_global_stride
+
+
+#############################################
+# Link the executable bin\probe_runner_global_stride.exe
+
+build bin\probe_runner_global_stride.exe: CXX_EXECUTABLE_LINKER__probe_runner_global_stride_Release CMakeFiles\probe_runner_global_stride.dir\src\main\probe_runner_global_stride.cpp.obj | lib\global_stride_sweep_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\global_stride_sweep_lib.lib lib\probe_common.lib
   CONFIG = Release
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
   LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
   LINK_LIBRARIES = lib\global_stride_sweep_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\probe_runner.dir
+  OBJECT_DIR = CMakeFiles\probe_runner_global_stride.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner.dir\
-  TARGET_FILE = bin\probe_runner.exe
-  TARGET_IMPLIB = probe_runner.lib
-  TARGET_PDB = bin\probe_runner.pdb
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_global_stride.dir\
+  TARGET_FILE = bin\probe_runner_global_stride.exe
+  TARGET_IMPLIB = probe_runner_global_stride.lib
+  TARGET_PDB = bin\probe_runner_global_stride.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target probe_runner_shared_bank_conflict_stride
+
+
+#############################################
+# Order-only phony target for probe_runner_shared_bank_conflict_stride
+
+build cmake_object_order_depends_target_probe_runner_shared_bank_conflict_stride: phony || cmake_object_order_depends_target_probe_common cmake_object_order_depends_target_shared_bank_conflict_stride_lib
+
+build CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\src\main\probe_runner_shared_bank_conflict_stride.cpp.obj: CXX_COMPILER__probe_runner_shared_bank_conflict_stride_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_shared_bank_conflict_stride.cpp || cmake_object_order_depends_target_probe_runner_shared_bank_conflict_stride
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\src\main
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\
+  TARGET_PDB = bin\probe_runner_shared_bank_conflict_stride.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target probe_runner_shared_bank_conflict_stride
+
+
+#############################################
+# Link the executable bin\probe_runner_shared_bank_conflict_stride.exe
+
+build bin\probe_runner_shared_bank_conflict_stride.exe: CXX_EXECUTABLE_LINKER__probe_runner_shared_bank_conflict_stride_Release CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\src\main\probe_runner_shared_bank_conflict_stride.cpp.obj | lib\shared_bank_conflict_stride_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\probe_common.lib lib\shared_bank_conflict_stride_lib.lib
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
+  LINK_LIBRARIES = lib\shared_bank_conflict_stride_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
+  OBJECT_DIR = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\
+  TARGET_FILE = bin\probe_runner_shared_bank_conflict_stride.exe
+  TARGET_IMPLIB = probe_runner_shared_bank_conflict_stride.lib
+  TARGET_PDB = bin\probe_runner_shared_bank_conflict_stride.pdb
 
 
 #############################################
@@ -215,9 +327,17 @@ build probe_common: phony lib\probe_common.lib
 
 build probe_common.lib: phony lib\probe_common.lib
 
-build probe_runner: phony bin\probe_runner.exe
+build probe_runner_global_stride: phony bin\probe_runner_global_stride.exe
 
-build probe_runner.exe: phony bin\probe_runner.exe
+build probe_runner_global_stride.exe: phony bin\probe_runner_global_stride.exe
+
+build probe_runner_shared_bank_conflict_stride: phony bin\probe_runner_shared_bank_conflict_stride.exe
+
+build probe_runner_shared_bank_conflict_stride.exe: phony bin\probe_runner_shared_bank_conflict_stride.exe
+
+build shared_bank_conflict_stride_lib: phony lib\shared_bank_conflict_stride_lib.lib
+
+build shared_bank_conflict_stride_lib.lib: phony lib\shared_bank_conflict_stride_lib.lib
 
 # =============================================================================
 # Folder targets.
@@ -227,7 +347,7 @@ build probe_runner.exe: phony bin\probe_runner.exe
 #############################################
 # Folder: C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build
 
-build all: phony lib\probe_common.lib lib\global_stride_sweep_lib.lib bin\probe_runner.exe
+build all: phony lib\probe_common.lib lib\global_stride_sweep_lib.lib lib\shared_bank_conflict_stride_lib.lib bin\probe_runner_global_stride.exe bin\probe_runner_shared_bank_conflict_stride.exe
 
 # =============================================================================
 # Built-in targets
