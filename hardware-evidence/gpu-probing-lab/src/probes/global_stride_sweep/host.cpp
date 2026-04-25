@@ -157,16 +157,21 @@ Result run_single_case(
   r.warp_address_span_bytes =
       static_cast<long long>(31) * stride * sizeof(float) + sizeof(float);
 
+  r.stride_gcd_with_n = gcd_ll(config.n, stride);
+  r.address_cycle_length =
+      r.stride_gcd_with_n > 0
+          ? static_cast<long long>(config.n) / r.stride_gcd_with_n
+          : 0;
+
   if (wrapped) {
     r.actual_total_accesses = config.total_accesses;
     r.active_threads = std::min(launched_threads, config.total_accesses);
     r.total_bytes_actual =
         static_cast<long long>(r.actual_total_accesses) * sizeof(float);
 
-    long long unique_cycle =
-        static_cast<long long>(config.n) / gcd_ll(config.n, stride);
     r.unique_index_upper_bound =
-        std::min<long long>(config.total_accesses, unique_cycle);
+      std::min<long long>(config.total_accesses, r.address_cycle_length);
+
     r.estimated_footprint_bytes =
         r.unique_index_upper_bound * static_cast<long long>(sizeof(float));
   } else {
@@ -395,9 +400,13 @@ std::string suite_to_json(const SuiteResult& suite) {
     oss << "      \"total_bytes_actual\": " << r.total_bytes_actual << ",\n";
     oss << "      \"requested_bandwidth_gb_s\": " << r.requested_bandwidth_gb_s << ",\n";
     oss << "      \"effective_bandwidth_gb_s\": " << r.effective_bandwidth_gb_s << ",\n";
+    
     oss << "      \"warp_address_span_bytes\": " << r.warp_address_span_bytes << ",\n";
+    oss << "      \"stride_gcd_with_n\": " << r.stride_gcd_with_n << ",\n";
+    oss << "      \"address_cycle_length\": " << r.address_cycle_length << ",\n";
     oss << "      \"unique_index_upper_bound\": " << r.unique_index_upper_bound << ",\n";
     oss << "      \"unique_coverage_ratio\": " << r.unique_coverage_ratio << ",\n";
+
     oss << "      \"estimated_footprint_bytes\": " << r.estimated_footprint_bytes << ",\n";
     oss << "      \"wraps_address_space\": "
         << (r.wraps_address_space ? "true" : "false") << ",\n";

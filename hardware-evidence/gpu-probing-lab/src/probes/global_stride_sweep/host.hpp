@@ -61,11 +61,15 @@ struct Result {
   double effective_bandwidth_gb_s = 0.0;
 
   long long warp_address_span_bytes = 0;
+
+  long long stride_gcd_with_n = 0;
+  long long address_cycle_length = 0;
+
   long long unique_index_upper_bound = 0;
   long long estimated_footprint_bytes = 0;
 
   double unique_coverage_ratio = 0.0;
-
+  
   bool wraps_address_space = false;
 
   double checksum = 0.0;
