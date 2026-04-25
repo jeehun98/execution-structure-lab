@@ -12,6 +12,11 @@ enum class StrideMode {
 };
 
 struct Config {
+  // Atlas-page / result contract metadata.
+  std::string probe_id = "global-stride-sweep-fixed-work";
+  std::string probe_family = "global_stride_sweep";
+  std::string result_schema = "stride-sweep-v1";
+
   int device_id = 0;
   int n = 1 << 24;
   int block_size = 256;
@@ -25,20 +30,20 @@ struct Config {
   std::vector<int> strides;
 
   bool run_wrapped = true;
-  bool run_bounded = true;
+  bool run_bounded = false;
   bool run_offset_sweep = false;
 
   std::vector<int> offset_values;
   std::vector<int> offset_representative_strides;
 
-  std::string output_path = "results/raw/global_stride_sweep_test.json";
+  std::string output_path;
 };
 
 struct Result {
   std::string mode;
   int stride = 1;
   int base_offset = 0;
-  float avg_ms = 0.0f;
+  double avg_ms = 0.0;
 
   int launched_threads = 0;
   int active_threads = 0;
@@ -49,9 +54,17 @@ struct Result {
   long long total_bytes_requested = 0;
   long long total_bytes_actual = 0;
 
+  double actual_work_ratio = 0.0;
+
+  // Logical throughput metrics. These are not hardware-counter DRAM bandwidth.
+  double requested_bandwidth_gb_s = 0.0;
+  double effective_bandwidth_gb_s = 0.0;
+
   long long warp_address_span_bytes = 0;
   long long unique_index_upper_bound = 0;
   long long estimated_footprint_bytes = 0;
+
+  double unique_coverage_ratio = 0.0;
 
   bool wraps_address_space = false;
 
@@ -62,6 +75,10 @@ struct Result {
 
 struct SuiteResult {
   std::string probe = "global_stride_sweep_suite";
+
+  std::string probe_id = "global-stride-sweep-fixed-work";
+  std::string probe_family = "global_stride_sweep";
+  std::string result_schema = "stride-sweep-v1";
 
   struct DeviceInfo {
     int device_id = 0;

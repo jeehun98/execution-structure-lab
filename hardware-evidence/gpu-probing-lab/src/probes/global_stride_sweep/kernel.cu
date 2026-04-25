@@ -36,6 +36,8 @@ __global__ void global_stride_sweep_wrapped_kernel(
     }
 
     float x = input[idx];
+
+    // Keep arithmetic dependency so the load is not trivially removed.
     for (int k = 0; k < inner_iters; ++k) {
       acc += x * 1.000001f;
     }
@@ -76,6 +78,8 @@ __global__ void global_stride_sweep_bounded_kernel(
     }
 
     float x = input[idx];
+
+    // Keep arithmetic dependency so the load is not trivially removed.
     for (int k = 0; k < inner_iters; ++k) {
       acc += x * 1.000001f;
     }

@@ -5,7 +5,8 @@ import sharedBankConflictStride from "./shared-memory/shared_bank_conflict_strid
 
 export const hardwareExperimentsIntro = {
   title: "Probe-based hardware reading",
-  desc: "각 probe는 단순한 성능 수치 수집이 아니라, 특정 커널 모양이 어떤 하드웨어 반응을 드러내는지 읽기 위한 실험입니다. 현재 Global Memory 분류에서는 stride 변화에 대한 반응을 두 가지 방식으로 나누어 봅니다. 하나는 bounded no-wrap 조건에서 usable work envelope와 actual work가 어떻게 붕괴하는지를 관찰하는 probe이고, 다른 하나는 fixed-work wrapped 조건에서 address dispersion cost와 repeated reuse가 함께 만드는 비단조 response를 관찰하는 probe입니다. 두 실험은 같은 stride sweep처럼 보이지만, 하나는 work collapse를 읽고 다른 하나는 address-layout response를 읽는다는 점에서 역할이 다릅니다.",
+  desc:
+    "각 probe는 하나의 커널이 빠른지 느린지를 평가하기보다, 특정 코드 구조가 GPU의 어떤 실행 메커니즘을 건드리는지 읽기 위한 실험입니다. stride, alignment, padding, register pressure, instruction dependency 같은 변수를 통제하고, latency spike, throughput drop, work collapse, cache reuse 변화 같은 반응을 관찰합니다. 이 결과는 이후 kernel-realization-atlas에서 layout 선택, padding 삽입, vectorized load, shared memory 사용 여부, compiler lowering 검증으로 연결됩니다.",
 };
 
 export const hardwareExperimentGroups = [

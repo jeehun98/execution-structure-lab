@@ -88,7 +88,13 @@ function KernelShapeTable({ kernelShape }) {
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <h4 className="text-lg font-semibold text-white">핵심 커널 구조</h4>
+      <h4 className="text-lg font-semibold text-white">커널 구조 단서</h4>
+      <p className="mt-3 text-sm leading-6 text-neutral-400">
+        이 표는 커널이 어떤 하드웨어 반응을 유도하도록 설계되었는지 보여줍니다.
+        여기서 중요한 것은 구현 세부보다, 어떤 변수를 고정하고 어떤 변수를
+        흔드는지입니다.
+      </p>
+
       <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
         <div className="divide-y divide-white/10">
           {entries.map(([key, value]) => (
@@ -124,7 +130,7 @@ function GroupNavCard({ group, active, onClick }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
-            Category
+            Probe Group
           </div>
           <div className="mt-2 text-base font-semibold text-white">
             {group.label}
@@ -173,7 +179,12 @@ function NextLinks({ links = [] }) {
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <h4 className="text-lg font-semibold text-white">다음 연결 경로</h4>
+      <h4 className="text-lg font-semibold text-white">다음 검증 경로</h4>
+      <p className="mt-3 text-sm leading-6 text-neutral-400">
+        하나의 probe 결과만으로 하드웨어 메커니즘을 단정하지 않습니다. 다음
+        실험으로 같은 현상이 유지되는지, 다른 변수에서 이동하는지 확인합니다.
+      </p>
+
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {links.map((link) => (
           <Link
@@ -190,7 +201,9 @@ function NextLinks({ links = [] }) {
 }
 
 function ChartCard({ chart, data = [] }) {
-  if (!chart || !data?.length || !chart.xKey || !chart.yKeys?.length) return null;
+  if (!chart || !data?.length || !chart.xKey || !chart.yKeys?.length) {
+    return null;
+  }
 
   const strokePalette = [
     "#84cc16",
@@ -205,13 +218,18 @@ function ChartCard({ chart, data = [] }) {
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
       <h4 className="text-lg font-semibold text-white">{chart.title}</h4>
       {chart.summary ? (
-        <p className="mt-3 text-sm leading-6 text-neutral-400">{chart.summary}</p>
+        <p className="mt-3 text-sm leading-6 text-neutral-400">
+          {chart.summary}
+        </p>
       ) : null}
 
       <div className="mt-4 h-72 rounded-xl border border-white/10 bg-black/20 p-4">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
-            <CartesianGrid stroke="rgba(255,255,255,0.08)" strokeDasharray="3 3" />
+            <CartesianGrid
+              stroke="rgba(255,255,255,0.08)"
+              strokeDasharray="3 3"
+            />
             <XAxis
               dataKey={chart.xKey}
               stroke="rgba(255,255,255,0.55)"
@@ -268,10 +286,11 @@ function ChartSection({ charts = [], chartData = [] }) {
   return (
     <div className="space-y-6">
       <div>
-        <h4 className="text-lg font-semibold text-white">응답 지표 그래프</h4>
+        <h4 className="text-lg font-semibold text-white">반응 곡선</h4>
         <p className="mt-2 text-sm leading-6 text-neutral-400">
-          시간 곡선, footprint 변화, actual work collapse처럼 텍스트만으로는
-          놓치기 쉬운 반응을 그래프로 함께 확인합니다.
+          이 페이지에서 그래프는 단순 시각화가 아닙니다. stride 변화, footprint
+          변화, actual work collapse, latency spike처럼 수치 하나로는 보이지
+          않는 하드웨어 반응의 모양을 읽기 위한 핵심 증거입니다.
         </p>
       </div>
 
@@ -301,13 +320,15 @@ function GroupOverviewCard({ group }) {
       </h3>
 
       {group.summary ? (
-        <p className="mt-4 text-sm leading-7 text-neutral-400">{group.summary}</p>
+        <p className="mt-4 text-sm leading-7 text-neutral-400">
+          {group.summary}
+        </p>
       ) : null}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        <DetailList title="이 분류가 보는 질문" items={group.questions} />
-        <DetailList title="주요 관찰 신호" items={group.signals} />
-        <DetailList title="해석 가이드" items={group.interpretationGuide} />
+        <DetailList title="이 분류가 묻는 질문" items={group.questions} />
+        <DetailList title="주요 반응 신호" items={group.signals} />
+        <DetailList title="해석 기준" items={group.interpretationGuide} />
       </div>
     </div>
   );
@@ -333,7 +354,9 @@ function GroupSummaryGrid({ groups = [], selectedGroupId, onSelect }) {
             }`}
           >
             <div className="flex items-center justify-between gap-3">
-              <div className="text-base font-semibold text-white">{group.label}</div>
+              <div className="text-base font-semibold text-white">
+                {group.label}
+              </div>
               <div className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-300">
                 {group.experiments?.length ?? 0}
               </div>
@@ -392,7 +415,7 @@ export default function HardwareEvidencePage() {
   if (!selectedGroup || !selectedExperiment) {
     return (
       <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-neutral-300">
-        No hardware experiment groups found.
+        No hardware probe groups found.
       </div>
     );
   }
@@ -409,11 +432,12 @@ export default function HardwareEvidencePage() {
         </h1>
 
         <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-400">
-          각 실험은 하나의 커널 코드를 기준으로 GPU 반응의 일부를 검증하도록 구성됩니다.
-          중요한 것은 성능 수치 자체보다, 각 코드와 측정된 반응을 통해 하드웨어의
-          성능 특성, 제약, 병목, 실행 메커니즘의 단서를 역으로 읽어내는 것입니다.
-          이 페이지는 그 결과를 해석하고, 다른 하드웨어에서 같은 실험을 보았을 때도
-          어떤 차이를 어떻게 읽어야 하는지에 대한 기준을 함께 제공합니다.
+          이 페이지는 GPU 커널의 빠르고 느림을 단순 비교하는 곳이 아닙니다.
+          하나의 커널 구조를 하드웨어에 입력하고, 그 실행 반응에서 latency
+          spike, throughput drop, work collapse, cache reuse, bank conflict 같은
+          메커니즘의 흔적을 읽기 위한 probe atlas입니다. 각 실험은 관찰된
+          수치와 가능한 해석을 분리하고, 다른 GPU에서 같은 실험을 실행했을 때
+          무엇이 유지되고 무엇이 달라지는지 판단할 기준을 제공합니다.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3 text-sm text-neutral-300">
@@ -430,11 +454,13 @@ export default function HardwareEvidencePage() {
 
       <section className="space-y-5">
         <div>
-          <h2 className="text-xl font-semibold text-white">Hardware Probe Atlas</h2>
+          <h2 className="text-xl font-semibold text-white">GPU Probe Atlas</h2>
           <p className="mt-2 max-w-4xl text-sm leading-6 text-neutral-400">
-            개별 실험의 나열보다 먼저, 어떤 층위의 하드웨어 반응을 읽고 있는지
-            분류 단위로 구조화합니다. 각 분류 아래에서 probe를 관리하고 추가하며,
-            공통 질문과 공통 해석 기준을 공유한 뒤 개별 실험 상세로 내려갑니다.
+            probe는 개별 커널의 성능 점수가 아니라, 코드 구조가 어떤 하드웨어
+            층위를 건드리는지 읽기 위한 실험 단위입니다. 먼저 memory, shared
+            memory, compute, resource pressure, compiler lowering 같은 분류로
+            정리하고, 각 분류 안에서 공통 질문과 해석 기준을 공유한 뒤 개별
+            실험 상세로 내려갑니다.
           </p>
         </div>
 
@@ -460,7 +486,7 @@ export default function HardwareEvidencePage() {
             <div className="space-y-6">
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                 <div className="mb-3 text-xs uppercase tracking-[0.18em] text-lime-400/80">
-                  Probe Categories
+                  Probe Groups
                 </div>
 
                 <div className="space-y-3">
@@ -477,7 +503,7 @@ export default function HardwareEvidencePage() {
 
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                 <div className="mb-3 text-xs uppercase tracking-[0.18em] text-lime-400/80">
-                  Experiments in {selectedGroup.label}
+                  Probes in {selectedGroup.label}
                 </div>
 
                 <div className="space-y-3">
@@ -512,7 +538,7 @@ export default function HardwareEvidencePage() {
             <div className="grid gap-6 lg:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
                 <h4 className="text-lg font-semibold text-white">
-                  이 실험이 묻는 질문
+                  Probe Question
                 </h4>
                 <p className="mt-3 text-sm leading-7 text-neutral-400">
                   {selectedExperiment.question}
@@ -521,7 +547,7 @@ export default function HardwareEvidencePage() {
 
               <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
                 <h4 className="text-lg font-semibold text-white">
-                  왜 중요한가
+                  AICF에서 필요한 이유
                 </h4>
                 <p className="mt-3 text-sm leading-7 text-neutral-400">
                   {selectedExperiment.whyItMatters}
@@ -542,8 +568,9 @@ export default function HardwareEvidencePage() {
                   핵심 커널 발췌
                 </h4>
                 <p className="mt-3 text-sm leading-6 text-neutral-400">
-                  전체 구현보다, 이 실험의 반응을 만드는 핵심 코드 조각에
-                  집중합니다.
+                  전체 구현보다, 이 실험의 하드웨어 반응을 만드는 최소 코드
+                  구조에 집중합니다. 이 조각이 어떤 접근 패턴, 동기화, 반복,
+                  주소 분포를 만드는지가 해석의 출발점입니다.
                 </p>
                 <pre className="mt-4 overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-sm leading-6 text-neutral-200">
                   <code>{selectedExperiment.codeSnippet}</code>
@@ -558,7 +585,7 @@ export default function HardwareEvidencePage() {
 
             <div className="grid gap-6 lg:grid-cols-2">
               <DetailList
-                title="관찰 포인트"
+                title="관찰할 신호"
                 items={selectedExperiment.observe}
               />
               <DetailList
@@ -573,17 +600,17 @@ export default function HardwareEvidencePage() {
                 items={selectedExperiment.resultHighlights}
               />
               <DetailList
-                title="해석"
+                title="가능한 해석"
                 items={selectedExperiment.interpretation}
               />
             </div>
 
             <DetailList
-              title="한계와 주의점"
+              title="한계와 과잉해석 방지"
               items={selectedExperiment.caveats}
             />
             <DetailList
-              title="후속 실험"
+              title="후속 검증 Probe"
               items={selectedExperiment.nextProbes}
             />
 
@@ -595,13 +622,15 @@ export default function HardwareEvidencePage() {
       <section className="grid gap-6 lg:grid-cols-3">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 lg:col-span-2">
           <h2 className="text-xl font-semibold text-white">
-            이 레이어가 다음 판단으로 이어지는 방식
+            이 증거가 realization 선택으로 이어지는 방식
           </h2>
           <p className="mt-3 text-sm leading-7 text-neutral-400">
-            하드웨어 실험은 단순한 측정 결과 보관소가 아닙니다. 여기서 얻은
-            반응 패턴은 어떤 변환이 실제로 유효한지, 어떤 연산자 실현 경로가
-            병목을 줄이는지, 어떤 비교 실험이 의미 있는지를 판단하는 근거가
-            됩니다.
+            하드웨어 probe는 결과 보관소가 아니라, 커널 합성기가 realization을
+            선택할 때 참조하는 경험적 근거입니다. 특정 stride에서 spike가
+            생기는지, padding으로 완화되는지, fixed-work 조건에서도 비용이
+            유지되는지, register pressure가 어느 지점에서 occupancy를 무너뜨리는지
+            같은 관찰은 이후 layout transformation, tiling, vectorization,
+            shared memory 사용 여부, compiler lowering 검증으로 연결됩니다.
           </p>
         </div>
 

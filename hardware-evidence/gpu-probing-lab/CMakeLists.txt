@@ -9,9 +9,18 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
+set(CMAKE_CUDA_ARCHITECTURES 89 CACHE STRING "CUDA architectures")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 find_package(CUDAToolkit REQUIRED)
+
+set(PROBE_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+set(PROBE_RUNTIME_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/bin)
+set(PROBE_LIBRARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build/lib)
 
 # ------------------------------------------------------------
 # common library
@@ -23,8 +32,7 @@ add_library(probe_common
 
 target_include_directories(probe_common
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${PROBE_INCLUDE_DIRS}
 )
 
 target_link_libraries(probe_common
@@ -33,8 +41,8 @@ target_link_libraries(probe_common
 )
 
 set_target_properties(probe_common PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
 )
 
 # ------------------------------------------------------------
@@ -47,8 +55,7 @@ add_library(global_stride_sweep_lib
 
 target_include_directories(global_stride_sweep_lib
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${PROBE_INCLUDE_DIRS}
 )
 
 target_link_libraries(global_stride_sweep_lib
@@ -60,8 +67,8 @@ target_link_libraries(global_stride_sweep_lib
 set_target_properties(global_stride_sweep_lib PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
 )
 
 # ------------------------------------------------------------
@@ -74,8 +81,7 @@ add_library(shared_bank_conflict_stride_lib
 
 target_include_directories(shared_bank_conflict_stride_lib
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${PROBE_INCLUDE_DIRS}
 )
 
 target_link_libraries(shared_bank_conflict_stride_lib
@@ -87,8 +93,8 @@ target_link_libraries(shared_bank_conflict_stride_lib
 set_target_properties(shared_bank_conflict_stride_lib PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/lib
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
 )
 
 # ------------------------------------------------------------
@@ -100,8 +106,7 @@ add_executable(probe_runner_global_stride
 
 target_include_directories(probe_runner_global_stride
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${PROBE_INCLUDE_DIRS}
 )
 
 target_link_libraries(probe_runner_global_stride
@@ -110,7 +115,7 @@ target_link_libraries(probe_runner_global_stride
 )
 
 set_target_properties(probe_runner_global_stride PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/bin
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
 
 # ------------------------------------------------------------
@@ -122,8 +127,7 @@ add_executable(probe_runner_shared_bank_conflict_stride
 
 target_include_directories(probe_runner_shared_bank_conflict_stride
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${PROBE_INCLUDE_DIRS}
 )
 
 target_link_libraries(probe_runner_shared_bank_conflict_stride
@@ -132,5 +136,5 @@ target_link_libraries(probe_runner_shared_bank_conflict_stride
 )
 
 set_target_properties(probe_runner_shared_bank_conflict_stride PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/bin
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
