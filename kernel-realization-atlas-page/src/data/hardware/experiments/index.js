@@ -3,6 +3,7 @@ import globalStrideSweepFixedWork from "./global-memory/global_stride_sweep_fixe
 
 import sharedBankConflictStride from "./shared-memory/shared_bank_conflict_stride";
 import sharedPadEffect from "./shared-memory/shared_pad_effect";
+import sharedPaddingPeriodSweep from "./shared-memory/shared_padding_period_sweep";
 
 export const hardwareExperimentsIntro = {
   title: "Probe-based hardware reading",
@@ -50,29 +51,33 @@ export const hardwareExperimentGroups = [
     label: "Shared Memory",
     headline: "Shared memory bank mapping and layout transformation probes",
     summary:
-      "Shared Memory 그룹은 on-chip memory가 항상 빠르다는 일반론이 아니라, warp-local address distribution이 bank mapping과 만나 어떤 latency spike를 만들고, padding 같은 layout transformation이 그 spike를 어떻게 이동시키거나 완화하는지 관찰합니다.",
+      "Shared Memory 그룹은 on-chip memory가 항상 빠르다는 일반론이 아니라, warp-local address distribution이 bank mapping과 만나 어떤 latency spike를 만들고, padding 같은 layout transformation이 그 spike를 어떻게 완화하거나 다른 위치로 이동시키는지 관찰합니다.",
     questions: [
       "warp lane의 shared-memory index pattern은 어떤 bank conflict 후보를 만드는가?",
       "특정 stride에서 나타나는 latency spike는 padding으로 완화되는가?",
+      "padding period를 바꾸면 spike는 사라지는가, 아니면 다른 stride로 이동하는가?",
       "padding은 보편적 speedup인가, 아니면 특정 conflict shape에 대한 조건부 transformation인가?",
-      "다른 GPU에서도 spike 위치와 padding 민감도가 유지되는가?",
     ],
     signals: [
       "stride-local latency spike",
       "bank-aligned conflict candidate",
       "padding-induced spike mitigation",
+      "padding-period shifted spike",
       "padding overhead or phase-shifted spike",
       "min/max timing instability",
     ],
     interpretationGuide: [
-      "절대 avg_ms보다 spike 위치와 spike 완화 여부를 먼저 본다.",
+      "절대 avg_ms보다 spike 위치와 spike 이동 여부를 먼저 본다.",
       "padding이 빨라진 구간과 느려진 구간을 함께 본다.",
+      "padding period가 바뀔 때 spike topology가 같이 움직이는지 확인한다.",
       "shared memory 사용 여부가 아니라 access pattern과 layout mapping을 중심으로 해석한다.",
       "단일 timing curve만으로 bank conflict를 확정하지 않고, padding/read-write/broadcast probe와 함께 본다.",
     ],
     experiments: [
       sharedBankConflictStride,
       sharedPadEffect,
+      sharedPaddingPeriodSweep,
     ],
   }
+ 
 ];

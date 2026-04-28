@@ -185,3 +185,50 @@ target_link_libraries(probe_runner_shared_pad_effect
 set_target_properties(probe_runner_shared_pad_effect PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+
+# ------------------------------------------------------------
+# shared padding period sweep library
+# ------------------------------------------------------------
+add_library(shared_padding_period_sweep_lib
+    src/probes/shared_padding_period_sweep/host.cpp
+    src/probes/shared_padding_period_sweep/kernel.cu
+)
+
+target_include_directories(shared_padding_period_sweep_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(shared_padding_period_sweep_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(shared_padding_period_sweep_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# shared padding period sweep probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_shared_padding_period_sweep
+    src/main/probe_runner_shared_padding_period_sweep.cpp
+)
+
+target_include_directories(probe_runner_shared_padding_period_sweep
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_shared_padding_period_sweep
+    PRIVATE
+        shared_padding_period_sweep_lib
+)
+
+set_target_properties(probe_runner_shared_padding_period_sweep PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
