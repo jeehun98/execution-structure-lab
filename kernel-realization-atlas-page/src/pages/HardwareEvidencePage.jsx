@@ -1,15 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+
 import { hardwareChips } from "../data/hardware/chips";
 import { hardwareOverview } from "../data/hardware/overview";
 import {
@@ -17,55 +8,116 @@ import {
   hardwareExperimentsIntro,
 } from "../data/hardware/experiments";
 
-function formatKeyLabel(key) {
-  return key
-    .replace(/([A-Z])/g, " $1")
-    .replace(/_/g, " ")
-    .trim();
+function StatPill({ children }) {
+  return (
+    <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-neutral-300">
+      {children}
+    </span>
+  );
 }
 
-function formatMetricLabel(key) {
-  return key
-    .replace(/_/g, " ")
-    .replace(/([A-Z])/g, " $1")
-    .replace(/\b\w/g, (char) => char.toUpperCase())
-    .trim();
+function SectionHeader({ eyebrow, title, desc }) {
+  return (
+    <div>
+      {eyebrow ? (
+        <p className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
+          {eyebrow}
+        </p>
+      ) : null}
+
+      <h2 className="mt-3 text-2xl font-semibold text-white">{title}</h2>
+
+      {desc ? (
+        <p className="mt-3 max-w-4xl text-sm leading-7 text-neutral-400">
+          {desc}
+        </p>
+      ) : null}
+    </div>
+  );
 }
 
-function formatMetricValue(value) {
-  if (typeof value !== "number") return String(value);
+function ReadingStepCard({ index, title, desc }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+      <div className="flex items-start gap-4">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-lime-400/30 bg-lime-400/10 text-sm font-semibold text-lime-300">
+          {index}
+        </div>
 
-  if (Math.abs(value) >= 1_000_000_000) {
-    return `${(value / 1_000_000_000).toFixed(2)}B`;
-  }
-  if (Math.abs(value) >= 1_000_000) {
-    return `${(value / 1_000_000).toFixed(2)}M`;
-  }
-  if (Math.abs(value) >= 1_000) {
-    return `${(value / 1_000).toFixed(2)}K`;
-  }
-  if (Math.abs(value) < 1 && value !== 0) {
-    return value.toFixed(4);
-  }
-  if (!Number.isInteger(value)) {
-    return value.toFixed(3);
-  }
-  return String(value);
+        <div>
+          <h3 className="text-base font-semibold text-white">{title}</h3>
+          <p className="mt-2 text-sm leading-6 text-neutral-400">{desc}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-function DetailList({ title, items = [] }) {
+function GroupCard({ group, active, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rounded-2xl border p-5 text-left transition ${
+        active
+          ? "border-lime-400/50 bg-lime-400/10"
+          : "border-white/10 bg-white/[0.03] hover:border-lime-400/30 hover:bg-white/[0.05]"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Probe Group
+          </div>
+
+          <h3 className="mt-2 text-lg font-semibold text-white">
+            {group.label}
+          </h3>
+        </div>
+
+        <div className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-300">
+          {group.experiments?.length ?? 0}
+        </div>
+      </div>
+
+      {group.summary ? (
+        <p className="mt-4 line-clamp-4 text-sm leading-6 text-neutral-400">
+          {group.summary}
+        </p>
+      ) : null}
+    </button>
+  );
+}
+
+function SignalChips({ items = [] }) {
   if (!items?.length) return null;
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <h4 className="text-lg font-semibold text-white">{title}</h4>
-      <ul className="mt-4 space-y-3 text-sm text-neutral-300">
-        {items.map((item, index) => (
-          <li
-            key={`${title}-${index}`}
-            className="rounded-xl border border-white/10 bg-black/20 px-4 py-3 leading-6"
-          >
-            {item}
+    <div className="flex flex-wrap gap-2">
+      {items.map((item, index) => (
+        <span
+          key={`${item}-${index}`}
+          className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-neutral-300"
+        >
+          {item}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function CompactList({ title, items = [] }) {
+  if (!items?.length) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+      <h4 className="text-sm font-semibold text-white">{title}</h4>
+
+      <ul className="mt-3 space-y-2 text-sm leading-6 text-neutral-400">
+        {items.slice(0, 4).map((item, index) => (
+          <li key={`${title}-${index}`} className="flex gap-2">
+            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-lime-400/70" />
+            <span>{item}</span>
           </li>
         ))}
       </ul>
@@ -73,300 +125,113 @@ function DetailList({ title, items = [] }) {
   );
 }
 
-function KernelShapeTable({ kernelShape }) {
-  if (!kernelShape) return null;
-
-  const entries = Object.entries(kernelShape).filter(
-    ([, value]) =>
-      value !== undefined &&
-      value !== null &&
-      value !== "" &&
-      !(Array.isArray(value) && value.length === 0)
-  );
-
-  if (!entries.length) return null;
+function ExperimentCard({ experiment }) {
+  const signals =
+    experiment.observe?.slice(0, 3) ??
+    experiment.outputs?.slice(0, 3) ??
+    experiment.resultHighlights?.slice(0, 3) ??
+    [];
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <h4 className="text-lg font-semibold text-white">커널 구조 단서</h4>
-      <p className="mt-3 text-sm leading-6 text-neutral-400">
-        이 표는 커널이 어떤 하드웨어 반응을 유도하도록 설계되었는지 보여줍니다.
-        여기서 중요한 것은 구현 세부보다, 어떤 변수를 고정하고 어떤 변수를
-        흔드는지입니다.
-      </p>
+    <article className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 transition hover:border-lime-400/30 hover:bg-white/[0.055]">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-300">
+          {experiment.category}
+        </span>
 
-      <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
-        <div className="divide-y divide-white/10">
-          {entries.map(([key, value]) => (
-            <div
-              key={key}
-              className="grid gap-2 px-4 py-4 md:grid-cols-[180px_minmax(0,1fr)]"
-            >
-              <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
-                {formatKeyLabel(key)}
-              </div>
-              <div className="text-sm leading-6 text-neutral-300">
-                {Array.isArray(value) ? value.join(", ") : String(value)}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function GroupNavCard({ group, active, onClick }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`w-full rounded-xl border px-4 py-4 text-left transition ${
-        active
-          ? "border-lime-400/50 bg-lime-400/10"
-          : "border-white/10 bg-black/20 hover:border-lime-400/30 hover:bg-white/[0.06]"
-      }`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
-            Probe Group
-          </div>
-          <div className="mt-2 text-base font-semibold text-white">
-            {group.label}
-          </div>
-        </div>
-        <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-neutral-300">
-          {group.experiments?.length ?? 0}
-        </div>
+        <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
+          Probe
+        </span>
       </div>
 
-      {group.summary ? (
-        <div className="mt-3 text-sm leading-6 text-neutral-400">
-          {group.summary}
-        </div>
-      ) : null}
-    </button>
-  );
-}
-
-function ExperimentNavCard({ experiment, active, onClick }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`w-full rounded-xl border px-4 py-4 text-left transition ${
-        active
-          ? "border-lime-400/50 bg-lime-400/10"
-          : "border-white/10 bg-black/20 hover:border-lime-400/30 hover:bg-white/[0.06]"
-      }`}
-    >
-      <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
-        {experiment.category}
-      </div>
-      <div className="mt-2 text-base font-semibold text-white">
+      <h3 className="mt-4 text-xl font-semibold text-white">
         {experiment.label}
-      </div>
-      <div className="mt-2 text-sm leading-6 text-neutral-400">
-        {experiment.summary}
-      </div>
-    </button>
-  );
-}
+      </h3>
 
-function NextLinks({ links = [] }) {
-  if (!links?.length) return null;
-
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <h4 className="text-lg font-semibold text-white">다음 검증 경로</h4>
-      <p className="mt-3 text-sm leading-6 text-neutral-400">
-        하나의 probe 결과만으로 하드웨어 메커니즘을 단정하지 않습니다. 다음
-        실험으로 같은 현상이 유지되는지, 다른 변수에서 이동하는지 확인합니다.
-      </p>
-
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            to={link.href}
-            className="rounded-xl border border-white/10 bg-black/20 px-4 py-4 text-sm text-neutral-300 transition hover:border-lime-400/40 hover:text-white"
-          >
-            {link.label}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ChartCard({ chart, data = [] }) {
-  if (!chart || !data?.length || !chart.xKey || !chart.yKeys?.length) {
-    return null;
-  }
-
-  const strokePalette = [
-    "#84cc16",
-    "#22c55e",
-    "#38bdf8",
-    "#a78bfa",
-    "#f59e0b",
-    "#f472b6",
-  ];
-
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <h4 className="text-lg font-semibold text-white">{chart.title}</h4>
-      {chart.summary ? (
-        <p className="mt-3 text-sm leading-6 text-neutral-400">
-          {chart.summary}
+      {experiment.summary ? (
+        <p className="mt-3 text-sm leading-7 text-neutral-400">
+          {experiment.summary}
         </p>
       ) : null}
 
-      <div className="mt-4 h-72 rounded-xl border border-white/10 bg-black/20 p-4">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid
-              stroke="rgba(255,255,255,0.08)"
-              strokeDasharray="3 3"
-            />
-            <XAxis
-              dataKey={chart.xKey}
-              stroke="rgba(255,255,255,0.55)"
-              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
-            />
-            <YAxis
-              stroke="rgba(255,255,255,0.55)"
-              tick={{ fill: "rgba(255,255,255,0.75)", fontSize: 12 }}
-              tickFormatter={formatMetricValue}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "rgba(10,10,10,0.95)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                borderRadius: "12px",
-                color: "#fff",
-              }}
-              formatter={(value, name) => [
-                formatMetricValue(value),
-                formatMetricLabel(name),
-              ]}
-              labelFormatter={(label) =>
-                `${formatMetricLabel(chart.xKey)}: ${label}`
-              }
-            />
-            <Legend
-              formatter={(value) => (
-                <span className="text-sm text-neutral-300">
-                  {formatMetricLabel(value)}
-                </span>
-              )}
-            />
-            {chart.yKeys.map((key, index) => (
-              <Line
-                key={key}
-                type="monotone"
-                dataKey={key}
-                stroke={strokePalette[index % strokePalette.length]}
-                strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 5 }}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
+      {experiment.question ? (
+        <div className="mt-5 rounded-xl border border-white/10 bg-black/20 p-4">
+          <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Question
+          </div>
+          <p className="mt-2 text-sm leading-6 text-neutral-300">
+            {experiment.question}
+          </p>
+        </div>
+      ) : null}
+
+      {signals?.length ? (
+        <div className="mt-5">
+          <div className="mb-3 text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Signals to read
+          </div>
+          <SignalChips items={signals} />
+        </div>
+      ) : null}
+
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Link
+          to={`/hardware-evidence/${experiment.id}`}
+          className="rounded-xl border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-sm font-medium text-lime-200 transition hover:bg-lime-400/15"
+        >
+          상세 보기
+        </Link>
+
+        {experiment.nextLinks?.[0]?.href ? (
+          <Link
+            to={experiment.nextLinks[0].href}
+            className="rounded-xl border border-white/10 bg-black/20 px-4 py-2 text-sm text-neutral-300 transition hover:border-lime-400/30 hover:text-white"
+          >
+            다음 검증 경로
+          </Link>
+        ) : null}
       </div>
-    </div>
+    </article>
   );
 }
 
-function ChartSection({ charts = [], chartData = [] }) {
-  if (!charts?.length || !chartData?.length) return null;
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h4 className="text-lg font-semibold text-white">반응 곡선</h4>
-        <p className="mt-2 text-sm leading-6 text-neutral-400">
-          이 페이지에서 그래프는 단순 시각화가 아닙니다. stride 변화, footprint
-          변화, actual work collapse, latency spike처럼 수치 하나로는 보이지
-          않는 하드웨어 반응의 모양을 읽기 위한 핵심 증거입니다.
-        </p>
-      </div>
-
-      <div className="grid gap-6">
-        {charts.map((chart, index) => (
-          <ChartCard
-            key={`${chart.title}-${index}`}
-            chart={chart}
-            data={chartData}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function GroupOverviewCard({ group }) {
+function SelectedGroupOverview({ group }) {
   if (!group) return null;
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <div className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
-        {group.label}
-      </div>
-      <h3 className="mt-3 text-2xl font-semibold text-white">
-        {group.headline || `${group.label} Probe Group`}
-      </h3>
+    <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <div className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
+            Selected Probe Group
+          </div>
 
-      {group.summary ? (
-        <p className="mt-4 text-sm leading-7 text-neutral-400">
-          {group.summary}
-        </p>
-      ) : null}
+          <h2 className="mt-3 text-3xl font-semibold text-white">
+            {group.headline || group.label}
+          </h2>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-3">
-        <DetailList title="이 분류가 묻는 질문" items={group.questions} />
-        <DetailList title="주요 반응 신호" items={group.signals} />
-        <DetailList title="해석 기준" items={group.interpretationGuide} />
-      </div>
-    </div>
-  );
-}
-
-function GroupSummaryGrid({ groups = [], selectedGroupId, onSelect }) {
-  if (!groups?.length) return null;
-
-  return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {groups.map((group) => {
-        const active = group.id === selectedGroupId;
-
-        return (
-          <button
-            key={group.id}
-            type="button"
-            onClick={() => onSelect(group.id)}
-            className={`rounded-2xl border p-5 text-left transition ${
-              active
-                ? "border-lime-400/50 bg-lime-400/10"
-                : "border-white/10 bg-white/[0.03] hover:border-lime-400/30 hover:bg-white/[0.05]"
-            }`}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-base font-semibold text-white">
-                {group.label}
-              </div>
-              <div className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-300">
-                {group.experiments?.length ?? 0}
-              </div>
-            </div>
-            <p className="mt-3 text-sm leading-6 text-neutral-400">
+          {group.summary ? (
+            <p className="mt-4 max-w-4xl text-sm leading-7 text-neutral-400">
               {group.summary}
             </p>
-          </button>
-        );
-      })}
+          ) : null}
+        </div>
+
+        <div className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 text-right">
+          <div className="text-3xl font-semibold text-white">
+            {group.experiments?.length ?? 0}
+          </div>
+          <div className="mt-1 text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Probes
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+        <CompactList title="이 분류가 묻는 질문" items={group.questions} />
+        <CompactList title="주요 반응 신호" items={group.signals} />
+        <CompactList title="해석 기준" items={group.interpretationGuide} />
+      </div>
     </div>
   );
 }
@@ -375,7 +240,6 @@ export default function HardwareEvidencePage() {
   const [selectedGroupId, setSelectedGroupId] = useState(
     hardwareExperimentGroups[0]?.id ?? null
   );
-  const [selectedExperimentId, setSelectedExperimentId] = useState(null);
 
   const selectedGroup = useMemo(() => {
     return (
@@ -385,43 +249,8 @@ export default function HardwareEvidencePage() {
     );
   }, [selectedGroupId]);
 
-  useEffect(() => {
-    if (!selectedGroup) {
-      setSelectedExperimentId(null);
-      return;
-    }
-
-    const hasSelectedExperiment = selectedGroup.experiments?.some(
-      (experiment) => experiment.id === selectedExperimentId
-    );
-
-    if (!hasSelectedExperiment) {
-      setSelectedExperimentId(selectedGroup.experiments?.[0]?.id ?? null);
-    }
-  }, [selectedGroup, selectedExperimentId]);
-
-  const selectedExperiment = useMemo(() => {
-    if (!selectedGroup) return null;
-
-    return (
-      selectedGroup.experiments?.find(
-        (experiment) => experiment.id === selectedExperimentId
-      ) ??
-      selectedGroup.experiments?.[0] ??
-      null
-    );
-  }, [selectedGroup, selectedExperimentId]);
-
-  if (!selectedGroup || !selectedExperiment) {
-    return (
-      <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 text-neutral-300">
-        No hardware probe groups found.
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-14">
+    <div className="space-y-16">
       <section className="py-8">
         <p className="text-sm uppercase tracking-[0.2em] text-lime-400">
           {hardwareOverview.eyebrow}
@@ -432,223 +261,150 @@ export default function HardwareEvidencePage() {
         </h1>
 
         <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-400">
-          이 페이지는 GPU 커널의 빠르고 느림을 단순 비교하는 곳이 아닙니다.
-          하나의 커널 구조를 하드웨어에 입력하고, 그 실행 반응에서 latency
-          spike, throughput drop, work collapse, cache reuse, bank conflict 같은
-          메커니즘의 흔적을 읽기 위한 probe atlas입니다. 각 실험은 관찰된
-          수치와 가능한 해석을 분리하고, 다른 GPU에서 같은 실험을 실행했을 때
-          무엇이 유지되고 무엇이 달라지는지 판단할 기준을 제공합니다.
+          이 페이지는 GPU 성능 점수를 모아두는 곳이 아닙니다. 각 probe는 하나의
+          커널 구조를 GPU에 입력하고, 그 실행 반응에서 memory layout, cache
+          reuse, bank conflict, work collapse 같은 하드웨어 단서를 읽기 위한
+          실험입니다.
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-3 text-sm text-neutral-300">
+        <div className="mt-8 flex flex-wrap gap-3">
           {hardwareChips.map((chip) => (
-            <span
-              key={chip}
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2"
-            >
-              {chip}
-            </span>
+            <StatPill key={chip}>{chip}</StatPill>
           ))}
         </div>
       </section>
 
-      <section className="space-y-5">
-        <div>
-          <h2 className="text-xl font-semibold text-white">GPU Probe Atlas</h2>
-          <p className="mt-2 max-w-4xl text-sm leading-6 text-neutral-400">
-            probe는 개별 커널의 성능 점수가 아니라, 코드 구조가 어떤 하드웨어
-            층위를 건드리는지 읽기 위한 실험 단위입니다. 먼저 memory, shared
-            memory, compute, resource pressure, compiler lowering 같은 분류로
-            정리하고, 각 분류 안에서 공통 질문과 해석 기준을 공유한 뒤 개별
-            실험 상세로 내려갑니다.
-          </p>
-        </div>
-
-        {hardwareExperimentsIntro ? (
-          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-            <h3 className="text-lg font-semibold text-white">
-              {hardwareExperimentsIntro.title}
-            </h3>
-            <p className="mt-3 max-w-5xl text-sm leading-7 text-neutral-400">
-              {hardwareExperimentsIntro.desc}
-            </p>
-          </div>
-        ) : null}
-
-        <GroupSummaryGrid
-          groups={hardwareExperimentGroups}
-          selectedGroupId={selectedGroup.id}
-          onSelect={setSelectedGroupId}
+      <section className="space-y-6">
+        <SectionHeader
+          eyebrow="How to read"
+          title="Probe는 benchmark가 아니라 질문을 가진 커널입니다"
+          desc="메인 페이지에서는 전체 지도를 먼저 보여줍니다. 개별 실험의 코드, 그래프, 결과 해석은 상세 페이지에서 확인하고, 여기서는 각 probe가 어떤 하드웨어 층위를 건드리는지 빠르게 파악합니다."
         />
 
-        <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
-          <aside className="xl:sticky xl:top-24 xl:self-start">
-            <div className="space-y-6">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                <div className="mb-3 text-xs uppercase tracking-[0.18em] text-lime-400/80">
-                  Probe Groups
-                </div>
+        <div className="grid gap-4 lg:grid-cols-4">
+          <ReadingStepCard
+            index="1"
+            title="무엇을 바꾸는가"
+            desc="stride, padding, work size, address pattern처럼 실험에서 흔드는 변수를 먼저 봅니다."
+          />
 
-                <div className="space-y-3">
-                  {hardwareExperimentGroups.map((group) => (
-                    <GroupNavCard
-                      key={group.id}
-                      group={group}
-                      active={group.id === selectedGroup.id}
-                      onClick={() => setSelectedGroupId(group.id)}
-                    />
-                  ))}
-                </div>
-              </div>
+          <ReadingStepCard
+            index="2"
+            title="무엇을 고정하는가"
+            desc="total work, thread shape, memory size, iteration count처럼 비교 기준을 고정합니다."
+          />
 
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                <div className="mb-3 text-xs uppercase tracking-[0.18em] text-lime-400/80">
-                  Probes in {selectedGroup.label}
-                </div>
+          <ReadingStepCard
+            index="3"
+            title="어떤 반응이 드러나는가"
+            desc="latency spike, throughput drop, work collapse, conflict, reuse 같은 신호를 읽습니다."
+          />
 
-                <div className="space-y-3">
-                  {selectedGroup.experiments?.map((experiment) => (
-                    <ExperimentNavCard
-                      key={experiment.id}
-                      experiment={experiment}
-                      active={experiment.id === selectedExperiment.id}
-                      onClick={() => setSelectedExperimentId(experiment.id)}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </aside>
-
-          <div className="space-y-6">
-            <GroupOverviewCard group={selectedGroup} />
-
-            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-              <div className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
-                {selectedExperiment.category}
-              </div>
-              <h3 className="mt-3 text-2xl font-semibold text-white">
-                {selectedExperiment.label}
-              </h3>
-              <p className="mt-4 text-sm leading-7 text-neutral-400">
-                {selectedExperiment.summary}
-              </p>
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                <h4 className="text-lg font-semibold text-white">
-                  Probe Question
-                </h4>
-                <p className="mt-3 text-sm leading-7 text-neutral-400">
-                  {selectedExperiment.question}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                <h4 className="text-lg font-semibold text-white">
-                  AICF에서 필요한 이유
-                </h4>
-                <p className="mt-3 text-sm leading-7 text-neutral-400">
-                  {selectedExperiment.whyItMatters}
-                </p>
-              </div>
-            </div>
-
-            <DetailList
-              title="Probe 구성 방식"
-              items={selectedExperiment.method}
-            />
-
-            <KernelShapeTable kernelShape={selectedExperiment.kernelShape} />
-
-            {selectedExperiment.codeSnippet ? (
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                <h4 className="text-lg font-semibold text-white">
-                  핵심 커널 발췌
-                </h4>
-                <p className="mt-3 text-sm leading-6 text-neutral-400">
-                  전체 구현보다, 이 실험의 하드웨어 반응을 만드는 최소 코드
-                  구조에 집중합니다. 이 조각이 어떤 접근 패턴, 동기화, 반복,
-                  주소 분포를 만드는지가 해석의 출발점입니다.
-                </p>
-                <pre className="mt-4 overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-sm leading-6 text-neutral-200">
-                  <code>{selectedExperiment.codeSnippet}</code>
-                </pre>
-              </div>
-            ) : null}
-
-            <ChartSection
-              charts={selectedExperiment.charts}
-              chartData={selectedExperiment.chartData}
-            />
-
-            <div className="grid gap-6 lg:grid-cols-2">
-              <DetailList
-                title="관찰할 신호"
-                items={selectedExperiment.observe}
-              />
-              <DetailList
-                title="예상 출력 형태"
-                items={selectedExperiment.outputs}
-              />
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-2">
-              <DetailList
-                title="관찰된 결과"
-                items={selectedExperiment.resultHighlights}
-              />
-              <DetailList
-                title="가능한 해석"
-                items={selectedExperiment.interpretation}
-              />
-            </div>
-
-            <DetailList
-              title="한계와 과잉해석 방지"
-              items={selectedExperiment.caveats}
-            />
-            <DetailList
-              title="후속 검증 Probe"
-              items={selectedExperiment.nextProbes}
-            />
-
-            <NextLinks links={selectedExperiment.nextLinks} />
-          </div>
+          <ReadingStepCard
+            index="4"
+            title="무엇을 단정하면 안 되는가"
+            desc="단일 결과를 하드웨어 원리로 과잉해석하지 않고, 후속 probe로 검증합니다."
+          />
         </div>
       </section>
 
+      {hardwareExperimentsIntro ? (
+        <section className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+          <div className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
+            Probe Atlas
+          </div>
+
+          <h2 className="mt-3 text-2xl font-semibold text-white">
+            {hardwareExperimentsIntro.title}
+          </h2>
+
+          <p className="mt-4 max-w-5xl text-sm leading-7 text-neutral-400">
+            {hardwareExperimentsIntro.desc}
+          </p>
+        </section>
+      ) : null}
+
+      <section className="space-y-6">
+        <SectionHeader
+          eyebrow="Probe Groups"
+          title="먼저 하드웨어 층위를 고릅니다"
+          desc="각 그룹은 하나의 하드웨어 질문 묶음입니다. Global Memory, Shared Memory, Occupancy, Control Flow처럼 서로 다른 실행 층위를 나누어 보고, 그 안에서 개별 probe를 배치합니다."
+        />
+
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {hardwareExperimentGroups.map((group) => (
+            <GroupCard
+              key={group.id}
+              group={group}
+              active={group.id === selectedGroup?.id}
+              onClick={() => setSelectedGroupId(group.id)}
+            />
+          ))}
+        </div>
+      </section>
+
+      {selectedGroup ? (
+        <section className="space-y-6">
+          <SelectedGroupOverview group={selectedGroup} />
+
+          <div className="space-y-4">
+            <SectionHeader
+              eyebrow="Experiments"
+              title={`${selectedGroup.label} probes`}
+              desc="메인에서는 각 실험의 질문과 관찰 신호만 보여줍니다. 커널 코드, 그래프, 결과 해석, caveat는 상세 페이지로 분리하는 구조가 읽기 쉽습니다."
+            />
+
+            <div className="grid gap-5 lg:grid-cols-2">
+              {selectedGroup.experiments?.map((experiment) => (
+                <ExperimentCard key={experiment.id} experiment={experiment} />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="grid gap-6 lg:grid-cols-3">
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 lg:col-span-2">
-          <h2 className="text-xl font-semibold text-white">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 lg:col-span-2">
+          <div className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
+            From Evidence to Realization
+          </div>
+
+          <h2 className="mt-3 text-2xl font-semibold text-white">
             이 증거가 realization 선택으로 이어지는 방식
           </h2>
-          <p className="mt-3 text-sm leading-7 text-neutral-400">
+
+          <p className="mt-4 text-sm leading-7 text-neutral-400">
             하드웨어 probe는 결과 보관소가 아니라, 커널 합성기가 realization을
             선택할 때 참조하는 경험적 근거입니다. 특정 stride에서 spike가
             생기는지, padding으로 완화되는지, fixed-work 조건에서도 비용이
             유지되는지, register pressure가 어느 지점에서 occupancy를 무너뜨리는지
-            같은 관찰은 이후 layout transformation, tiling, vectorization,
-            shared memory 사용 여부, compiler lowering 검증으로 연결됩니다.
+            같은 관찰은 이후 layout transformation, tiling, vectorization, shared
+            memory 사용 여부, compiler lowering 검증으로 연결됩니다.
           </p>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-          <h2 className="text-xl font-semibold text-white">다음 경로</h2>
-          <div className="mt-4 space-y-3 text-sm">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6">
+          <div className="text-xs uppercase tracking-[0.18em] text-lime-400/80">
+            Next
+          </div>
+
+          <h2 className="mt-3 text-2xl font-semibold text-white">다음 경로</h2>
+
+          <div className="mt-5 space-y-3 text-sm">
             <Link
               to="/properties-new"
               className="block rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-neutral-300 transition hover:border-lime-400/40 hover:text-white"
             >
               변환 성질 보기
             </Link>
+
             <Link
               to="/operators-new"
               className="block rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-neutral-300 transition hover:border-lime-400/40 hover:text-white"
             >
               연산자 실현 구조 보기
             </Link>
+
             <Link
               to="/analysis-new"
               className="block rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-neutral-300 transition hover:border-lime-400/40 hover:text-white"

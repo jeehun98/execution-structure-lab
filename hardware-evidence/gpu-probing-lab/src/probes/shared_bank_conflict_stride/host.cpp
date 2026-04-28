@@ -37,6 +37,7 @@ struct EventTimer {
   float toc_ms() {
     CUDA_CHECK(cudaEventRecord(stop));
     CUDA_CHECK(cudaEventSynchronize(stop));
+
     float ms = 0.0f;
     CUDA_CHECK(cudaEventElapsedTime(&ms, start, stop));
     return ms;
@@ -45,20 +46,46 @@ struct EventTimer {
 
 std::string escape_json(const std::string& s) {
   std::ostringstream oss;
+
   for (char c : s) {
     switch (c) {
-      case '\"': oss << "\\\""; break;
-      case '\\': oss << "\\\\"; break;
-      case '\n': oss << "\\n"; break;
-      case '\r': oss << "\\r"; break;
-      case '\t': oss << "\\t"; break;
-      default: oss << c; break;
+      case '\"':
+        oss << "\\\"";
+        break;
+      case '\\':
+        oss << "\\\\";
+        break;
+      case '\n':
+        oss << "\\n";
+        break;
+      case '\r':
+        oss << "\\r";
+        break;
+      case '\t':
+        oss << "\\t";
+        break;
+      default:
+        oss << c;
+        break;
     }
   }
+
   return oss.str();
 }
 
-} // namespace
+void validate_stride_values(const std::vector<int>& strides) {
+  if (strides.empty()) {
+    throw std::runtime_error("stride list must not be empty");
+  }
+
+  for (int stride : strides) {
+    if (stride <= 0) {
+      throw std::runtime_error("all stride values must be > 0");
+    }
+  }
+}
+
+}  // namespace
 
 void launch_shared_bank_conflict_stride_kernel(
     float* out,
@@ -72,11 +99,29 @@ void launch_shared_bank_conflict_stride_kernel(
     bool pad_every_32);
 
 std::vector<int> default_stride_values(int max_stride) {
+  if (max_stride <= 0) {
+    throw std::runtime_error("max_stride must be > 0");
+  }
+
   std::vector<int> v;
+  v.reserve(static_cast<size_t>(max_stride));
+
   for (int s = 1; s <= max_stride; ++s) {
     v.push_back(s);
   }
+
   return v;
+}
+
+std::vector<int> stride_values_from_config(const Config& cfg) {
+  if (!cfg.strides.empty()) {
+    validate_stride_values(cfg.strides);
+    return cfg.strides;
+  }
+
+  auto strides = default_stride_values(cfg.max_stride);
+  validate_stride_values(strides);
+  return strides;
 }
 
 static ResultPoint run_single_case(
@@ -85,6 +130,7 @@ static ResultPoint run_single_case(
     float* d_out,
     std::vector<float>& h_out) {
   ResultPoint r;
+
   r.stride = stride;
   r.block_size = cfg.block_size;
   r.grid_size = cfg.grid_size;
@@ -99,6 +145,11 @@ static ResultPoint run_single_case(
   r.write_mode = cfg.write_mode;
   r.pad_every_32 = cfg.pad_every_32;
 
+  CUDA_CHECK(cudaMemset(
+      d_out,
+      0,
+      sizeof(float) * static_cast<size_t>(r.launched_threads)));
+
   for (int i = 0; i < cfg.warmup; ++i) {
     launch_shared_bank_conflict_stride_kernel(
         d_out,
@@ -111,6 +162,7 @@ static ResultPoint run_single_case(
         cfg.write_mode,
         cfg.pad_every_32);
   }
+
   CUDA_CHECK(cudaDeviceSynchronize());
 
   EventTimer timer;
@@ -118,6 +170,7 @@ static ResultPoint run_single_case(
 
   for (int i = 0; i < cfg.repeat; ++i) {
     timer.tic();
+
     launch_shared_bank_conflict_stride_kernel(
         d_out,
         cfg.block_size,
@@ -128,6 +181,7 @@ static ResultPoint run_single_case(
         cfg.use_modulo_wrap,
         cfg.write_mode,
         cfg.pad_every_32);
+
     ms_sum += timer.toc_ms();
   }
 
@@ -145,13 +199,15 @@ static ResultPoint run_single_case(
 
   for (float v : h_out) {
     const double dv = static_cast<double>(v);
+
     checksum += dv;
     sum += dv;
     max_abs = std::max(max_abs, std::abs(dv));
   }
 
   r.checksum = checksum;
-  r.output_mean = h_out.empty() ? 0.0 : (sum / static_cast<double>(h_out.size()));
+  r.output_mean =
+      h_out.empty() ? 0.0 : (sum / static_cast<double>(h_out.size()));
   r.output_max_abs = max_abs;
 
   return r;
@@ -161,18 +217,33 @@ RunResult run(const Config& cfg) {
   if (cfg.block_size <= 0) {
     throw std::runtime_error("block_size must be > 0");
   }
+
   if (cfg.grid_size <= 0) {
     throw std::runtime_error("grid_size must be > 0");
   }
+
   if (cfg.shared_span_floats <= 0) {
     throw std::runtime_error("shared_span_floats must be > 0");
   }
+
   if (cfg.accesses_per_thread <= 0) {
     throw std::runtime_error("accesses_per_thread must be > 0");
   }
-  if (cfg.max_stride <= 0) {
-    throw std::runtime_error("max_stride must be > 0");
+
+  if (cfg.warmup < 0) {
+    throw std::runtime_error("warmup must be >= 0");
   }
+
+  if (cfg.repeat <= 0) {
+    throw std::runtime_error("repeat must be > 0");
+  }
+
+  if (cfg.max_stride <= 0 && cfg.strides.empty()) {
+    throw std::runtime_error(
+        "max_stride must be > 0 when explicit strides are not provided");
+  }
+
+  const auto strides = stride_values_from_config(cfg);
 
   RunResult rr;
   rr.probe = "shared_bank_conflict_stride";
@@ -186,14 +257,15 @@ RunResult run(const Config& cfg) {
   CUDA_CHECK(cudaMemset(d_out, 0, out_bytes));
 
   std::vector<float> h_out(out_count, 0.0f);
-  const auto strides = default_stride_values(cfg.max_stride);
 
   rr.results.reserve(strides.size());
+
   for (int stride : strides) {
     rr.results.push_back(run_single_case(cfg, stride, d_out, h_out));
   }
 
   CUDA_CHECK(cudaFree(d_out));
+
   return rr;
 }
 
@@ -209,12 +281,14 @@ std::string to_json(
 
   os << "{\n";
   os << "  \"probe\": \"" << escape_json(result.probe) << "\",\n";
+
   os << "  \"device\": {\n";
   os << "    \"id\": " << device_id << ",\n";
   os << "    \"name\": \"" << escape_json(device_name) << "\",\n";
   os << "    \"cc_major\": " << cc_major << ",\n";
   os << "    \"cc_minor\": " << cc_minor << "\n";
   os << "  },\n";
+
   os << "  \"config\": {\n";
   os << "    \"block_size\": " << cfg.block_size << ",\n";
   os << "    \"grid_size\": " << cfg.grid_size << ",\n";
@@ -223,14 +297,39 @@ std::string to_json(
   os << "    \"warmup\": " << cfg.warmup << ",\n";
   os << "    \"repeat\": " << cfg.repeat << ",\n";
   os << "    \"max_stride\": " << cfg.max_stride << ",\n";
-  os << "    \"use_modulo_wrap\": " << (cfg.use_modulo_wrap ? "true" : "false") << ",\n";
-  os << "    \"write_mode\": " << (cfg.write_mode ? "true" : "false") << ",\n";
-  os << "    \"pad_every_32\": " << (cfg.pad_every_32 ? "true" : "false") << "\n";
+
+  os << "    \"strides\": [";
+  for (size_t i = 0; i < cfg.strides.size(); ++i) {
+    os << cfg.strides[i];
+    if (i + 1 < cfg.strides.size()) {
+      os << ", ";
+    }
+  }
+  os << "],\n";
+
+  os << "    \"effective_strides\": [";
+  const auto effective_strides = stride_values_from_config(cfg);
+  for (size_t i = 0; i < effective_strides.size(); ++i) {
+    os << effective_strides[i];
+    if (i + 1 < effective_strides.size()) {
+      os << ", ";
+    }
+  }
+  os << "],\n";
+
+  os << "    \"use_modulo_wrap\": "
+     << (cfg.use_modulo_wrap ? "true" : "false") << ",\n";
+  os << "    \"write_mode\": "
+     << (cfg.write_mode ? "true" : "false") << ",\n";
+  os << "    \"pad_every_32\": "
+     << (cfg.pad_every_32 ? "true" : "false") << "\n";
   os << "  },\n";
+
   os << "  \"results\": [\n";
 
   for (size_t i = 0; i < result.results.size(); ++i) {
     const auto& r = result.results[i];
+
     os << "    {\n";
     os << "      \"stride\": " << r.stride << ",\n";
     os << "      \"avg_ms\": " << r.avg_ms << ",\n";
@@ -241,9 +340,12 @@ std::string to_json(
     os << "      \"actual_total_accesses\": " << r.actual_total_accesses << ",\n";
     os << "      \"shared_span_floats\": " << r.shared_span_floats << ",\n";
     os << "      \"shared_span_bytes\": " << r.shared_span_bytes << ",\n";
-    os << "      \"use_modulo_wrap\": " << (r.use_modulo_wrap ? "true" : "false") << ",\n";
-    os << "      \"write_mode\": " << (r.write_mode ? "true" : "false") << ",\n";
-    os << "      \"pad_every_32\": " << (r.pad_every_32 ? "true" : "false") << ",\n";
+    os << "      \"use_modulo_wrap\": "
+       << (r.use_modulo_wrap ? "true" : "false") << ",\n";
+    os << "      \"write_mode\": "
+       << (r.write_mode ? "true" : "false") << ",\n";
+    os << "      \"pad_every_32\": "
+       << (r.pad_every_32 ? "true" : "false") << ",\n";
     os << "      \"checksum\": " << r.checksum << ",\n";
     os << "      \"output_mean\": " << r.output_mean << ",\n";
     os << "      \"output_max_abs\": " << r.output_max_abs << "\n";
@@ -265,11 +367,18 @@ void write_json(
     int cc_major,
     int cc_minor) {
   std::ofstream ofs(output_path);
+
   if (!ofs) {
     throw std::runtime_error("failed to open output file: " + output_path);
   }
 
-  ofs << to_json(result, cfg, device_id, device_name, cc_major, cc_minor);
+  ofs << to_json(
+      result,
+      cfg,
+      device_id,
+      device_name,
+      cc_major,
+      cc_minor);
 }
 
-} // namespace probe::shared_bank_conflict_stride
+}  // namespace probe::shared_bank_conflict_stride

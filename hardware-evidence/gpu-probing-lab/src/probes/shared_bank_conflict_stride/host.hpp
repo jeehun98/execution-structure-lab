@@ -14,7 +14,14 @@ struct Config {
 
   int warmup = 10;
   int repeat = 50;
+
+  // Fallback only.
+  // If explicit strides are provided, max_stride is not used for sweep generation.
   int max_stride = 64;
+
+  // Explicit irregular stride list.
+  // If empty, default_stride_values(max_stride) is used.
+  std::vector<int> strides;
 
   bool use_modulo_wrap = true;
   bool write_mode = false;
@@ -49,7 +56,15 @@ struct RunResult {
   std::vector<ResultPoint> results;
 };
 
+// Used only when Config::strides is empty.
+// Default behavior should remain compatible with the old max_stride-based sweep.
 std::vector<int> default_stride_values(int max_stride);
+
+// Preferred helper for sweep selection.
+// If cfg.strides is non-empty, returns cfg.strides.
+// Otherwise returns default_stride_values(cfg.max_stride).
+std::vector<int> stride_values_from_config(const Config& cfg);
+
 RunResult run(const Config& cfg);
 
 std::string to_json(
@@ -69,4 +84,4 @@ void write_json(
     int cc_major,
     int cc_minor);
 
-} // namespace probe::shared_bank_conflict_stride
+}  // namespace probe::shared_bank_conflict_stride

@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import PageShell from "./components/layout/PageShell";
+
 import AnalysisNewPage from "./pages/AnalysisNewPage";
 import AtlasHomePage from "./pages/AtlasHomePage";
 import HardwareEvidencePage from "./pages/HardwareEvidencePage";
+import HardwareExperimentDetailPage from "./pages/HardwareExperimentDetailPage";
 import InvariantsPage from "./pages/InvariantsPage";
 import MemoryNewPage from "./pages/MemoryNewPage";
 import OperatorsNewPage from "./pages/OperatorsNewPage";
@@ -30,6 +32,15 @@ export default function App() {
           element={
             <PageShell>
               <HardwareEvidencePage />
+            </PageShell>
+          }
+        />
+
+        <Route
+          path="/hardware-evidence/:experimentId"
+          element={
+            <PageShell>
+              <HardwareExperimentDetailPage />
             </PageShell>
           }
         />

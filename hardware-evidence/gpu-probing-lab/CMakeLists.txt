@@ -138,3 +138,50 @@ target_link_libraries(probe_runner_shared_bank_conflict_stride
 set_target_properties(probe_runner_shared_bank_conflict_stride PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+
+# ------------------------------------------------------------
+# shared pad effect library
+# ------------------------------------------------------------
+add_library(shared_pad_effect_lib
+    src/probes/shared_pad_effect/host.cpp
+    src/probes/shared_pad_effect/kernel.cu
+)
+
+target_include_directories(shared_pad_effect_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(shared_pad_effect_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(shared_pad_effect_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# shared pad effect probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_shared_pad_effect
+    src/main/probe_runner_shared_pad_effect.cpp
+)
+
+target_include_directories(probe_runner_shared_pad_effect
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_shared_pad_effect
+    PRIVATE
+        shared_pad_effect_lib
+)
+
+set_target_properties(probe_runner_shared_pad_effect PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
