@@ -46,25 +46,25 @@ set_target_properties(probe_common PROPERTIES
 )
 
 # ------------------------------------------------------------
-# global stride sweep library
+# warp issue policy probe library
 # ------------------------------------------------------------
-add_library(global_stride_sweep_lib
-    src/probes/global_stride_sweep/host.cpp
-    src/probes/global_stride_sweep/kernel.cu
+add_library(warp_issue_policy_probe_lib
+    src/probes/warp_issue_policy_probe/host.cpp
+    src/probes/warp_issue_policy_probe/kernel.cu
 )
 
-target_include_directories(global_stride_sweep_lib
+target_include_directories(warp_issue_policy_probe_lib
     PUBLIC
         ${PROBE_INCLUDE_DIRS}
 )
 
-target_link_libraries(global_stride_sweep_lib
+target_link_libraries(warp_issue_policy_probe_lib
     PUBLIC
         probe_common
         CUDA::cudart
 )
 
-set_target_properties(global_stride_sweep_lib PROPERTIES
+set_target_properties(warp_issue_policy_probe_lib PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
     CUDA_RESOLVE_DEVICE_SYMBOLS ON
     ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
@@ -72,163 +72,22 @@ set_target_properties(global_stride_sweep_lib PROPERTIES
 )
 
 # ------------------------------------------------------------
-# shared bank conflict stride library
+# warp issue policy probe runner
 # ------------------------------------------------------------
-add_library(shared_bank_conflict_stride_lib
-    src/probes/shared_bank_conflict_stride/host.cpp
-    src/probes/shared_bank_conflict_stride/kernel.cu
+add_executable(probe_runner_warp_issue_policy
+    src/main/probe_runner_warp_issue_policy.cpp
 )
 
-target_include_directories(shared_bank_conflict_stride_lib
-    PUBLIC
-        ${PROBE_INCLUDE_DIRS}
-)
-
-target_link_libraries(shared_bank_conflict_stride_lib
-    PUBLIC
-        probe_common
-        CUDA::cudart
-)
-
-set_target_properties(shared_bank_conflict_stride_lib PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
-    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
-)
-
-# ------------------------------------------------------------
-# global stride probe runner
-# ------------------------------------------------------------
-add_executable(probe_runner_global_stride
-    src/main/probe_runner_global_stride.cpp
-)
-
-target_include_directories(probe_runner_global_stride
+target_include_directories(probe_runner_warp_issue_policy
     PRIVATE
         ${PROBE_INCLUDE_DIRS}
 )
 
-target_link_libraries(probe_runner_global_stride
+target_link_libraries(probe_runner_warp_issue_policy
     PRIVATE
-        global_stride_sweep_lib
+        warp_issue_policy_probe_lib
 )
 
-set_target_properties(probe_runner_global_stride PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
-)
-
-# ------------------------------------------------------------
-# shared bank conflict stride probe runner
-# ------------------------------------------------------------
-add_executable(probe_runner_shared_bank_conflict_stride
-    src/main/probe_runner_shared_bank_conflict_stride.cpp
-)
-
-target_include_directories(probe_runner_shared_bank_conflict_stride
-    PRIVATE
-        ${PROBE_INCLUDE_DIRS}
-)
-
-target_link_libraries(probe_runner_shared_bank_conflict_stride
-    PRIVATE
-        shared_bank_conflict_stride_lib
-)
-
-set_target_properties(probe_runner_shared_bank_conflict_stride PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
-)
-
-# ------------------------------------------------------------
-# shared pad effect library
-# ------------------------------------------------------------
-add_library(shared_pad_effect_lib
-    src/probes/shared_pad_effect/host.cpp
-    src/probes/shared_pad_effect/kernel.cu
-)
-
-target_include_directories(shared_pad_effect_lib
-    PUBLIC
-        ${PROBE_INCLUDE_DIRS}
-)
-
-target_link_libraries(shared_pad_effect_lib
-    PUBLIC
-        probe_common
-        CUDA::cudart
-)
-
-set_target_properties(shared_pad_effect_lib PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
-    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
-)
-
-# ------------------------------------------------------------
-# shared pad effect probe runner
-# ------------------------------------------------------------
-add_executable(probe_runner_shared_pad_effect
-    src/main/probe_runner_shared_pad_effect.cpp
-)
-
-target_include_directories(probe_runner_shared_pad_effect
-    PRIVATE
-        ${PROBE_INCLUDE_DIRS}
-)
-
-target_link_libraries(probe_runner_shared_pad_effect
-    PRIVATE
-        shared_pad_effect_lib
-)
-
-set_target_properties(probe_runner_shared_pad_effect PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
-)
-
-# ------------------------------------------------------------
-# shared padding period sweep library
-# ------------------------------------------------------------
-add_library(shared_padding_period_sweep_lib
-    src/probes/shared_padding_period_sweep/host.cpp
-    src/probes/shared_padding_period_sweep/kernel.cu
-)
-
-target_include_directories(shared_padding_period_sweep_lib
-    PUBLIC
-        ${PROBE_INCLUDE_DIRS}
-)
-
-target_link_libraries(shared_padding_period_sweep_lib
-    PUBLIC
-        probe_common
-        CUDA::cudart
-)
-
-set_target_properties(shared_padding_period_sweep_lib PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
-    CUDA_RESOLVE_DEVICE_SYMBOLS ON
-    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
-    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
-)
-
-# ------------------------------------------------------------
-# shared padding period sweep probe runner
-# ------------------------------------------------------------
-add_executable(probe_runner_shared_padding_period_sweep
-    src/main/probe_runner_shared_padding_period_sweep.cpp
-)
-
-target_include_directories(probe_runner_shared_padding_period_sweep
-    PRIVATE
-        ${PROBE_INCLUDE_DIRS}
-)
-
-target_link_libraries(probe_runner_shared_padding_period_sweep
-    PRIVATE
-        shared_padding_period_sweep_lib
-)
-
-set_target_properties(probe_runner_shared_padding_period_sweep PROPERTIES
+set_target_properties(probe_runner_warp_issue_policy PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )

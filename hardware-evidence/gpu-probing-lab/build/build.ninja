@@ -87,416 +87,107 @@ build lib\probe_common.lib: CXX_STATIC_LIBRARY_LINKER__probe_common_Release CMak
   TARGET_PDB = lib\probe_common.pdb
 
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target global_stride_sweep_lib
+# Object build statements for STATIC_LIBRARY target warp_issue_policy_probe_lib
 
 
 #############################################
-# Order-only phony target for global_stride_sweep_lib
+# Order-only phony target for warp_issue_policy_probe_lib
 
-build cmake_object_order_depends_target_global_stride_sweep_lib: phony || cmake_object_order_depends_target_probe_common
+build cmake_object_order_depends_target_warp_issue_policy_probe_lib: phony || cmake_object_order_depends_target_probe_common
 
-build CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep\host.cpp.obj: CXX_COMPILER__global_stride_sweep_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\global_stride_sweep\host.cpp || cmake_object_order_depends_target_global_stride_sweep_lib
+build CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe\host.cpp.obj: CXX_COMPILER__warp_issue_policy_probe_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\warp_issue_policy_probe\host.cpp || cmake_object_order_depends_target_warp_issue_policy_probe_lib
   CONFIG = Release
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
   INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\global_stride_sweep_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep
-  TARGET_COMPILE_PDB = CMakeFiles\global_stride_sweep_lib.dir\global_stride_sweep_lib.pdb
-  TARGET_PDB = lib\global_stride_sweep_lib.pdb
+  OBJECT_DIR = CMakeFiles\warp_issue_policy_probe_lib.dir
+  OBJECT_FILE_DIR = CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe
+  TARGET_COMPILE_PDB = CMakeFiles\warp_issue_policy_probe_lib.dir\warp_issue_policy_probe_lib.pdb
+  TARGET_PDB = lib\warp_issue_policy_probe_lib.pdb
 
-build CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep\kernel.cu.obj: CUDA_COMPILER__global_stride_sweep_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\global_stride_sweep\kernel.cu || cmake_object_order_depends_target_global_stride_sweep_lib
+build CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe\kernel.cu.obj: CUDA_COMPILER__warp_issue_policy_probe_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\warp_issue_policy_probe\kernel.cu || cmake_object_order_depends_target_warp_issue_policy_probe_lib
   CONFIG = Release
-  DEP_FILE = CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep\kernel.cu.obj.d
+  DEP_FILE = CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe\kernel.cu.obj.d
   FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
   INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -isystem "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
-  OBJECT_DIR = CMakeFiles\global_stride_sweep_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep
-  TARGET_COMPILE_PDB = CMakeFiles\global_stride_sweep_lib.dir\global_stride_sweep_lib.pdb
-  TARGET_PDB = lib\global_stride_sweep_lib.pdb
+  OBJECT_DIR = CMakeFiles\warp_issue_policy_probe_lib.dir
+  OBJECT_FILE_DIR = CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe
+  TARGET_COMPILE_PDB = CMakeFiles\warp_issue_policy_probe_lib.dir\warp_issue_policy_probe_lib.pdb
+  TARGET_PDB = lib\warp_issue_policy_probe_lib.pdb
 
 
 # =============================================================================
-# Device Link build statements for STATIC_LIBRARY target global_stride_sweep_lib
+# Device Link build statements for STATIC_LIBRARY target warp_issue_policy_probe_lib
 
 
 #############################################
-# Link the static library CMakeFiles\global_stride_sweep_lib.dir\cmake_device_link.obj
+# Link the static library CMakeFiles\warp_issue_policy_probe_lib.dir\cmake_device_link.obj
 
-build CMakeFiles\global_stride_sweep_lib.dir\cmake_device_link.obj: CXX_STATIC_LIBRARY_DEVICE_LINKER__global_stride_sweep_lib_Release CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep\host.cpp.obj CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep\kernel.cu.obj || lib\probe_common.lib
+build CMakeFiles\warp_issue_policy_probe_lib.dir\cmake_device_link.obj: CXX_STATIC_LIBRARY_DEVICE_LINKER__warp_issue_policy_probe_lib_Release CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe\host.cpp.obj CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe\kernel.cu.obj || lib\probe_common.lib
   LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
   LINK_LIBRARIES = lib\probe_common.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\global_stride_sweep_lib.dir
-  TARGET_COMPILE_PDB = CMakeFiles\global_stride_sweep_lib.dir\global_stride_sweep_lib.pdb
-  TARGET_FILE = CMakeFiles\global_stride_sweep_lib.dir\cmake_device_link.obj
-  TARGET_PDB = lib\global_stride_sweep_lib.pdb
+  OBJECT_DIR = CMakeFiles\warp_issue_policy_probe_lib.dir
+  TARGET_COMPILE_PDB = CMakeFiles\warp_issue_policy_probe_lib.dir\warp_issue_policy_probe_lib.pdb
+  TARGET_FILE = CMakeFiles\warp_issue_policy_probe_lib.dir\cmake_device_link.obj
+  TARGET_PDB = lib\warp_issue_policy_probe_lib.pdb
 
 # =============================================================================
-# Link build statements for STATIC_LIBRARY target global_stride_sweep_lib
+# Link build statements for STATIC_LIBRARY target warp_issue_policy_probe_lib
 
 
 #############################################
-# Link the static library lib\global_stride_sweep_lib.lib
+# Link the static library lib\warp_issue_policy_probe_lib.lib
 
-build lib\global_stride_sweep_lib.lib: CXX_STATIC_LIBRARY_LINKER__global_stride_sweep_lib_Release CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep\host.cpp.obj CMakeFiles\global_stride_sweep_lib.dir\src\probes\global_stride_sweep\kernel.cu.obj CMakeFiles\global_stride_sweep_lib.dir\cmake_device_link.obj || lib\probe_common.lib
+build lib\warp_issue_policy_probe_lib.lib: CXX_STATIC_LIBRARY_LINKER__warp_issue_policy_probe_lib_Release CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe\host.cpp.obj CMakeFiles\warp_issue_policy_probe_lib.dir\src\probes\warp_issue_policy_probe\kernel.cu.obj CMakeFiles\warp_issue_policy_probe_lib.dir\cmake_device_link.obj || lib\probe_common.lib
   CONFIG = Release
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
   LINK_FLAGS = /machine:x64
-  OBJECT_DIR = CMakeFiles\global_stride_sweep_lib.dir
+  OBJECT_DIR = CMakeFiles\warp_issue_policy_probe_lib.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\global_stride_sweep_lib.dir\global_stride_sweep_lib.pdb
-  TARGET_FILE = lib\global_stride_sweep_lib.lib
-  TARGET_PDB = lib\global_stride_sweep_lib.pdb
+  TARGET_COMPILE_PDB = CMakeFiles\warp_issue_policy_probe_lib.dir\warp_issue_policy_probe_lib.pdb
+  TARGET_FILE = lib\warp_issue_policy_probe_lib.lib
+  TARGET_PDB = lib\warp_issue_policy_probe_lib.pdb
 
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target shared_bank_conflict_stride_lib
+# Object build statements for EXECUTABLE target probe_runner_warp_issue_policy
 
 
 #############################################
-# Order-only phony target for shared_bank_conflict_stride_lib
+# Order-only phony target for probe_runner_warp_issue_policy
 
-build cmake_object_order_depends_target_shared_bank_conflict_stride_lib: phony || cmake_object_order_depends_target_probe_common
+build cmake_object_order_depends_target_probe_runner_warp_issue_policy: phony || cmake_object_order_depends_target_probe_common cmake_object_order_depends_target_warp_issue_policy_probe_lib
 
-build CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\host.cpp.obj: CXX_COMPILER__shared_bank_conflict_stride_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\shared_bank_conflict_stride\host.cpp || cmake_object_order_depends_target_shared_bank_conflict_stride_lib
+build CMakeFiles\probe_runner_warp_issue_policy.dir\src\main\probe_runner_warp_issue_policy.cpp.obj: CXX_COMPILER__probe_runner_warp_issue_policy_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_warp_issue_policy.cpp || cmake_object_order_depends_target_probe_runner_warp_issue_policy
   CONFIG = Release
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
   INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride
-  TARGET_COMPILE_PDB = CMakeFiles\shared_bank_conflict_stride_lib.dir\shared_bank_conflict_stride_lib.pdb
-  TARGET_PDB = lib\shared_bank_conflict_stride_lib.pdb
-
-build CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\kernel.cu.obj: CUDA_COMPILER__shared_bank_conflict_stride_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\shared_bank_conflict_stride\kernel.cu || cmake_object_order_depends_target_shared_bank_conflict_stride_lib
-  CONFIG = Release
-  DEP_FILE = CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\kernel.cu.obj.d
-  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -isystem "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
-  OBJECT_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride
-  TARGET_COMPILE_PDB = CMakeFiles\shared_bank_conflict_stride_lib.dir\shared_bank_conflict_stride_lib.pdb
-  TARGET_PDB = lib\shared_bank_conflict_stride_lib.pdb
+  OBJECT_DIR = CMakeFiles\probe_runner_warp_issue_policy.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_warp_issue_policy.dir\src\main
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_warp_issue_policy.dir\
+  TARGET_PDB = bin\probe_runner_warp_issue_policy.pdb
 
 
 # =============================================================================
-# Device Link build statements for STATIC_LIBRARY target shared_bank_conflict_stride_lib
+# Link build statements for EXECUTABLE target probe_runner_warp_issue_policy
 
 
 #############################################
-# Link the static library CMakeFiles\shared_bank_conflict_stride_lib.dir\cmake_device_link.obj
+# Link the executable bin\probe_runner_warp_issue_policy.exe
 
-build CMakeFiles\shared_bank_conflict_stride_lib.dir\cmake_device_link.obj: CXX_STATIC_LIBRARY_DEVICE_LINKER__shared_bank_conflict_stride_lib_Release CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\host.cpp.obj CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\kernel.cu.obj || lib\probe_common.lib
-  LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
-  LINK_LIBRARIES = lib\probe_common.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir
-  TARGET_COMPILE_PDB = CMakeFiles\shared_bank_conflict_stride_lib.dir\shared_bank_conflict_stride_lib.pdb
-  TARGET_FILE = CMakeFiles\shared_bank_conflict_stride_lib.dir\cmake_device_link.obj
-  TARGET_PDB = lib\shared_bank_conflict_stride_lib.pdb
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target shared_bank_conflict_stride_lib
-
-
-#############################################
-# Link the static library lib\shared_bank_conflict_stride_lib.lib
-
-build lib\shared_bank_conflict_stride_lib.lib: CXX_STATIC_LIBRARY_LINKER__shared_bank_conflict_stride_lib_Release CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\host.cpp.obj CMakeFiles\shared_bank_conflict_stride_lib.dir\src\probes\shared_bank_conflict_stride\kernel.cu.obj CMakeFiles\shared_bank_conflict_stride_lib.dir\cmake_device_link.obj || lib\probe_common.lib
-  CONFIG = Release
-  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
-  LINK_FLAGS = /machine:x64
-  OBJECT_DIR = CMakeFiles\shared_bank_conflict_stride_lib.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\shared_bank_conflict_stride_lib.dir\shared_bank_conflict_stride_lib.pdb
-  TARGET_FILE = lib\shared_bank_conflict_stride_lib.lib
-  TARGET_PDB = lib\shared_bank_conflict_stride_lib.pdb
-
-# =============================================================================
-# Object build statements for EXECUTABLE target probe_runner_global_stride
-
-
-#############################################
-# Order-only phony target for probe_runner_global_stride
-
-build cmake_object_order_depends_target_probe_runner_global_stride: phony || cmake_object_order_depends_target_global_stride_sweep_lib cmake_object_order_depends_target_probe_common
-
-build CMakeFiles\probe_runner_global_stride.dir\src\main\probe_runner_global_stride.cpp.obj: CXX_COMPILER__probe_runner_global_stride_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_global_stride.cpp || cmake_object_order_depends_target_probe_runner_global_stride
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\probe_runner_global_stride.dir
-  OBJECT_FILE_DIR = CMakeFiles\probe_runner_global_stride.dir\src\main
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_global_stride.dir\
-  TARGET_PDB = bin\probe_runner_global_stride.pdb
-
-
-# =============================================================================
-# Link build statements for EXECUTABLE target probe_runner_global_stride
-
-
-#############################################
-# Link the executable bin\probe_runner_global_stride.exe
-
-build bin\probe_runner_global_stride.exe: CXX_EXECUTABLE_LINKER__probe_runner_global_stride_Release CMakeFiles\probe_runner_global_stride.dir\src\main\probe_runner_global_stride.cpp.obj | lib\global_stride_sweep_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\global_stride_sweep_lib.lib lib\probe_common.lib
+build bin\probe_runner_warp_issue_policy.exe: CXX_EXECUTABLE_LINKER__probe_runner_warp_issue_policy_Release CMakeFiles\probe_runner_warp_issue_policy.dir\src\main\probe_runner_warp_issue_policy.cpp.obj | lib\warp_issue_policy_probe_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\probe_common.lib lib\warp_issue_policy_probe_lib.lib
   CONFIG = Release
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
   LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
-  LINK_LIBRARIES = lib\global_stride_sweep_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_LIBRARIES = lib\warp_issue_policy_probe_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\probe_runner_global_stride.dir
+  OBJECT_DIR = CMakeFiles\probe_runner_warp_issue_policy.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_global_stride.dir\
-  TARGET_FILE = bin\probe_runner_global_stride.exe
-  TARGET_IMPLIB = probe_runner_global_stride.lib
-  TARGET_PDB = bin\probe_runner_global_stride.pdb
-
-# =============================================================================
-# Object build statements for EXECUTABLE target probe_runner_shared_bank_conflict_stride
-
-
-#############################################
-# Order-only phony target for probe_runner_shared_bank_conflict_stride
-
-build cmake_object_order_depends_target_probe_runner_shared_bank_conflict_stride: phony || cmake_object_order_depends_target_probe_common cmake_object_order_depends_target_shared_bank_conflict_stride_lib
-
-build CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\src\main\probe_runner_shared_bank_conflict_stride.cpp.obj: CXX_COMPILER__probe_runner_shared_bank_conflict_stride_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_shared_bank_conflict_stride.cpp || cmake_object_order_depends_target_probe_runner_shared_bank_conflict_stride
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir
-  OBJECT_FILE_DIR = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\src\main
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\
-  TARGET_PDB = bin\probe_runner_shared_bank_conflict_stride.pdb
-
-
-# =============================================================================
-# Link build statements for EXECUTABLE target probe_runner_shared_bank_conflict_stride
-
-
-#############################################
-# Link the executable bin\probe_runner_shared_bank_conflict_stride.exe
-
-build bin\probe_runner_shared_bank_conflict_stride.exe: CXX_EXECUTABLE_LINKER__probe_runner_shared_bank_conflict_stride_Release CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\src\main\probe_runner_shared_bank_conflict_stride.cpp.obj | lib\shared_bank_conflict_stride_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\probe_common.lib lib\shared_bank_conflict_stride_lib.lib
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
-  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
-  LINK_LIBRARIES = lib\shared_bank_conflict_stride_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_shared_bank_conflict_stride.dir\
-  TARGET_FILE = bin\probe_runner_shared_bank_conflict_stride.exe
-  TARGET_IMPLIB = probe_runner_shared_bank_conflict_stride.lib
-  TARGET_PDB = bin\probe_runner_shared_bank_conflict_stride.pdb
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target shared_pad_effect_lib
-
-
-#############################################
-# Order-only phony target for shared_pad_effect_lib
-
-build cmake_object_order_depends_target_shared_pad_effect_lib: phony || cmake_object_order_depends_target_probe_common
-
-build CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect\host.cpp.obj: CXX_COMPILER__shared_pad_effect_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\shared_pad_effect\host.cpp || cmake_object_order_depends_target_shared_pad_effect_lib
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\shared_pad_effect_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect
-  TARGET_COMPILE_PDB = CMakeFiles\shared_pad_effect_lib.dir\shared_pad_effect_lib.pdb
-  TARGET_PDB = lib\shared_pad_effect_lib.pdb
-
-build CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect\kernel.cu.obj: CUDA_COMPILER__shared_pad_effect_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\shared_pad_effect\kernel.cu || cmake_object_order_depends_target_shared_pad_effect_lib
-  CONFIG = Release
-  DEP_FILE = CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect\kernel.cu.obj.d
-  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -isystem "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
-  OBJECT_DIR = CMakeFiles\shared_pad_effect_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect
-  TARGET_COMPILE_PDB = CMakeFiles\shared_pad_effect_lib.dir\shared_pad_effect_lib.pdb
-  TARGET_PDB = lib\shared_pad_effect_lib.pdb
-
-
-# =============================================================================
-# Device Link build statements for STATIC_LIBRARY target shared_pad_effect_lib
-
-
-#############################################
-# Link the static library CMakeFiles\shared_pad_effect_lib.dir\cmake_device_link.obj
-
-build CMakeFiles\shared_pad_effect_lib.dir\cmake_device_link.obj: CXX_STATIC_LIBRARY_DEVICE_LINKER__shared_pad_effect_lib_Release CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect\host.cpp.obj CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect\kernel.cu.obj || lib\probe_common.lib
-  LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
-  LINK_LIBRARIES = lib\probe_common.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\shared_pad_effect_lib.dir
-  TARGET_COMPILE_PDB = CMakeFiles\shared_pad_effect_lib.dir\shared_pad_effect_lib.pdb
-  TARGET_FILE = CMakeFiles\shared_pad_effect_lib.dir\cmake_device_link.obj
-  TARGET_PDB = lib\shared_pad_effect_lib.pdb
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target shared_pad_effect_lib
-
-
-#############################################
-# Link the static library lib\shared_pad_effect_lib.lib
-
-build lib\shared_pad_effect_lib.lib: CXX_STATIC_LIBRARY_LINKER__shared_pad_effect_lib_Release CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect\host.cpp.obj CMakeFiles\shared_pad_effect_lib.dir\src\probes\shared_pad_effect\kernel.cu.obj CMakeFiles\shared_pad_effect_lib.dir\cmake_device_link.obj || lib\probe_common.lib
-  CONFIG = Release
-  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
-  LINK_FLAGS = /machine:x64
-  OBJECT_DIR = CMakeFiles\shared_pad_effect_lib.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\shared_pad_effect_lib.dir\shared_pad_effect_lib.pdb
-  TARGET_FILE = lib\shared_pad_effect_lib.lib
-  TARGET_PDB = lib\shared_pad_effect_lib.pdb
-
-# =============================================================================
-# Object build statements for EXECUTABLE target probe_runner_shared_pad_effect
-
-
-#############################################
-# Order-only phony target for probe_runner_shared_pad_effect
-
-build cmake_object_order_depends_target_probe_runner_shared_pad_effect: phony || cmake_object_order_depends_target_probe_common cmake_object_order_depends_target_shared_pad_effect_lib
-
-build CMakeFiles\probe_runner_shared_pad_effect.dir\src\main\probe_runner_shared_pad_effect.cpp.obj: CXX_COMPILER__probe_runner_shared_pad_effect_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_shared_pad_effect.cpp || cmake_object_order_depends_target_probe_runner_shared_pad_effect
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\probe_runner_shared_pad_effect.dir
-  OBJECT_FILE_DIR = CMakeFiles\probe_runner_shared_pad_effect.dir\src\main
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_shared_pad_effect.dir\
-  TARGET_PDB = bin\probe_runner_shared_pad_effect.pdb
-
-
-# =============================================================================
-# Link build statements for EXECUTABLE target probe_runner_shared_pad_effect
-
-
-#############################################
-# Link the executable bin\probe_runner_shared_pad_effect.exe
-
-build bin\probe_runner_shared_pad_effect.exe: CXX_EXECUTABLE_LINKER__probe_runner_shared_pad_effect_Release CMakeFiles\probe_runner_shared_pad_effect.dir\src\main\probe_runner_shared_pad_effect.cpp.obj | lib\shared_pad_effect_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\probe_common.lib lib\shared_pad_effect_lib.lib
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
-  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
-  LINK_LIBRARIES = lib\shared_pad_effect_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\probe_runner_shared_pad_effect.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_shared_pad_effect.dir\
-  TARGET_FILE = bin\probe_runner_shared_pad_effect.exe
-  TARGET_IMPLIB = probe_runner_shared_pad_effect.lib
-  TARGET_PDB = bin\probe_runner_shared_pad_effect.pdb
-
-# =============================================================================
-# Object build statements for STATIC_LIBRARY target shared_padding_period_sweep_lib
-
-
-#############################################
-# Order-only phony target for shared_padding_period_sweep_lib
-
-build cmake_object_order_depends_target_shared_padding_period_sweep_lib: phony || cmake_object_order_depends_target_probe_common
-
-build CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep\host.cpp.obj: CXX_COMPILER__shared_padding_period_sweep_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\shared_padding_period_sweep\host.cpp || cmake_object_order_depends_target_shared_padding_period_sweep_lib
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\shared_padding_period_sweep_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep
-  TARGET_COMPILE_PDB = CMakeFiles\shared_padding_period_sweep_lib.dir\shared_padding_period_sweep_lib.pdb
-  TARGET_PDB = lib\shared_padding_period_sweep_lib.pdb
-
-build CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep\kernel.cu.obj: CUDA_COMPILER__shared_padding_period_sweep_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\shared_padding_period_sweep\kernel.cu || cmake_object_order_depends_target_shared_padding_period_sweep_lib
-  CONFIG = Release
-  DEP_FILE = CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep\kernel.cu.obj.d
-  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -isystem "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
-  OBJECT_DIR = CMakeFiles\shared_padding_period_sweep_lib.dir
-  OBJECT_FILE_DIR = CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep
-  TARGET_COMPILE_PDB = CMakeFiles\shared_padding_period_sweep_lib.dir\shared_padding_period_sweep_lib.pdb
-  TARGET_PDB = lib\shared_padding_period_sweep_lib.pdb
-
-
-# =============================================================================
-# Device Link build statements for STATIC_LIBRARY target shared_padding_period_sweep_lib
-
-
-#############################################
-# Link the static library CMakeFiles\shared_padding_period_sweep_lib.dir\cmake_device_link.obj
-
-build CMakeFiles\shared_padding_period_sweep_lib.dir\cmake_device_link.obj: CXX_STATIC_LIBRARY_DEVICE_LINKER__shared_padding_period_sweep_lib_Release CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep\host.cpp.obj CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep\kernel.cu.obj || lib\probe_common.lib
-  LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
-  LINK_LIBRARIES = lib\probe_common.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\shared_padding_period_sweep_lib.dir
-  TARGET_COMPILE_PDB = CMakeFiles\shared_padding_period_sweep_lib.dir\shared_padding_period_sweep_lib.pdb
-  TARGET_FILE = CMakeFiles\shared_padding_period_sweep_lib.dir\cmake_device_link.obj
-  TARGET_PDB = lib\shared_padding_period_sweep_lib.pdb
-
-# =============================================================================
-# Link build statements for STATIC_LIBRARY target shared_padding_period_sweep_lib
-
-
-#############################################
-# Link the static library lib\shared_padding_period_sweep_lib.lib
-
-build lib\shared_padding_period_sweep_lib.lib: CXX_STATIC_LIBRARY_LINKER__shared_padding_period_sweep_lib_Release CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep\host.cpp.obj CMakeFiles\shared_padding_period_sweep_lib.dir\src\probes\shared_padding_period_sweep\kernel.cu.obj CMakeFiles\shared_padding_period_sweep_lib.dir\cmake_device_link.obj || lib\probe_common.lib
-  CONFIG = Release
-  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
-  LINK_FLAGS = /machine:x64
-  OBJECT_DIR = CMakeFiles\shared_padding_period_sweep_lib.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\shared_padding_period_sweep_lib.dir\shared_padding_period_sweep_lib.pdb
-  TARGET_FILE = lib\shared_padding_period_sweep_lib.lib
-  TARGET_PDB = lib\shared_padding_period_sweep_lib.pdb
-
-# =============================================================================
-# Object build statements for EXECUTABLE target probe_runner_shared_padding_period_sweep
-
-
-#############################################
-# Order-only phony target for probe_runner_shared_padding_period_sweep
-
-build cmake_object_order_depends_target_probe_runner_shared_padding_period_sweep: phony || cmake_object_order_depends_target_probe_common cmake_object_order_depends_target_shared_padding_period_sweep_lib
-
-build CMakeFiles\probe_runner_shared_padding_period_sweep.dir\src\main\probe_runner_shared_padding_period_sweep.cpp.obj: CXX_COMPILER__probe_runner_shared_padding_period_sweep_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_shared_padding_period_sweep.cpp || cmake_object_order_depends_target_probe_runner_shared_padding_period_sweep
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
-  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
-  OBJECT_DIR = CMakeFiles\probe_runner_shared_padding_period_sweep.dir
-  OBJECT_FILE_DIR = CMakeFiles\probe_runner_shared_padding_period_sweep.dir\src\main
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_shared_padding_period_sweep.dir\
-  TARGET_PDB = bin\probe_runner_shared_padding_period_sweep.pdb
-
-
-# =============================================================================
-# Link build statements for EXECUTABLE target probe_runner_shared_padding_period_sweep
-
-
-#############################################
-# Link the executable bin\probe_runner_shared_padding_period_sweep.exe
-
-build bin\probe_runner_shared_padding_period_sweep.exe: CXX_EXECUTABLE_LINKER__probe_runner_shared_padding_period_sweep_Release CMakeFiles\probe_runner_shared_padding_period_sweep.dir\src\main\probe_runner_shared_padding_period_sweep.cpp.obj | lib\shared_padding_period_sweep_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\probe_common.lib lib\shared_padding_period_sweep_lib.lib
-  CONFIG = Release
-  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
-  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
-  LINK_LIBRARIES = lib\shared_padding_period_sweep_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
-  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
-  OBJECT_DIR = CMakeFiles\probe_runner_shared_padding_period_sweep.dir
-  POST_BUILD = cd .
-  PRE_LINK = cd .
-  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_shared_padding_period_sweep.dir\
-  TARGET_FILE = bin\probe_runner_shared_padding_period_sweep.exe
-  TARGET_IMPLIB = probe_runner_shared_padding_period_sweep.lib
-  TARGET_PDB = bin\probe_runner_shared_padding_period_sweep.pdb
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_warp_issue_policy.dir\
+  TARGET_FILE = bin\probe_runner_warp_issue_policy.exe
+  TARGET_IMPLIB = probe_runner_warp_issue_policy.lib
+  TARGET_PDB = bin\probe_runner_warp_issue_policy.pdb
 
 
 #############################################
@@ -525,41 +216,17 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
-build global_stride_sweep_lib: phony lib\global_stride_sweep_lib.lib
-
-build global_stride_sweep_lib.lib: phony lib\global_stride_sweep_lib.lib
-
 build probe_common: phony lib\probe_common.lib
 
 build probe_common.lib: phony lib\probe_common.lib
 
-build probe_runner_global_stride: phony bin\probe_runner_global_stride.exe
+build probe_runner_warp_issue_policy: phony bin\probe_runner_warp_issue_policy.exe
 
-build probe_runner_global_stride.exe: phony bin\probe_runner_global_stride.exe
+build probe_runner_warp_issue_policy.exe: phony bin\probe_runner_warp_issue_policy.exe
 
-build probe_runner_shared_bank_conflict_stride: phony bin\probe_runner_shared_bank_conflict_stride.exe
+build warp_issue_policy_probe_lib: phony lib\warp_issue_policy_probe_lib.lib
 
-build probe_runner_shared_bank_conflict_stride.exe: phony bin\probe_runner_shared_bank_conflict_stride.exe
-
-build probe_runner_shared_pad_effect: phony bin\probe_runner_shared_pad_effect.exe
-
-build probe_runner_shared_pad_effect.exe: phony bin\probe_runner_shared_pad_effect.exe
-
-build probe_runner_shared_padding_period_sweep: phony bin\probe_runner_shared_padding_period_sweep.exe
-
-build probe_runner_shared_padding_period_sweep.exe: phony bin\probe_runner_shared_padding_period_sweep.exe
-
-build shared_bank_conflict_stride_lib: phony lib\shared_bank_conflict_stride_lib.lib
-
-build shared_bank_conflict_stride_lib.lib: phony lib\shared_bank_conflict_stride_lib.lib
-
-build shared_pad_effect_lib: phony lib\shared_pad_effect_lib.lib
-
-build shared_pad_effect_lib.lib: phony lib\shared_pad_effect_lib.lib
-
-build shared_padding_period_sweep_lib: phony lib\shared_padding_period_sweep_lib.lib
-
-build shared_padding_period_sweep_lib.lib: phony lib\shared_padding_period_sweep_lib.lib
+build warp_issue_policy_probe_lib.lib: phony lib\warp_issue_policy_probe_lib.lib
 
 # =============================================================================
 # Folder targets.
@@ -569,7 +236,7 @@ build shared_padding_period_sweep_lib.lib: phony lib\shared_padding_period_sweep
 #############################################
 # Folder: C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build
 
-build all: phony lib\probe_common.lib lib\global_stride_sweep_lib.lib lib\shared_bank_conflict_stride_lib.lib bin\probe_runner_global_stride.exe bin\probe_runner_shared_bank_conflict_stride.exe lib\shared_pad_effect_lib.lib bin\probe_runner_shared_pad_effect.exe lib\shared_padding_period_sweep_lib.lib bin\probe_runner_shared_padding_period_sweep.exe
+build all: phony lib\probe_common.lib lib\warp_issue_policy_probe_lib.lib bin\probe_runner_warp_issue_policy.exe
 
 # =============================================================================
 # Built-in targets

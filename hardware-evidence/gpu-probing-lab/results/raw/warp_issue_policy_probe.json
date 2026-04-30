@@ -1,0 +1,48 @@
+{
+  "experiment": "warp_issue_policy_probe",
+  "config": {
+    "mode": 0,
+    "blocks": 1,
+    "cycle_budget": 200000000,
+    "sample_period": 256,
+    "global_elements": 16777216
+  },
+  "records": [
+    {
+      "mode": 0,
+      "block": 0,
+      "warp_id": 0,
+      "role": "independent_alu",
+      "progress": 459715,
+      "last_clock": 731843361019,
+      "sink": 0
+    },
+    {
+      "mode": 0,
+      "block": 0,
+      "warp_id": 1,
+      "role": "independent_alu",
+      "progress": 459715,
+      "last_clock": 731843361023,
+      "sink": 0
+    },
+    {
+      "mode": 0,
+      "block": 0,
+      "warp_id": 2,
+      "role": "independent_alu",
+      "progress": 459715,
+      "last_clock": 731843361027,
+      "sink": 0
+    },
+    {
+      "mode": 0,
+      "block": 0,
+      "warp_id": 3,
+      "role": "independent_alu",
+      "progress": 459715,
+      "last_clock": 731843361031,
+      "sink": 0
+    }
+  ]
+}
