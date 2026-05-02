@@ -1,6 +1,9 @@
 import { Link, useParams } from "react-router-dom";
 
-import { mode0BaselineObservation } from "../data/hardware/baselineObservations";
+import {
+  findHardwareObservationById,
+  hardwareObservations,
+} from "../data/hardware/observations";
 
 function formatNumber(value) {
   if (value === null || value === undefined) return "—";
@@ -96,6 +99,79 @@ function DetailList({ title, items = [], markerClassName = "bg-lime-400/70" }) {
   );
 }
 
+function InfoCardGrid({ items = [] }) {
+  if (!hasItems(items)) return null;
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      {items.map((item, index) => (
+        <div
+          key={`${item.label}-${index}`}
+          className="rounded-2xl border border-white/10 bg-black/20 p-5"
+        >
+          <div className="text-xs uppercase tracking-[0.16em] text-lime-400/80">
+            {item.label}
+          </div>
+
+          <p className="mt-3 text-sm leading-6 text-neutral-300">
+            {item.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ProbeContextBlock({ context }) {
+  if (!context) return null;
+
+  return (
+    <div className="rounded-2xl border border-lime-400/20 bg-lime-400/[0.06] p-6">
+      <h3 className="text-lg font-semibold text-white">{context.title}</h3>
+
+      {context.body ? (
+        <p className="mt-3 text-sm leading-7 text-neutral-300">
+          {context.body}
+        </p>
+      ) : null}
+
+      {context.question ? (
+        <div className="mt-5 rounded-2xl border border-white/10 bg-black/25 p-5">
+          <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Actual Question
+          </div>
+
+          <p className="mt-3 text-sm leading-7 text-lime-100">
+            {context.question}
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function ComparisonPurposeBlock({ comparisonPurpose }) {
+  if (!comparisonPurpose) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+      <h3 className="text-lg font-semibold text-white">
+        {comparisonPurpose.title}
+      </h3>
+
+      {comparisonPurpose.summary ? (
+        <p className="mt-3 text-sm leading-7 text-neutral-400">
+          {comparisonPurpose.summary}
+        </p>
+      ) : null}
+
+      <div className="mt-5">
+        <DetailList title="비교 해석 예시" items={comparisonPurpose.examples} />
+      </div>
+    </div>
+  );
+}
+
 function KeyFindingGrid({ observation }) {
   const records = observation.records ?? [];
   const progressValues = records.map((record) => record.progress);
@@ -186,7 +262,7 @@ function ConfigTable({ config }) {
       <h3 className="text-lg font-semibold text-white">실험 조건</h3>
 
       <p className="mt-3 text-sm leading-6 text-neutral-400">
-        이 표는 mode 0 baseline을 해석하는 데 필요한 실행 조건만 남깁니다.
+        이 표는 해당 probe를 해석하는 데 필요한 실행 조건만 남깁니다.
       </p>
 
       <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
@@ -327,6 +403,8 @@ function NextStepBlock({ nextStep }) {
 }
 
 function NotFoundDetailPage({ experimentId }) {
+  const firstObservation = hardwareObservations[0];
+
   return (
     <div className="space-y-6">
       <Link
@@ -346,8 +424,8 @@ function NotFoundDetailPage({ experimentId }) {
         </h1>
 
         <p className="mt-4 text-sm leading-7 text-neutral-400">
-          현재 구조에서는 기존 experiments 데이터 디렉터리를 제거했기 때문에,
-          detail page는 baseline observation 데이터만 읽습니다.
+          요청한 id와 일치하는 observation을 찾지 못했습니다. 현재 등록된
+          observation 목록에서 다시 선택하세요.
         </p>
 
         {experimentId ? (
@@ -357,14 +435,16 @@ function NotFoundDetailPage({ experimentId }) {
           </div>
         ) : null}
 
-        <div className="mt-6">
-          <Link
-            to="/hardware-evidence/warp_issue_policy_probe_mode0_baseline"
-            className="inline-flex rounded-xl border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-sm font-medium text-lime-200 transition hover:bg-lime-400/15"
-          >
-            mode 0 baseline 상세 보기
-          </Link>
-        </div>
+        {firstObservation ? (
+          <div className="mt-6">
+            <Link
+              to={`/hardware-evidence/${firstObservation.id}`}
+              className="inline-flex rounded-xl border border-lime-400/30 bg-lime-400/10 px-4 py-2 text-sm font-medium text-lime-200 transition hover:bg-lime-400/15"
+            >
+              첫 번째 observation 보기
+            </Link>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -373,10 +453,7 @@ function NotFoundDetailPage({ experimentId }) {
 export default function HardwareExperimentDetailPage() {
   const { experimentId } = useParams();
 
-  const observation =
-    experimentId === mode0BaselineObservation.id
-      ? mode0BaselineObservation
-      : null;
+  const observation = findHardwareObservationById(experimentId);
 
   if (!observation) {
     return <NotFoundDetailPage experimentId={experimentId} />;
@@ -384,10 +461,14 @@ export default function HardwareExperimentDetailPage() {
 
   const anchorItems = [
     { href: "#overview", label: "실험 개요" },
+    { href: "#probe-context", label: "probe 질문" },
+    { href: "#known-mechanisms", label: "알고 들어가는 실행 모델" },
+    { href: "#not-proving", label: "증명하지 않는 것" },
     { href: "#key-findings", label: "핵심 관찰값" },
     { href: "#condition", label: "실험 조건" },
     { href: "#records", label: "raw records" },
     { href: "#interpretation", label: "해석 가능 범위" },
+    { href: "#comparison", label: "후속 mode 비교" },
     { href: "#clock", label: "last_clock 해석" },
     { href: "#patch", label: "sink patch" },
     { href: "#next", label: "다음 probe" },
@@ -408,13 +489,17 @@ export default function HardwareExperimentDetailPage() {
           className="rounded-2xl border border-white/10 bg-white/[0.04] p-6"
         >
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-300">
-              Baseline Probe
-            </span>
+            {observation.groupLabel ? (
+              <span className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-300">
+                {observation.groupLabel}
+              </span>
+            ) : null}
 
-            <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
-              Experimental Record
-            </span>
+            {observation.type ? (
+              <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
+                {observation.type}
+              </span>
+            ) : null}
 
             <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
               {observation.label}
@@ -430,17 +515,6 @@ export default function HardwareExperimentDetailPage() {
               {observation.summary}
             </p>
           ) : null}
-
-          <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
-            <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
-              Reading Rule
-            </div>
-
-            <p className="mt-2 text-sm leading-6 text-neutral-400">
-              이 페이지는 하드웨어 일반론을 설명하지 않는다. 실험 조건, 출력값,
-              관찰 가능한 차이, 그리고 단정할 수 없는 범위를 분리해서 기록한다.
-            </p>
-          </div>
         </div>
 
         <section id="key-findings">
@@ -456,22 +530,65 @@ export default function HardwareExperimentDetailPage() {
 
           <SidebarCard title="현재 등록된 상세 기록">
             <div className="space-y-3">
-              <Link
-                to={`/hardware-evidence/${mode0BaselineObservation.id}`}
-                className="block rounded-xl border border-lime-400/30 bg-lime-400/10 px-4 py-3 text-sm text-lime-200 transition hover:bg-lime-400/15"
-              >
-                {mode0BaselineObservation.label}
-              </Link>
+              {hardwareObservations.map((item) => {
+                const isActive = item.id === observation.id;
 
-              <div className="rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-sm leading-6 text-neutral-500">
-                기존 experiments 디렉터리를 제거한 상태이므로, 추가 probe는 별도
-                data 파일을 만든 뒤 이 페이지에 연결해야 합니다.
-              </div>
+                return (
+                  <Link
+                    key={item.id}
+                    to={`/hardware-evidence/${item.id}`}
+                    className={`block rounded-xl border px-4 py-3 text-sm transition ${
+                      isActive
+                        ? "border-lime-400/30 bg-lime-400/10 text-lime-200 hover:bg-lime-400/15"
+                        : "border-white/10 bg-black/20 text-neutral-300 hover:border-lime-400/40 hover:text-white"
+                    }`}
+                  >
+                    <div className="font-medium">{item.label}</div>
+                    <div className="mt-1 text-xs text-neutral-500">
+                      {item.groupLabel}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </SidebarCard>
         </aside>
 
         <div className="space-y-6">
+          <SectionBlock
+            id="probe-context"
+            eyebrow="Probe Question"
+            title="이 실험이 실제로 묻는 것"
+            desc="자명한 CUDA 실행 모델이 아니라, workload class 차이가 progress 분포에 어떻게 드러나는지를 본다."
+          >
+            <ProbeContextBlock context={observation.probeContext} />
+          </SectionBlock>
+
+          <SectionBlock
+            id="known-mechanisms"
+            eyebrow="Known Mechanisms"
+            title={
+              observation.knownMechanisms?.title ??
+              "실험 전에 알고 들어가는 GPU 실행 모델"
+            }
+            desc="이 섹션은 실험으로 새로 증명하는 내용이 아니라, 결과 해석 전에 전제로 두는 GPU 실행 모델입니다."
+          >
+            <InfoCardGrid items={observation.knownMechanisms?.items} />
+          </SectionBlock>
+
+          <SectionBlock
+            id="not-proving"
+            eyebrow="Boundary"
+            title="이 실험이 직접 증명하지 않는 것"
+            desc="progress 차이는 scheduler, dependency, memory latency, compiler scheduling, occupancy가 합쳐진 관찰값입니다."
+          >
+            <DetailList
+              title="단정하지 않을 내용"
+              items={observation.notTryingToProve}
+              markerClassName="bg-neutral-500"
+            />
+          </SectionBlock>
+
           <SectionBlock
             id="condition"
             eyebrow="Condition"
@@ -504,6 +621,17 @@ export default function HardwareExperimentDetailPage() {
               markerClassName="bg-neutral-500"
             />
           </div>
+
+          <SectionBlock
+            id="comparison"
+            eyebrow="Comparison"
+            title="후속 mode와 비교하는 방식"
+            desc="mode 0은 발견용 결과라기보다 mode 1~4 해석을 위한 기준선입니다."
+          >
+            <ComparisonPurposeBlock
+              comparisonPurpose={observation.comparisonPurpose}
+            />
+          </SectionBlock>
 
           <SectionBlock
             id="clock"
@@ -545,7 +673,7 @@ export default function HardwareExperimentDetailPage() {
             id="next"
             eyebrow="Next"
             title="다음 검증"
-            desc="mode 0 baseline 이후 바로 이어서 확인할 실험입니다."
+            desc="현재 observation 이후 바로 이어서 확인할 실험입니다."
           >
             <NextStepBlock nextStep={observation.nextStep} />
           </SectionBlock>

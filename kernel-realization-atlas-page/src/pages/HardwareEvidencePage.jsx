@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { mode0BaselineObservation } from "../data/hardware/baselineObservations";
+import { hardwareObservations } from "../data/hardware/observations";
 import { hardwareChips } from "../data/hardware/chips";
 import { hardwareOverview } from "../data/hardware/overview";
 
@@ -66,6 +66,32 @@ function EvidenceLevelCard({ title, desc, items = [] }) {
         </ul>
       ) : null}
     </div>
+  );
+}
+
+function SmallInfoCard({ title, desc }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+      <h3 className="text-base font-semibold text-white">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-neutral-400">{desc}</p>
+    </div>
+  );
+}
+
+function BulletList({ items = [], markerClassName = "bg-lime-400/70" }) {
+  if (!items.length) return null;
+
+  return (
+    <ul className="space-y-2 text-sm leading-6 text-neutral-400">
+      {items.map((item, index) => (
+        <li key={`${item}-${index}`} className="flex gap-2">
+          <span
+            className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${markerClassName}`}
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -138,17 +164,23 @@ function ObservationSummaryCard({ observation }) {
   if (!observation) return null;
 
   const summary = getObservationSummary(observation);
+  const knownMechanisms = observation.knownMechanisms?.items?.slice(0, 3) ?? [];
+  const notTryingToProve = observation.notTryingToProve?.slice(0, 3) ?? [];
 
   return (
     <article className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 transition hover:border-lime-400/30 hover:bg-white/[0.055]">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-300">
-          Baseline Probe
-        </span>
+        {observation.groupLabel ? (
+          <span className="rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-300">
+            {observation.groupLabel}
+          </span>
+        ) : null}
 
-        <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
-          Experimental Record
-        </span>
+        {observation.type ? (
+          <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
+            {observation.type}
+          </span>
+        ) : null}
 
         <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
           {observation.label}
@@ -163,6 +195,42 @@ function ObservationSummaryCard({ observation }) {
         <p className="mt-3 line-clamp-3 text-sm leading-7 text-neutral-400">
           {observation.summary}
         </p>
+      ) : null}
+
+      {observation.probeContext?.question ? (
+        <div className="mt-5 rounded-2xl border border-lime-400/20 bg-lime-400/[0.06] p-4">
+          <div className="text-xs uppercase tracking-[0.16em] text-lime-300/90">
+            Actual Probe Question
+          </div>
+
+          <p className="mt-2 text-sm leading-6 text-lime-100">
+            {observation.probeContext.question}
+          </p>
+        </div>
+      ) : null}
+
+      {knownMechanisms.length ? (
+        <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
+          <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Known Mechanisms
+          </div>
+
+          <div className="mt-3 grid gap-3 md:grid-cols-3">
+            {knownMechanisms.map((item, index) => (
+              <div
+                key={`${item.label}-${index}`}
+                className="rounded-xl border border-white/10 bg-white/[0.03] p-3"
+              >
+                <div className="text-xs font-medium uppercase tracking-[0.14em] text-lime-400/80">
+                  {item.label}
+                </div>
+                <p className="mt-2 line-clamp-3 text-xs leading-5 text-neutral-400">
+                  {item.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       ) : null}
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -202,6 +270,33 @@ function ObservationSummaryCard({ observation }) {
         </p>
       </div>
 
+      {observation.comparisonPurpose?.summary ? (
+        <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Comparison Role
+          </div>
+
+          <p className="mt-2 text-sm leading-6 text-neutral-400">
+            {observation.comparisonPurpose.summary}
+          </p>
+        </div>
+      ) : null}
+
+      {notTryingToProve.length ? (
+        <div className="mt-5 rounded-2xl border border-white/10 bg-black/20 p-4">
+          <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+            Not Proving
+          </div>
+
+          <div className="mt-3">
+            <BulletList
+              items={notTryingToProve}
+              markerClassName="bg-neutral-500"
+            />
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
           to={`/hardware-evidence/${observation.id}`}
@@ -209,12 +304,6 @@ function ObservationSummaryCard({ observation }) {
         >
           상세 기록 보기
         </Link>
-
-        {observation.nextStep?.label ? (
-          <span className="rounded-xl border border-white/10 bg-black/20 px-4 py-2 text-sm text-neutral-400">
-            Next: {observation.nextStep.label}
-          </span>
-        ) : null}
       </div>
     </article>
   );
@@ -228,7 +317,7 @@ function ObservationSection({ observations = [] }) {
       <SectionHeader
         eyebrow="Observed Probes"
         title="검증이 끝난 실험 기록"
-        desc="메인 페이지에서는 각 probe의 핵심 관찰값만 간단히 보여줍니다. raw records, caveat, last_clock 해석, sink patch, 다음 검증 경로는 상세 페이지에서 분리해 확인합니다."
+        desc="메인 페이지에서는 각 probe의 질문, 전제로 둔 GPU 메커니즘, 핵심 관찰값, 그리고 단정하지 않을 범위를 함께 보여줍니다. raw records, last_clock 해석, sink patch, 다음 검증 경로는 상세 페이지에서 분리해 확인합니다."
       />
 
       <div className="grid gap-5 xl:grid-cols-2">
@@ -244,8 +333,6 @@ function ObservationSection({ observations = [] }) {
 }
 
 export default function HardwareEvidencePage() {
-  const observations = [mode0BaselineObservation];
-
   return (
     <div className="space-y-16">
       <section className="py-8">
@@ -258,11 +345,29 @@ export default function HardwareEvidencePage() {
         </h1>
 
         <p className="mt-6 max-w-3xl text-lg leading-8 text-neutral-400">
-          이 페이지는 GPU의 일반적인 구조를 설명하는 문서가 아니다. 여기서는
-          특정 커널 조건을 실제로 실행하고, 그 결과로 나온 progress, clock,
-          latency, throughput, sink, warp별 편차 같은 관찰값만을 근거로 하드웨어
-          반응을 기록한다.
+          이 페이지는 GPU의 일반 구조를 설명하는 문서가 아니다. 이미 알려진
+          warp execution, ready-warp issue, latency hiding, memory hierarchy 같은
+          실행 모델을 전제로 두고, 특정 커널 조건을 실제로 실행해 나온 progress,
+          clock, latency, throughput, sink, warp별 편차를 근거로 하드웨어 반응을
+          좁혀 읽는 공간이다.
         </p>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+          <SmallInfoCard
+            title="알고 들어가는 것"
+            desc="warp 단위 실행, scheduler의 ready warp issue, dependency와 memory wait가 stall을 만든다는 기본 메커니즘은 전제로 둔다."
+          />
+
+          <SmallInfoCard
+            title="실험으로 바꾸는 것"
+            desc="block 수, warp role, dependency chain, shared/global load, access pattern처럼 하나의 실행 조건을 의도적으로 바꾼다."
+          />
+
+          <SmallInfoCard
+            title="관찰로 남기는 것"
+            desc="progress, last_clock, ratio, per-warp spread, sink, latency curve를 기록하고, 말할 수 있는 범위와 말하면 안 되는 범위를 분리한다."
+          />
+        </div>
 
         <div className="mt-8 flex flex-wrap gap-3">
           {hardwareChips.map((chip) => (
@@ -274,21 +379,21 @@ export default function HardwareEvidencePage() {
       <section className="space-y-6">
         <SectionHeader
           eyebrow="How to read"
-          title="Probe는 설명이 아니라 검증 단위입니다"
-          desc="각 probe는 하나의 실험 질문을 갖습니다. 문서에서 중요한 것은 알려진 GPU 개념을 반복하는 것이 아니라, 어떤 조건에서 어떤 결과가 관찰되었고, 그 결과로 어디까지 말할 수 있으며, 어디서부터는 아직 말하면 안 되는지를 분리하는 것입니다."
+          title="Probe는 알려진 메커니즘 위에 올리는 검증 단위입니다"
+          desc="각 probe는 GPU 교과서 내용을 다시 증명하려는 것이 아니다. 이미 알려진 실행 모델을 전제로 두고, 특정 조건을 바꾸었을 때 관찰값이 어떻게 달라지는지 기록한다. 핵심은 무엇을 알고 들어가는지, 무엇을 바꾸는지, 무엇이 관찰되었는지, 어디까지 단정할 수 있는지를 분리하는 것이다."
         />
 
         <div className="grid gap-4 lg:grid-cols-4">
           <ReadingStepCard
             index="1"
-            title="고정 조건 확인"
-            desc="block 수, warp 구성, cycle budget, sample period, work size처럼 비교 기준이 되는 조건을 먼저 확인합니다."
+            title="전제 분리"
+            desc="warp 단위 실행, ready warp issue, latency hiding처럼 이미 알고 있는 GPU 메커니즘을 먼저 분리합니다. 자명한 실행 모델을 실험 결론처럼 쓰지 않습니다."
           />
 
           <ReadingStepCard
             index="2"
             title="변경 조건 확인"
-            desc="warp role, dependency chain, memory access role, stall source처럼 실험에서 의도적으로 바꾼 조건을 봅니다."
+            desc="warp role, dependency chain, memory access type, stall source처럼 실험에서 의도적으로 다르게 만든 workload class를 확인합니다."
           />
 
           <ReadingStepCard
@@ -305,22 +410,22 @@ export default function HardwareEvidencePage() {
         </div>
       </section>
 
-      <ObservationSection observations={observations} />
+      <ObservationSection observations={hardwareObservations} />
 
       <section className="space-y-6">
         <SectionHeader
           eyebrow="Evidence Level"
           title="실험 결과의 증거 강도를 분리합니다"
-          desc="모든 probe가 같은 강도의 결론을 주지는 않습니다. 어떤 것은 계측 baseline이고, 어떤 것은 특정 조건의 반응 패턴이며, 어떤 것은 문서화되지 않은 선택 경향을 역으로 읽기 위한 probe입니다."
+          desc="모든 probe가 같은 강도의 결론을 주지는 않습니다. 어떤 것은 control baseline이고, 어떤 것은 한 조건만 바꾼 differential response이며, 어떤 것은 문서화되지 않은 scheduler, scoreboard, cache, memory hierarchy의 선택 경향을 역으로 읽기 위한 probe입니다."
         />
 
         <div className="grid gap-5 lg:grid-cols-3">
           <EvidenceLevelCard
             title="Baseline Probe"
-            desc="후속 실험을 읽기 전에 측정 파이프라인과 비교 기준이 정상인지 확인합니다."
+            desc="후속 실험을 읽기 전에 측정 파이프라인과 비교 기준이 정상인지 확인합니다. baseline은 새 메커니즘을 발견하기보다, 후속 차이를 해석할 기준을 만듭니다."
             items={[
-              "동일 조건 반복 실행",
-              "warp별 progress 균형 확인",
+              "동일 workload 조건 반복 실행",
+              "warp_id 기반 progress 편향 확인",
               "clock 기록 규칙성 확인",
               "anti-optimization caveat 확인",
             ]}
@@ -328,12 +433,12 @@ export default function HardwareEvidencePage() {
 
           <EvidenceLevelCard
             title="Differential Probe"
-            desc="한 조건만 바꾼 뒤 baseline과 비교해 어떤 출력값이 달라지는지 관찰합니다."
+            desc="한 조건만 바꾼 뒤 baseline과 비교해 어떤 출력값이 달라지는지 관찰합니다. workload class 차이를 progress, ratio, spread로 읽습니다."
             items={[
               "dependent / independent 비교",
+              "shared-load / ALU 비교",
+              "global-load / ALU 비교",
               "role별 progress ratio",
-              "warp 내부와 warp 간 편차 분리",
-              "고정 조건 유지 여부 확인",
             ]}
           />
 
@@ -363,11 +468,18 @@ export default function HardwareEvidencePage() {
           <p className="mt-4 text-sm leading-7 text-neutral-400">
             hardware probe는 최적화 규칙을 먼저 선언하는 문서가 아니다. 커널
             합성기가 realization을 선택할 때 참조할 수 있는 관찰 근거를 쌓는
-            과정이다. 예를 들어 동일 ready warp 간 baseline 편향이 없는지,
-            dependency chain을 가진 warp가 independent warp 대비 얼마나 적은
-            progress를 얻는지, stall 이후 어떤 warp가 다시 진행되는지 같은 결과는
-            이후 tiling, unrolling, vectorization, shared memory 사용, lowering
-            검증의 판단 근거가 된다.
+            과정이다. 예를 들어 동일 workload warp 사이에 기본 progress 편향이
+            없는지, dependency chain을 가진 warp가 independent warp 대비 얼마나
+            적은 progress를 얻는지, global-load warp가 stall되는 동안 ready ALU
+            warp가 얼마나 유지되는지 같은 결과는 이후 tiling, unrolling,
+            vectorization, shared memory 사용, lowering 검증의 판단 근거가 된다.
+          </p>
+
+          <p className="mt-4 text-sm leading-7 text-neutral-500">
+            중요한 것은 이 기록이 GPU 내부 policy를 단번에 선언하지 않는다는
+            점이다. 관찰값은 scheduler 선택, scoreboard wait, memory latency,
+            compiler scheduling, occupancy가 합쳐져 나온 결과다. 따라서 각 probe는
+            결론이 아니라 다음 실험의 search space를 줄이는 증거 단위로 사용한다.
           </p>
         </div>
 

@@ -8,6 +8,10 @@ function formatNumber(value) {
   return value.toLocaleString("en-US");
 }
 
+function hasItems(items) {
+  return Array.isArray(items) && items.length > 0;
+}
+
 function ConfigPill({ label, value }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
@@ -20,42 +24,44 @@ function ConfigPill({ label, value }) {
 }
 
 function RecordTable({ records = [] }) {
-  if (!records.length) return null;
+  if (!hasItems(records)) return null;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/25">
-      <div className="grid grid-cols-[80px_1fr_120px_160px_80px] border-b border-white/10 px-4 py-3 text-xs uppercase tracking-[0.14em] text-neutral-500">
-        <div>Warp</div>
-        <div>Role</div>
-        <div className="text-right">Progress</div>
-        <div className="text-right">Last Clock</div>
-        <div className="text-right">Sink</div>
-      </div>
+    <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/25">
+      <div className="min-w-[720px]">
+        <div className="grid grid-cols-[80px_1fr_120px_160px_80px] border-b border-white/10 px-4 py-3 text-xs uppercase tracking-[0.14em] text-neutral-500">
+          <div>Warp</div>
+          <div>Role</div>
+          <div className="text-right">Progress</div>
+          <div className="text-right">Last Clock</div>
+          <div className="text-right">Sink</div>
+        </div>
 
-      <div className="divide-y divide-white/10">
-        {records.map((record) => (
-          <div
-            key={record.warpId}
-            className="grid grid-cols-[80px_1fr_120px_160px_80px] px-4 py-3 text-sm text-neutral-300"
-          >
-            <div>warp {record.warpId}</div>
-            <div>{record.role}</div>
-            <div className="text-right tabular-nums">
-              {formatNumber(record.progress)}
+        <div className="divide-y divide-white/10">
+          {records.map((record) => (
+            <div
+              key={record.warpId}
+              className="grid grid-cols-[80px_1fr_120px_160px_80px] px-4 py-3 text-sm text-neutral-300"
+            >
+              <div>warp {record.warpId}</div>
+              <div>{record.role}</div>
+              <div className="text-right tabular-nums">
+                {formatNumber(record.progress)}
+              </div>
+              <div className="text-right tabular-nums">
+                {formatNumber(record.lastClock)}
+              </div>
+              <div className="text-right tabular-nums">{record.sink}</div>
             </div>
-            <div className="text-right tabular-nums">
-              {formatNumber(record.lastClock)}
-            </div>
-            <div className="text-right tabular-nums">{record.sink}</div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 function BulletList({ items = [], markerClassName = "bg-lime-400/70" }) {
-  if (!items.length) return null;
+  if (!hasItems(items)) return null;
 
   return (
     <ul className="space-y-2 text-sm leading-6 text-neutral-400">
@@ -78,6 +84,99 @@ function CodeBlock({ children }) {
     <pre className="overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-sm leading-6 text-neutral-200">
       <code>{children}</code>
     </pre>
+  );
+}
+
+function ProbeContextMiniBlock({ context }) {
+  if (!context) return null;
+
+  return (
+    <div className="rounded-2xl border border-lime-400/20 bg-lime-400/[0.06] p-5">
+      <div className="text-xs uppercase tracking-[0.16em] text-lime-300/90">
+        Probe Question
+      </div>
+
+      <h3 className="mt-2 text-base font-semibold text-white">
+        {context.title}
+      </h3>
+
+      {context.body ? (
+        <p className="mt-3 text-sm leading-6 text-neutral-300">
+          {context.body}
+        </p>
+      ) : null}
+
+      {context.question ? (
+        <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-4">
+          <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+            Actual Question
+          </div>
+          <p className="mt-2 text-sm leading-6 text-lime-100">
+            {context.question}
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function KnownMechanismMiniGrid({ mechanisms }) {
+  const items = mechanisms?.items ?? [];
+
+  if (!hasItems(items)) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+      <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+        Known Mechanisms
+      </div>
+
+      <h3 className="mt-2 text-base font-semibold text-white">
+        {mechanisms?.title ?? "실험 전에 알고 들어가는 GPU 실행 모델"}
+      </h3>
+
+      <div className="mt-4 grid gap-3 md:grid-cols-2">
+        {items.map((item, index) => (
+          <div
+            key={`${item.label}-${index}`}
+            className="rounded-xl border border-white/10 bg-black/20 p-4"
+          >
+            <div className="text-xs uppercase tracking-[0.14em] text-lime-400/80">
+              {item.label}
+            </div>
+            <p className="mt-2 text-sm leading-6 text-neutral-400">
+              {item.text}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ComparisonPurposeMiniBlock({ comparisonPurpose }) {
+  if (!comparisonPurpose) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+      <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+        Comparison Purpose
+      </div>
+
+      <h3 className="mt-2 text-base font-semibold text-white">
+        {comparisonPurpose.title}
+      </h3>
+
+      {comparisonPurpose.summary ? (
+        <p className="mt-3 text-sm leading-6 text-neutral-400">
+          {comparisonPurpose.summary}
+        </p>
+      ) : null}
+
+      <div className="mt-4">
+        <BulletList items={comparisonPurpose.examples} />
+      </div>
+    </div>
   );
 }
 
@@ -109,6 +208,10 @@ export default function BaselineObservationCard({ observation }) {
               </p>
             ) : null}
           </div>
+
+          <ProbeContextMiniBlock context={observation.probeContext} />
+
+          <KnownMechanismMiniGrid mechanisms={observation.knownMechanisms} />
 
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <ConfigPill label="mode" value={config?.mode} />
@@ -149,9 +252,28 @@ export default function BaselineObservationCard({ observation }) {
               </div>
             </div>
           </div>
+
+          <ComparisonPurposeMiniBlock
+            comparisonPurpose={observation.comparisonPurpose}
+          />
         </div>
 
         <aside className="space-y-4">
+          {hasItems(observation.notTryingToProve) ? (
+            <div className="rounded-2xl border border-white/10 bg-black/25 p-5">
+              <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+                Not Trying To Prove
+              </div>
+
+              <div className="mt-4">
+                <BulletList
+                  items={observation.notTryingToProve}
+                  markerClassName="bg-neutral-500"
+                />
+              </div>
+            </div>
+          ) : null}
+
           <div className="rounded-2xl border border-white/10 bg-black/25 p-5">
             <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
               Last Clock Observation
@@ -160,6 +282,14 @@ export default function BaselineObservationCard({ observation }) {
             <p className="mt-3 text-sm leading-6 text-neutral-300">
               {observation.clockObservation?.summary}
             </p>
+
+            {hasItems(observation.clockObservation?.values) ? (
+              <div className="mt-4">
+                <CodeBlock>
+                  {observation.clockObservation.values.join("\n")}
+                </CodeBlock>
+              </div>
+            ) : null}
 
             <p className="mt-3 text-sm leading-6 text-neutral-500">
               {observation.clockObservation?.caveat}
@@ -174,6 +304,12 @@ export default function BaselineObservationCard({ observation }) {
             <p className="mt-3 text-sm leading-6 text-neutral-300">
               {observation.suggestedPatch?.title}
             </p>
+
+            {observation.suggestedPatch?.desc ? (
+              <p className="mt-3 text-sm leading-6 text-neutral-500">
+                {observation.suggestedPatch.desc}
+              </p>
+            ) : null}
 
             <div className="mt-4 space-y-3">
               <div>
@@ -200,6 +336,12 @@ export default function BaselineObservationCard({ observation }) {
             <h3 className="mt-2 text-base font-semibold text-white">
               {observation.nextStep?.label}
             </h3>
+
+            {observation.nextStep?.desc ? (
+              <p className="mt-3 text-sm leading-6 text-neutral-400">
+                {observation.nextStep.desc}
+              </p>
+            ) : null}
 
             <div className="mt-4">
               <CodeBlock>{observation.nextStep?.configText}</CodeBlock>
