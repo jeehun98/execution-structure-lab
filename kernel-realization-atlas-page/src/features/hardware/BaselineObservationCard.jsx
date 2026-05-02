@@ -1,0 +1,216 @@
+function formatNumber(value) {
+  if (value === null || value === undefined) return "—";
+
+  if (typeof value !== "number") {
+    return String(value);
+  }
+
+  return value.toLocaleString("en-US");
+}
+
+function ConfigPill({ label, value }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
+      <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+        {label}
+      </div>
+      <div className="mt-1 text-sm font-medium text-neutral-200">{value}</div>
+    </div>
+  );
+}
+
+function RecordTable({ records = [] }) {
+  if (!records.length) return null;
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/25">
+      <div className="grid grid-cols-[80px_1fr_120px_160px_80px] border-b border-white/10 px-4 py-3 text-xs uppercase tracking-[0.14em] text-neutral-500">
+        <div>Warp</div>
+        <div>Role</div>
+        <div className="text-right">Progress</div>
+        <div className="text-right">Last Clock</div>
+        <div className="text-right">Sink</div>
+      </div>
+
+      <div className="divide-y divide-white/10">
+        {records.map((record) => (
+          <div
+            key={record.warpId}
+            className="grid grid-cols-[80px_1fr_120px_160px_80px] px-4 py-3 text-sm text-neutral-300"
+          >
+            <div>warp {record.warpId}</div>
+            <div>{record.role}</div>
+            <div className="text-right tabular-nums">
+              {formatNumber(record.progress)}
+            </div>
+            <div className="text-right tabular-nums">
+              {formatNumber(record.lastClock)}
+            </div>
+            <div className="text-right tabular-nums">{record.sink}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BulletList({ items = [], markerClassName = "bg-lime-400/70" }) {
+  if (!items.length) return null;
+
+  return (
+    <ul className="space-y-2 text-sm leading-6 text-neutral-400">
+      {items.map((item, index) => (
+        <li key={`${item}-${index}`} className="flex gap-2">
+          <span
+            className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${markerClassName}`}
+          />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function CodeBlock({ children }) {
+  if (!children) return null;
+
+  return (
+    <pre className="overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-sm leading-6 text-neutral-200">
+      <code>{children}</code>
+    </pre>
+  );
+}
+
+export default function BaselineObservationCard({ observation }) {
+  if (!observation) return null;
+
+  const { config, records } = observation;
+
+  return (
+    <section className="rounded-3xl border border-lime-400/20 bg-lime-400/[0.06] p-6">
+      <div className="text-xs uppercase tracking-[0.18em] text-lime-300/90">
+        Current Baseline Result
+      </div>
+
+      <div className="mt-3 grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="space-y-6">
+          <div>
+            <div className="text-sm font-medium text-lime-300">
+              {observation.label}
+            </div>
+
+            <h2 className="mt-2 text-2xl font-semibold leading-tight text-white">
+              {observation.title}
+            </h2>
+
+            {observation.summary ? (
+              <p className="mt-4 text-sm leading-7 text-neutral-300">
+                {observation.summary}
+              </p>
+            ) : null}
+          </div>
+
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <ConfigPill label="mode" value={config?.mode} />
+            <ConfigPill label="blocks" value={config?.blocks} />
+            <ConfigPill
+              label="cycle budget"
+              value={formatNumber(config?.cycleBudget)}
+            />
+            <ConfigPill
+              label="sample period"
+              value={formatNumber(config?.samplePeriod)}
+            />
+          </div>
+
+          <RecordTable records={records} />
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+              <h3 className="text-base font-semibold text-white">
+                결과에서 말할 수 있는 것
+              </h3>
+
+              <div className="mt-4">
+                <BulletList items={observation.interpretation} />
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-white/10 bg-black/25 p-5">
+              <h3 className="text-base font-semibold text-white">
+                과잉해석 금지
+              </h3>
+
+              <div className="mt-4">
+                <BulletList
+                  items={observation.caveats}
+                  markerClassName="bg-neutral-500"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside className="space-y-4">
+          <div className="rounded-2xl border border-white/10 bg-black/25 p-5">
+            <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+              Last Clock Observation
+            </div>
+
+            <p className="mt-3 text-sm leading-6 text-neutral-300">
+              {observation.clockObservation?.summary}
+            </p>
+
+            <p className="mt-3 text-sm leading-6 text-neutral-500">
+              {observation.clockObservation?.caveat}
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-amber-400/20 bg-amber-400/[0.06] p-5">
+            <div className="text-xs uppercase tracking-[0.16em] text-amber-300">
+              Suggested Patch
+            </div>
+
+            <p className="mt-3 text-sm leading-6 text-neutral-300">
+              {observation.suggestedPatch?.title}
+            </p>
+
+            <div className="mt-4 space-y-3">
+              <div>
+                <div className="mb-2 text-xs uppercase tracking-[0.14em] text-neutral-500">
+                  Before
+                </div>
+                <CodeBlock>{observation.suggestedPatch?.before}</CodeBlock>
+              </div>
+
+              <div>
+                <div className="mb-2 text-xs uppercase tracking-[0.14em] text-neutral-500">
+                  After
+                </div>
+                <CodeBlock>{observation.suggestedPatch?.after}</CodeBlock>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+              Next
+            </div>
+
+            <h3 className="mt-2 text-base font-semibold text-white">
+              {observation.nextStep?.label}
+            </h3>
+
+            <div className="mt-4">
+              <CodeBlock>{observation.nextStep?.configText}</CodeBlock>
+            </div>
+
+            <div className="mt-4">
+              <BulletList items={observation.nextStep?.metrics} />
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  );
+}
