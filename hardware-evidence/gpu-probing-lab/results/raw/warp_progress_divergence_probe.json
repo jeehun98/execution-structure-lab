@@ -1,0 +1,43 @@
+{
+  "experiment": "warp_progress_divergence_probe",
+  "config": {
+    "blocks": 1,
+    "cycle_budget": 200000000,
+    "sample_period": 256,
+    "global_elements": 16777216
+  },
+  "records": [
+    {
+      "block": 0,
+      "warp_id": 0,
+      "role": "fast_independent_alu",
+      "progress": 462823,
+      "last_clock": 159499133611,
+      "sink": 0
+    },
+    {
+      "block": 0,
+      "warp_id": 1,
+      "role": "dependent_alu_chain",
+      "progress": 90648,
+      "last_clock": 159499133486,
+      "sink": 860966725
+    },
+    {
+      "block": 0,
+      "warp_id": 2,
+      "role": "shared_load",
+      "progress": 129754,
+      "last_clock": 159499134096,
+      "sink": 3832225372
+    },
+    {
+      "block": 0,
+      "warp_id": 3,
+      "role": "dependent_global_load",
+      "progress": 10646,
+      "last_clock": 159499142006,
+      "sink": 3854218683
+    }
+  ]
+}

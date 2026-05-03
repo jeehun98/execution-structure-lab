@@ -12,6 +12,8 @@ import OperatorsNewPage from "./pages/OperatorsNewPage";
 import PropertiesNewPage from "./pages/PropertiesNewPage";
 import ComputationStructuresPage from "./pages/ComputationStructuresPage";
 
+import GpuGraphPage from "./features/gpu-graph/GpuGraphPage";
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -23,6 +25,15 @@ export default function App() {
           element={
             <PageShell>
               <AtlasHomePage />
+            </PageShell>
+          }
+        />
+
+        <Route
+          path="/gpu-graph-test"
+          element={
+            <PageShell fullWidth>
+              <GpuGraphPage />
             </PageShell>
           }
         />

@@ -189,6 +189,212 @@ build bin\probe_runner_warp_issue_policy.exe: CXX_EXECUTABLE_LINKER__probe_runne
   TARGET_IMPLIB = probe_runner_warp_issue_policy.lib
   TARGET_PDB = bin\probe_runner_warp_issue_policy.pdb
 
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target global_latency_hiding_probe_lib
+
+
+#############################################
+# Order-only phony target for global_latency_hiding_probe_lib
+
+build cmake_object_order_depends_target_global_latency_hiding_probe_lib: phony || cmake_object_order_depends_target_probe_common
+
+build CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe\host.cpp.obj: CXX_COMPILER__global_latency_hiding_probe_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\global_latency_hiding_probe\host.cpp || cmake_object_order_depends_target_global_latency_hiding_probe_lib
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\global_latency_hiding_probe_lib.dir
+  OBJECT_FILE_DIR = CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe
+  TARGET_COMPILE_PDB = CMakeFiles\global_latency_hiding_probe_lib.dir\global_latency_hiding_probe_lib.pdb
+  TARGET_PDB = lib\global_latency_hiding_probe_lib.pdb
+
+build CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe\kernel.cu.obj: CUDA_COMPILER__global_latency_hiding_probe_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\global_latency_hiding_probe\kernel.cu || cmake_object_order_depends_target_global_latency_hiding_probe_lib
+  CONFIG = Release
+  DEP_FILE = CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe\kernel.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -isystem "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
+  OBJECT_DIR = CMakeFiles\global_latency_hiding_probe_lib.dir
+  OBJECT_FILE_DIR = CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe
+  TARGET_COMPILE_PDB = CMakeFiles\global_latency_hiding_probe_lib.dir\global_latency_hiding_probe_lib.pdb
+  TARGET_PDB = lib\global_latency_hiding_probe_lib.pdb
+
+
+# =============================================================================
+# Device Link build statements for STATIC_LIBRARY target global_latency_hiding_probe_lib
+
+
+#############################################
+# Link the static library CMakeFiles\global_latency_hiding_probe_lib.dir\cmake_device_link.obj
+
+build CMakeFiles\global_latency_hiding_probe_lib.dir\cmake_device_link.obj: CXX_STATIC_LIBRARY_DEVICE_LINKER__global_latency_hiding_probe_lib_Release CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe\host.cpp.obj CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe\kernel.cu.obj || lib\probe_common.lib
+  LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  LINK_LIBRARIES = lib\probe_common.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
+  OBJECT_DIR = CMakeFiles\global_latency_hiding_probe_lib.dir
+  TARGET_COMPILE_PDB = CMakeFiles\global_latency_hiding_probe_lib.dir\global_latency_hiding_probe_lib.pdb
+  TARGET_FILE = CMakeFiles\global_latency_hiding_probe_lib.dir\cmake_device_link.obj
+  TARGET_PDB = lib\global_latency_hiding_probe_lib.pdb
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target global_latency_hiding_probe_lib
+
+
+#############################################
+# Link the static library lib\global_latency_hiding_probe_lib.lib
+
+build lib\global_latency_hiding_probe_lib.lib: CXX_STATIC_LIBRARY_LINKER__global_latency_hiding_probe_lib_Release CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe\host.cpp.obj CMakeFiles\global_latency_hiding_probe_lib.dir\src\probes\global_latency_hiding_probe\kernel.cu.obj CMakeFiles\global_latency_hiding_probe_lib.dir\cmake_device_link.obj || lib\probe_common.lib
+  CONFIG = Release
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
+  LINK_FLAGS = /machine:x64
+  OBJECT_DIR = CMakeFiles\global_latency_hiding_probe_lib.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\global_latency_hiding_probe_lib.dir\global_latency_hiding_probe_lib.pdb
+  TARGET_FILE = lib\global_latency_hiding_probe_lib.lib
+  TARGET_PDB = lib\global_latency_hiding_probe_lib.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target probe_runner_global_latency_hiding
+
+
+#############################################
+# Order-only phony target for probe_runner_global_latency_hiding
+
+build cmake_object_order_depends_target_probe_runner_global_latency_hiding: phony || cmake_object_order_depends_target_global_latency_hiding_probe_lib cmake_object_order_depends_target_probe_common
+
+build CMakeFiles\probe_runner_global_latency_hiding.dir\src\main\probe_runner_global_latency_hiding.cpp.obj: CXX_COMPILER__probe_runner_global_latency_hiding_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_global_latency_hiding.cpp || cmake_object_order_depends_target_probe_runner_global_latency_hiding
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_global_latency_hiding.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_global_latency_hiding.dir\src\main
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_global_latency_hiding.dir\
+  TARGET_PDB = bin\probe_runner_global_latency_hiding.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target probe_runner_global_latency_hiding
+
+
+#############################################
+# Link the executable bin\probe_runner_global_latency_hiding.exe
+
+build bin\probe_runner_global_latency_hiding.exe: CXX_EXECUTABLE_LINKER__probe_runner_global_latency_hiding_Release CMakeFiles\probe_runner_global_latency_hiding.dir\src\main\probe_runner_global_latency_hiding.cpp.obj | lib\global_latency_hiding_probe_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\global_latency_hiding_probe_lib.lib lib\probe_common.lib
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
+  LINK_LIBRARIES = lib\global_latency_hiding_probe_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
+  OBJECT_DIR = CMakeFiles\probe_runner_global_latency_hiding.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_global_latency_hiding.dir\
+  TARGET_FILE = bin\probe_runner_global_latency_hiding.exe
+  TARGET_IMPLIB = probe_runner_global_latency_hiding.lib
+  TARGET_PDB = bin\probe_runner_global_latency_hiding.pdb
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target warp_progress_divergence_probe_lib
+
+
+#############################################
+# Order-only phony target for warp_progress_divergence_probe_lib
+
+build cmake_object_order_depends_target_warp_progress_divergence_probe_lib: phony || cmake_object_order_depends_target_probe_common
+
+build CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe\host.cpp.obj: CXX_COMPILER__warp_progress_divergence_probe_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\warp_progress_divergence_probe\host.cpp || cmake_object_order_depends_target_warp_progress_divergence_probe_lib
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\warp_progress_divergence_probe_lib.dir
+  OBJECT_FILE_DIR = CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe
+  TARGET_COMPILE_PDB = CMakeFiles\warp_progress_divergence_probe_lib.dir\warp_progress_divergence_probe_lib.pdb
+  TARGET_PDB = lib\warp_progress_divergence_probe_lib.pdb
+
+build CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe\kernel.cu.obj: CUDA_COMPILER__warp_progress_divergence_probe_lib_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\probes\warp_progress_divergence_probe\kernel.cu || cmake_object_order_depends_target_warp_progress_divergence_probe_lib
+  CONFIG = Release
+  DEP_FILE = CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe\kernel.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -isystem "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
+  OBJECT_DIR = CMakeFiles\warp_progress_divergence_probe_lib.dir
+  OBJECT_FILE_DIR = CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe
+  TARGET_COMPILE_PDB = CMakeFiles\warp_progress_divergence_probe_lib.dir\warp_progress_divergence_probe_lib.pdb
+  TARGET_PDB = lib\warp_progress_divergence_probe_lib.pdb
+
+
+# =============================================================================
+# Device Link build statements for STATIC_LIBRARY target warp_progress_divergence_probe_lib
+
+
+#############################################
+# Link the static library CMakeFiles\warp_progress_divergence_probe_lib.dir\cmake_device_link.obj
+
+build CMakeFiles\warp_progress_divergence_probe_lib.dir\cmake_device_link.obj: CXX_STATIC_LIBRARY_DEVICE_LINKER__warp_progress_divergence_probe_lib_Release CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe\host.cpp.obj CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe\kernel.cu.obj || lib\probe_common.lib
+  LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  LINK_LIBRARIES = lib\probe_common.lib "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
+  OBJECT_DIR = CMakeFiles\warp_progress_divergence_probe_lib.dir
+  TARGET_COMPILE_PDB = CMakeFiles\warp_progress_divergence_probe_lib.dir\warp_progress_divergence_probe_lib.pdb
+  TARGET_FILE = CMakeFiles\warp_progress_divergence_probe_lib.dir\cmake_device_link.obj
+  TARGET_PDB = lib\warp_progress_divergence_probe_lib.pdb
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target warp_progress_divergence_probe_lib
+
+
+#############################################
+# Link the static library lib\warp_progress_divergence_probe_lib.lib
+
+build lib\warp_progress_divergence_probe_lib.lib: CXX_STATIC_LIBRARY_LINKER__warp_progress_divergence_probe_lib_Release CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe\host.cpp.obj CMakeFiles\warp_progress_divergence_probe_lib.dir\src\probes\warp_progress_divergence_probe\kernel.cu.obj CMakeFiles\warp_progress_divergence_probe_lib.dir\cmake_device_link.obj || lib\probe_common.lib
+  CONFIG = Release
+  LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
+  LINK_FLAGS = /machine:x64
+  OBJECT_DIR = CMakeFiles\warp_progress_divergence_probe_lib.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\warp_progress_divergence_probe_lib.dir\warp_progress_divergence_probe_lib.pdb
+  TARGET_FILE = lib\warp_progress_divergence_probe_lib.lib
+  TARGET_PDB = lib\warp_progress_divergence_probe_lib.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target probe_runner_warp_progress_divergence
+
+
+#############################################
+# Order-only phony target for probe_runner_warp_progress_divergence
+
+build cmake_object_order_depends_target_probe_runner_warp_progress_divergence: phony || cmake_object_order_depends_target_probe_common cmake_object_order_depends_target_warp_progress_divergence_probe_lib
+
+build CMakeFiles\probe_runner_warp_progress_divergence.dir\src\main\probe_runner_warp_progress_divergence.cpp.obj: CXX_COMPILER__probe_runner_warp_progress_divergence_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src\main\probe_runner_warp_progress_divergence.cpp || cmake_object_order_depends_target_probe_runner_warp_progress_divergence
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_warp_progress_divergence.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_warp_progress_divergence.dir\src\main
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_warp_progress_divergence.dir\
+  TARGET_PDB = bin\probe_runner_warp_progress_divergence.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target probe_runner_warp_progress_divergence
+
+
+#############################################
+# Link the executable bin\probe_runner_warp_progress_divergence.exe
+
+build bin\probe_runner_warp_progress_divergence.exe: CXX_EXECUTABLE_LINKER__probe_runner_warp_progress_divergence_Release CMakeFiles\probe_runner_warp_progress_divergence.dir\src\main\probe_runner_warp_progress_divergence.cpp.obj | lib\warp_progress_divergence_probe_lib.lib lib\probe_common.lib C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib || lib\probe_common.lib lib\warp_progress_divergence_probe_lib.lib
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
+  LINK_LIBRARIES = lib\warp_progress_divergence_probe_lib.lib  lib\probe_common.lib  "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
+  OBJECT_DIR = CMakeFiles\probe_runner_warp_progress_divergence.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_warp_progress_divergence.dir\
+  TARGET_FILE = bin\probe_runner_warp_progress_divergence.exe
+  TARGET_IMPLIB = probe_runner_warp_progress_divergence.lib
+  TARGET_PDB = bin\probe_runner_warp_progress_divergence.pdb
+
 
 #############################################
 # Utility command for edit_cache
@@ -216,17 +422,33 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
+build global_latency_hiding_probe_lib: phony lib\global_latency_hiding_probe_lib.lib
+
+build global_latency_hiding_probe_lib.lib: phony lib\global_latency_hiding_probe_lib.lib
+
 build probe_common: phony lib\probe_common.lib
 
 build probe_common.lib: phony lib\probe_common.lib
+
+build probe_runner_global_latency_hiding: phony bin\probe_runner_global_latency_hiding.exe
+
+build probe_runner_global_latency_hiding.exe: phony bin\probe_runner_global_latency_hiding.exe
 
 build probe_runner_warp_issue_policy: phony bin\probe_runner_warp_issue_policy.exe
 
 build probe_runner_warp_issue_policy.exe: phony bin\probe_runner_warp_issue_policy.exe
 
+build probe_runner_warp_progress_divergence: phony bin\probe_runner_warp_progress_divergence.exe
+
+build probe_runner_warp_progress_divergence.exe: phony bin\probe_runner_warp_progress_divergence.exe
+
 build warp_issue_policy_probe_lib: phony lib\warp_issue_policy_probe_lib.lib
 
 build warp_issue_policy_probe_lib.lib: phony lib\warp_issue_policy_probe_lib.lib
+
+build warp_progress_divergence_probe_lib: phony lib\warp_progress_divergence_probe_lib.lib
+
+build warp_progress_divergence_probe_lib.lib: phony lib\warp_progress_divergence_probe_lib.lib
 
 # =============================================================================
 # Folder targets.
@@ -236,7 +458,7 @@ build warp_issue_policy_probe_lib.lib: phony lib\warp_issue_policy_probe_lib.lib
 #############################################
 # Folder: C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build
 
-build all: phony lib\probe_common.lib lib\warp_issue_policy_probe_lib.lib bin\probe_runner_warp_issue_policy.exe
+build all: phony lib\probe_common.lib lib\warp_issue_policy_probe_lib.lib bin\probe_runner_warp_issue_policy.exe lib\global_latency_hiding_probe_lib.lib bin\probe_runner_global_latency_hiding.exe lib\warp_progress_divergence_probe_lib.lib bin\probe_runner_warp_progress_divergence.exe
 
 # =============================================================================
 # Built-in targets

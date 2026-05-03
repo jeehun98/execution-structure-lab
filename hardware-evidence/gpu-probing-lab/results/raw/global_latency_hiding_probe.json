@@ -1,0 +1,611 @@
+{
+  "experiment": "global_latency_hiding_probe",
+  "config": {
+    "active_warps_values": [1, 2, 4, 8, 16, 32],
+    "blocks": 1,
+    "cycle_budget": 200000000,
+    "sample_period": 256,
+    "global_elements": 16777216
+  },
+  "summaries": [
+    {
+      "active_warps": 1,
+      "average_progress": 15629,
+      "total_progress": 15629
+    },
+    {
+      "active_warps": 2,
+      "average_progress": 13337,
+      "total_progress": 26674
+    },
+    {
+      "active_warps": 4,
+      "average_progress": 13175,
+      "total_progress": 52700
+    },
+    {
+      "active_warps": 8,
+      "average_progress": 12875.6,
+      "total_progress": 103005
+    },
+    {
+      "active_warps": 16,
+      "average_progress": 12134.7,
+      "total_progress": 194155
+    },
+    {
+      "active_warps": 32,
+      "average_progress": 9980.56,
+      "total_progress": 319378
+    }
+  ],
+  "records": [
+    {
+      "active_warps": 1,
+      "block": 0,
+      "warp_id": 0,
+      "role": "global_load",
+      "progress": 15629,
+      "last_clock": 124836674218,
+      "sink": 2430509063
+    },
+    {
+      "active_warps": 2,
+      "block": 0,
+      "warp_id": 0,
+      "role": "global_load",
+      "progress": 13337,
+      "last_clock": 125037020038,
+      "sink": 2215270828
+    },
+    {
+      "active_warps": 2,
+      "block": 0,
+      "warp_id": 1,
+      "role": "global_load",
+      "progress": 13337,
+      "last_clock": 125037015862,
+      "sink": 2517435101
+    },
+    {
+      "active_warps": 4,
+      "block": 0,
+      "warp_id": 0,
+      "role": "global_load",
+      "progress": 13176,
+      "last_clock": 125237364610,
+      "sink": 1929383920
+    },
+    {
+      "active_warps": 4,
+      "block": 0,
+      "warp_id": 1,
+      "role": "global_load",
+      "progress": 13175,
+      "last_clock": 125237367002,
+      "sink": 1456225862
+    },
+    {
+      "active_warps": 4,
+      "block": 0,
+      "warp_id": 2,
+      "role": "global_load",
+      "progress": 13179,
+      "last_clock": 125237355181,
+      "sink": 891522823
+    },
+    {
+      "active_warps": 4,
+      "block": 0,
+      "warp_id": 3,
+      "role": "global_load",
+      "progress": 13170,
+      "last_clock": 125237354645,
+      "sink": 3900576172
+    },
+    {
+      "active_warps": 8,
+      "block": 0,
+      "warp_id": 0,
+      "role": "global_load",
+      "progress": 12873,
+      "last_clock": 125437806398,
+      "sink": 2901793670
+    },
+    {
+      "active_warps": 8,
+      "block": 0,
+      "warp_id": 1,
+      "role": "global_load",
+      "progress": 12876,
+      "last_clock": 125437811395,
+      "sink": 3873218294
+    },
+    {
+      "active_warps": 8,
+      "block": 0,
+      "warp_id": 2,
+      "role": "global_load",
+      "progress": 12878,
+      "last_clock": 125437808510,
+      "sink": 652981370
+    },
+    {
+      "active_warps": 8,
+      "block": 0,
+      "warp_id": 3,
+      "role": "global_load",
+      "progress": 12876,
+      "last_clock": 125437817523,
+      "sink": 3095593034
+    },
+    {
+      "active_warps": 8,
+      "block": 0,
+      "warp_id": 4,
+      "role": "global_load",
+      "progress": 12877,
+      "last_clock": 125437808789,
+      "sink": 2892083111
+    },
+    {
+      "active_warps": 8,
+      "block": 0,
+      "warp_id": 5,
+      "role": "global_load",
+      "progress": 12876,
+      "last_clock": 125437805533,
+      "sink": 1151979593
+    },
+    {
+      "active_warps": 8,
+      "block": 0,
+      "warp_id": 6,
+      "role": "global_load",
+      "progress": 12870,
+      "last_clock": 125437816458,
+      "sink": 1806238863
+    },
+    {
+      "active_warps": 8,
+      "block": 0,
+      "warp_id": 7,
+      "role": "global_load",
+      "progress": 12879,
+      "last_clock": 125437813586,
+      "sink": 3992206313
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 0,
+      "role": "global_load",
+      "progress": 12135,
+      "last_clock": 125638254037,
+      "sink": 2815919586
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 1,
+      "role": "global_load",
+      "progress": 12131,
+      "last_clock": 125638253696,
+      "sink": 1788583058
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 2,
+      "role": "global_load",
+      "progress": 12139,
+      "last_clock": 125638260399,
+      "sink": 2095367761
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 3,
+      "role": "global_load",
+      "progress": 12133,
+      "last_clock": 125638265547,
+      "sink": 1805664204
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 4,
+      "role": "global_load",
+      "progress": 12139,
+      "last_clock": 125638256371,
+      "sink": 3037146590
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 5,
+      "role": "global_load",
+      "progress": 12130,
+      "last_clock": 125638253729,
+      "sink": 2479734613
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 6,
+      "role": "global_load",
+      "progress": 12129,
+      "last_clock": 125638261940,
+      "sink": 2773731019
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 7,
+      "role": "global_load",
+      "progress": 12132,
+      "last_clock": 125638251716,
+      "sink": 2523533064
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 8,
+      "role": "global_load",
+      "progress": 12133,
+      "last_clock": 125638255036,
+      "sink": 1639611616
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 9,
+      "role": "global_load",
+      "progress": 12137,
+      "last_clock": 125638261954,
+      "sink": 237098168
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 10,
+      "role": "global_load",
+      "progress": 12133,
+      "last_clock": 125638253803,
+      "sink": 1212987338
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 11,
+      "role": "global_load",
+      "progress": 12135,
+      "last_clock": 125638262613,
+      "sink": 2416556030
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 12,
+      "role": "global_load",
+      "progress": 12133,
+      "last_clock": 125638259399,
+      "sink": 935697439
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 13,
+      "role": "global_load",
+      "progress": 12139,
+      "last_clock": 125638254355,
+      "sink": 3764211875
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 14,
+      "role": "global_load",
+      "progress": 12137,
+      "last_clock": 125638254073,
+      "sink": 3163217290
+    },
+    {
+      "active_warps": 16,
+      "block": 0,
+      "warp_id": 15,
+      "role": "global_load",
+      "progress": 12140,
+      "last_clock": 125638259942,
+      "sink": 1405346534
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 0,
+      "role": "global_load",
+      "progress": 9974,
+      "last_clock": 125838724106,
+      "sink": 3407867130
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 1,
+      "role": "global_load",
+      "progress": 9972,
+      "last_clock": 125838734678,
+      "sink": 2584765696
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 2,
+      "role": "global_load",
+      "progress": 9978,
+      "last_clock": 125838732244,
+      "sink": 2636007711
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 3,
+      "role": "global_load",
+      "progress": 9973,
+      "last_clock": 125838733079,
+      "sink": 2519715544
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 4,
+      "role": "global_load",
+      "progress": 9980,
+      "last_clock": 125838732525,
+      "sink": 3241867629
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 5,
+      "role": "global_load",
+      "progress": 9979,
+      "last_clock": 125838720419,
+      "sink": 3181945004
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 6,
+      "role": "global_load",
+      "progress": 9975,
+      "last_clock": 125838731513,
+      "sink": 3611417394
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 7,
+      "role": "global_load",
+      "progress": 9979,
+      "last_clock": 125838734442,
+      "sink": 299653193
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 8,
+      "role": "global_load",
+      "progress": 9981,
+      "last_clock": 125838720569,
+      "sink": 982123372
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 9,
+      "role": "global_load",
+      "progress": 9976,
+      "last_clock": 125838731712,
+      "sink": 2991926956
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 10,
+      "role": "global_load",
+      "progress": 9976,
+      "last_clock": 125838722088,
+      "sink": 43381671
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 11,
+      "role": "global_load",
+      "progress": 9984,
+      "last_clock": 125838724060,
+      "sink": 1305333157
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 12,
+      "role": "global_load",
+      "progress": 9977,
+      "last_clock": 125838722500,
+      "sink": 2834195156
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 13,
+      "role": "global_load",
+      "progress": 9983,
+      "last_clock": 125838734019,
+      "sink": 1010549919
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 14,
+      "role": "global_load",
+      "progress": 9977,
+      "last_clock": 125838734422,
+      "sink": 1475707349
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 15,
+      "role": "global_load",
+      "progress": 9981,
+      "last_clock": 125838721679,
+      "sink": 1894767508
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 16,
+      "role": "global_load",
+      "progress": 9980,
+      "last_clock": 125838723066,
+      "sink": 718752535
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 17,
+      "role": "global_load",
+      "progress": 9986,
+      "last_clock": 125838736037,
+      "sink": 2277712957
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 18,
+      "role": "global_load",
+      "progress": 9978,
+      "last_clock": 125838726828,
+      "sink": 264709166
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 19,
+      "role": "global_load",
+      "progress": 9984,
+      "last_clock": 125838721319,
+      "sink": 1022834091
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 20,
+      "role": "global_load",
+      "progress": 9983,
+      "last_clock": 125838720672,
+      "sink": 824691429
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 21,
+      "role": "global_load",
+      "progress": 9985,
+      "last_clock": 125838728460,
+      "sink": 1716506955
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 22,
+      "role": "global_load",
+      "progress": 9983,
+      "last_clock": 125838731875,
+      "sink": 1735776970
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 23,
+      "role": "global_load",
+      "progress": 9984,
+      "last_clock": 125838719519,
+      "sink": 2845931288
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 24,
+      "role": "global_load",
+      "progress": 9986,
+      "last_clock": 125838727269,
+      "sink": 1226385046
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 25,
+      "role": "global_load",
+      "progress": 9982,
+      "last_clock": 125838732198,
+      "sink": 481810772
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 26,
+      "role": "global_load",
+      "progress": 9982,
+      "last_clock": 125838724187,
+      "sink": 218248030
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 27,
+      "role": "global_load",
+      "progress": 9981,
+      "last_clock": 125838730628,
+      "sink": 3956338628
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 28,
+      "role": "global_load",
+      "progress": 9988,
+      "last_clock": 125838734916,
+      "sink": 149133962
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 29,
+      "role": "global_load",
+      "progress": 9984,
+      "last_clock": 125838733173,
+      "sink": 4106691725
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 30,
+      "role": "global_load",
+      "progress": 9982,
+      "last_clock": 125838725236,
+      "sink": 2317113661
+    },
+    {
+      "active_warps": 32,
+      "block": 0,
+      "warp_id": 31,
+      "role": "global_load",
+      "progress": 9985,
+      "last_clock": 125838731074,
+      "sink": 1192650348
+    }
+  ]
+}

@@ -91,3 +91,97 @@ target_link_libraries(probe_runner_warp_issue_policy
 set_target_properties(probe_runner_warp_issue_policy PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+
+# ------------------------------------------------------------
+# global latency hiding probe library
+# ------------------------------------------------------------
+add_library(global_latency_hiding_probe_lib
+    src/probes/global_latency_hiding_probe/host.cpp
+    src/probes/global_latency_hiding_probe/kernel.cu
+)
+
+target_include_directories(global_latency_hiding_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(global_latency_hiding_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(global_latency_hiding_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# global latency hiding probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_global_latency_hiding
+    src/main/probe_runner_global_latency_hiding.cpp
+)
+
+target_include_directories(probe_runner_global_latency_hiding
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_global_latency_hiding
+    PRIVATE
+        global_latency_hiding_probe_lib
+)
+
+set_target_properties(probe_runner_global_latency_hiding PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
+
+# ------------------------------------------------------------
+# warp progress divergence probe library
+# ------------------------------------------------------------
+add_library(warp_progress_divergence_probe_lib
+    src/probes/warp_progress_divergence_probe/host.cpp
+    src/probes/warp_progress_divergence_probe/kernel.cu
+)
+
+target_include_directories(warp_progress_divergence_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(warp_progress_divergence_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(warp_progress_divergence_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# warp progress divergence probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_warp_progress_divergence
+    src/main/probe_runner_warp_progress_divergence.cpp
+)
+
+target_include_directories(probe_runner_warp_progress_divergence
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_warp_progress_divergence
+    PRIVATE
+        warp_progress_divergence_probe_lib
+)
+
+set_target_properties(probe_runner_warp_progress_divergence PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
