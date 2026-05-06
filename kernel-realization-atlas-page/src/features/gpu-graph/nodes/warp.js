@@ -4,8 +4,10 @@ export default {
   layer: 0,
 
   connectsTo: [
-    { id: "same_baseline", type: "probe" },
-    { id: "mixed_probe", type: "next" },
+    {
+      id: "same_baseline",
+      type: "baseline",
+    },
   ],
 
   meta: {
