@@ -1,11 +1,4 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-  useRef,
-  useLayoutEffect,
-  useCallback,
-} from "react";
+import { useEffect, useMemo, useState } from "react";
 import { buildGraph } from "./buildGraph";
 
 const CANVAS = {
@@ -23,6 +16,11 @@ const ROOT = {
 const COLUMN_GAP = 260;
 const ROW_GAP = 120;
 
+// 대략적인 노드 반쪽 너비.
+// 간선은 중앙-중앙으로 연결하지만,
+// 라벨 위치 계산에는 이 값을 사용한다.
+const DEFAULT_NODE_HALF_WIDTH = 56;
+
 // --- Helper Functions ---
 
 function buildChildrenMap(edges) {
@@ -38,6 +36,7 @@ function getReachableNodeIds(rootId, childrenMap) {
 
   function visit(id) {
     if (visited.has(id)) return;
+
     visited.add(id);
 
     const childEdges = childrenMap[id] ?? [];
@@ -45,6 +44,7 @@ function getReachableNodeIds(rootId, childrenMap) {
   }
 
   visit(rootId);
+
   return visited;
 }
 
@@ -77,8 +77,10 @@ function getLayout({ nodes, edges, rootId }) {
 
   const columns = visibleNodes.reduce((map, node) => {
     const depth = depthMap.get(node.id) ?? 0;
+
     if (!map[depth]) map[depth] = [];
     map[depth].push(node);
+
     return map;
   }, {});
 
@@ -116,9 +118,11 @@ function getLayout({ nodes, edges, rootId }) {
 
 function getParentMap(edges) {
   const parentMap = new Map();
+
   edges.forEach((edge) => {
     parentMap.set(edge.to, edge.from);
   });
+
   return parentMap;
 }
 
@@ -132,74 +136,45 @@ function getActivePathNodeIds(focusId, edges, rootId) {
     activeIds.add(current);
 
     if (current === rootId) break;
+
     current = parentMap.get(current);
   }
 
   return activeIds;
 }
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
-
-
-function getEdgeLabelPosition({
-  startX,
-  startY,
-  endX,
-  endY,
-  fromWidth = 0,
-  toWidth = 0,
-}) {
+function getEdgeLabelPosition({ startX, startY, endX, endY }) {
   const dx = endX - startX;
   const dy = endY - startY;
 
   const goingRight = dx >= 0;
 
-  // 측정 실패 시에도 위치가 확실히 바뀌도록 fallback 자체를 중앙이 아니라 출발점 기준으로 둠
-  const fallbackX = goingRight ? startX + 72 : startX - 72;
-  const fallbackY = startY - 22;
+  // 라벨을 선의 정중앙이 아니라
+  // 출발 노드 바깥쪽 근처에 둔다.
+  const sourceOuterX = goingRight
+    ? startX + DEFAULT_NODE_HALF_WIDTH
+    : startX - DEFAULT_NODE_HALF_WIDTH;
 
-  const fromHalfWidth = fromWidth ? fromWidth / 2 : 36;
-  const toHalfWidth = toWidth ? toWidth / 2 : 36;
+  const targetOuterX = goingRight
+    ? endX - DEFAULT_NODE_HALF_WIDTH
+    : endX + DEFAULT_NODE_HALF_WIDTH;
 
-  // 노드 중앙-중앙 선은 유지하되,
-  // 라벨은 출발 노드 바깥쪽에서 조금 떨어진 위치에 배치
-  const fromOuterX = goingRight
-    ? startX + fromHalfWidth
-    : startX - fromHalfWidth;
+  const gap = Math.abs(targetOuterX - sourceOuterX);
 
-  const toOuterX = goingRight
-    ? endX - toHalfWidth
-    : endX + toHalfWidth;
+  // 노드 사이 여백이 넓으면 조금 더 멀리,
+  // 좁으면 너무 멀리 가지 않게 제한.
+  const offsetFromSource = Math.min(Math.max(gap * 0.28, 46), 82);
 
-  const gap = Math.abs(toOuterX - fromOuterX);
+  const labelX = goingRight
+    ? sourceOuterX + offsetFromSource
+    : sourceOuterX - offsetFromSource;
 
-  // 노드 사이 빈 공간이 좁을 때도 라벨이 노드에 붙지 않도록 최소 오프셋 보장
-  const offsetFromSource = Math.min(Math.max(gap * 0.28, 46), 86);
-
-  let labelX = goingRight
-    ? fromOuterX + offsetFromSource
-    : fromOuterX - offsetFromSource;
-
-  // 그래도 다음 노드에 너무 가까워지지 않도록 제한
-  if (goingRight) {
-    labelX = Math.min(labelX, toOuterX - 24);
-  } else {
-    labelX = Math.max(labelX, toOuterX + 24);
-  }
-
+  // 수평 간선이면 위로 띄우고,
+  // 대각 간선이면 시작점과 끝점 사이를 따라가되 조금 위로 둔다.
   const labelY =
     Math.abs(dy) < 20
-      ? startY - 24
-      : startY + dy * 0.35 - 24;
-
-  if (!Number.isFinite(labelX) || !Number.isFinite(labelY)) {
-    return {
-      x: fallbackX,
-      y: fallbackY,
-    };
-  }
+      ? startY - 28
+      : startY + dy * 0.35 - 28;
 
   return {
     x: labelX,
@@ -207,28 +182,11 @@ function getEdgeLabelPosition({
   };
 }
 
-
 // --- Components ---
 
-function NodeButton({
-  node,
-  active,
-  pathActive,
-  onClick,
-  onWidthMeasured,
-}) {
-  const buttonRef = useRef(null);
-
-  useLayoutEffect(() => {
-    if (buttonRef.current) {
-      const width = buttonRef.current.offsetWidth;
-      onWidthMeasured(node.id, width);
-    }
-  }, [node.id, node.label, onWidthMeasured]);
-
+function NodeButton({ node, active, pathActive, onClick }) {
   return (
     <button
-      ref={buttonRef}
       type="button"
       onClick={() => onClick(node.id)}
       className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-xl border px-4 py-2 text-sm transition ${
@@ -238,14 +196,17 @@ function NodeButton({
           ? "border-lime-400/70 bg-neutral-950 text-white shadow-[0_0_14px_rgba(163,230,53,0.12)]"
           : "border-white/20 bg-neutral-900 text-neutral-300 hover:border-lime-400/50 hover:text-white"
       }`}
-      style={{ left: node.x, top: node.y }}
+      style={{
+        left: node.x,
+        top: node.y,
+      }}
     >
       {node.label}
     </button>
   );
 }
 
-function EdgePath({ edge, active, fromWidth = 0, toWidth = 0 }) {
+function EdgePath({ edge, active }) {
   const from = edge.fromNode;
   const to = edge.toNode;
 
@@ -267,8 +228,6 @@ function EdgePath({ edge, active, fromWidth = 0, toWidth = 0 }) {
     startY,
     endX,
     endY,
-    fromWidth,
-    toWidth,
   });
 
   return (
@@ -276,7 +235,11 @@ function EdgePath({ edge, active, fromWidth = 0, toWidth = 0 }) {
       <path
         d={`M ${startX} ${startY} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${endX} ${endY}`}
         fill="none"
-        stroke={active ? "rgb(163 230 53 / 0.9)" : "rgb(163 230 53 / 0.22)"}
+        stroke={
+          active
+            ? "rgb(163 230 53 / 0.9)"
+            : "rgb(163 230 53 / 0.22)"
+        }
         strokeWidth={active ? 2 : 1.2}
         strokeLinecap="round"
       />
@@ -319,18 +282,13 @@ export default function GraphCanvas({ onSelect }) {
   );
 
   const [focus, setFocus] = useState(ROOT_ID);
-  const [nodeWidths, setNodeWidths] = useState({});
-
-  const handleWidthMeasured = useCallback((id, width) => {
-    setNodeWidths((prev) => {
-      if (prev[id] === width) return prev;
-      return { ...prev, [id]: width };
-    });
-  }, []);
 
   useEffect(() => {
     const root = layout.nodes.find((node) => node.id === ROOT_ID);
-    if (root) onSelect?.(root);
+
+    if (root) {
+      onSelect?.(root);
+    }
   }, [layout.nodes, onSelect]);
 
   const activePathNodeIds = useMemo(
@@ -340,6 +298,7 @@ export default function GraphCanvas({ onSelect }) {
 
   const selectNode = (id) => {
     const selectedNode = layout.nodes.find((node) => node.id === id);
+
     setFocus(id);
     onSelect?.(selectedNode);
   };
@@ -351,7 +310,10 @@ export default function GraphCanvas({ onSelect }) {
   return (
     <div
       className="relative mx-auto bg-black"
-      style={{ width: CANVAS.width, height: CANVAS.height }}
+      style={{
+        width: CANVAS.width,
+        height: CANVAS.height,
+      }}
     >
       <svg
         className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
@@ -362,8 +324,6 @@ export default function GraphCanvas({ onSelect }) {
             key={edge.id}
             edge={edge}
             active={isEdgeActive(edge)}
-            fromWidth={nodeWidths[edge.from] ?? 0}
-            toWidth={nodeWidths[edge.to] ?? 0}
           />
         ))}
       </svg>
@@ -375,7 +335,6 @@ export default function GraphCanvas({ onSelect }) {
           active={focus === node.id}
           pathActive={activePathNodeIds.has(node.id)}
           onClick={selectNode}
-          onWidthMeasured={handleWidthMeasured}
         />
       ))}
     </div>
