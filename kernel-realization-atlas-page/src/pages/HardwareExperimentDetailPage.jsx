@@ -23,14 +23,18 @@ function hasObject(value) {
   return value && typeof value === "object" && !Array.isArray(value);
 }
 
+function hasSignatureRecords(records = []) {
+  return records.some((record) => Boolean(record.signature));
+}
+
 function ratioLabel(key) {
   return key
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, (char) => char.toUpperCase());
 }
 
-function SectionBlock({ id, eyebrow, title, desc, children }) {
-  if (!children) return null;
+function SectionBlock({ show = true, id, eyebrow, title, desc, children }) {
+  if (!show) return null;
 
   return (
     <section
@@ -224,7 +228,7 @@ function KeyFindingGrid({ observation }) {
     return record.progress < best.progress ? record : best;
   }, null);
 
-  const items = [
+  let items = [
     {
       label: "Warp Count",
       value: records.length,
@@ -254,19 +258,29 @@ function KeyFindingGrid({ observation }) {
   ];
 
   if (allClockDeltasEqual) {
-    items[2] = {
-      label: "Clock Delta",
-      value: `+${clockDeltas[0]} cycles`,
-      desc: "last_clock이 고정 간격으로 증가",
-    };
+    items = [
+      items[0],
+      items[1],
+      {
+        label: "Clock Delta",
+        value: `+${clockDeltas[0]} cycles`,
+        desc: "last_clock이 고정 간격으로 증가",
+      },
+      items[3],
+    ];
   }
 
   if (!allProgressEqual && slowestRecord) {
-    items[3] = {
-      label: "Slowest Path",
-      value: slowestRecord.role,
-      desc: `progress ${formatNumber(slowestRecord.progress)}`,
-    };
+    items = [
+      items[0],
+      items[1],
+      items[2],
+      {
+        label: "Slowest Path",
+        value: slowestRecord.role,
+        desc: `progress ${formatNumber(slowestRecord.progress)}`,
+      },
+    ];
   }
 
   return (
@@ -632,7 +646,7 @@ function buildAnchorItems(observation) {
     items.push({ href: "#probe-context", label: "probe 질문" });
   }
 
-  if (observation.knownMechanisms?.items) {
+  if (hasItems(observation.knownMechanisms?.items)) {
     items.push({ href: "#known-mechanisms", label: "실행 모델" });
   }
 
@@ -640,11 +654,15 @@ function buildAnchorItems(observation) {
     items.push({ href: "#not-proving", label: "경계" });
   }
 
-  if (observation.records) {
+  if (observation.config) {
+    items.push({ href: "#condition", label: "조건" });
+  }
+
+  if (hasItems(observation.records)) {
     items.push({ href: "#records", label: "records" });
   }
 
-  if (hasItems(observation.ordering)) {
+  if (hasItems(observation.ordering) || hasSignatureRecords(observation.records)) {
     items.push({ href: "#signature", label: "signature" });
   }
 
@@ -822,6 +840,7 @@ export default function HardwareExperimentDetailPage() {
 
         <div className="space-y-6">
           <SectionBlock
+            show={Boolean(observation.probeContext)}
             id="probe-context"
             eyebrow="Probe Question"
             title="이 실험이 실제로 묻는 것"
@@ -830,14 +849,19 @@ export default function HardwareExperimentDetailPage() {
           </SectionBlock>
 
           <SectionBlock
+            show={hasItems(observation.knownMechanisms?.items)}
             id="known-mechanisms"
             eyebrow="Known Mechanisms"
-            title={observation.knownMechanisms?.title}
+            title={
+              observation.knownMechanisms?.title ??
+              "실험 전에 알고 들어가는 실행 모델"
+            }
           >
             <InfoCardGrid items={observation.knownMechanisms?.items} />
           </SectionBlock>
 
           <SectionBlock
+            show={hasItems(observation.notTryingToProve)}
             id="not-proving"
             eyebrow="Boundary"
             title="이 실험이 직접 증명하지 않는 것"
@@ -850,6 +874,7 @@ export default function HardwareExperimentDetailPage() {
           </SectionBlock>
 
           <SectionBlock
+            show={Boolean(observation.config)}
             id="condition"
             eyebrow="Condition"
             title="실험 조건"
@@ -858,6 +883,7 @@ export default function HardwareExperimentDetailPage() {
           </SectionBlock>
 
           <SectionBlock
+            show={hasItems(observation.records)}
             id="records"
             eyebrow="Raw Records"
             title="warp별 관찰값"
@@ -869,6 +895,10 @@ export default function HardwareExperimentDetailPage() {
           </SectionBlock>
 
           <SectionBlock
+            show={
+              hasItems(observation.ordering) ||
+              hasSignatureRecords(observation.records)
+            }
             id="signature"
             eyebrow="Execution Signature"
             title="관찰된 실행 서명"
@@ -881,6 +911,7 @@ export default function HardwareExperimentDetailPage() {
           </SectionBlock>
 
           <SectionBlock
+            show={hasObject(observation.ratios)}
             id="ratios"
             eyebrow="Relative Ratios"
             title="상대 progress 비율"
@@ -889,20 +920,24 @@ export default function HardwareExperimentDetailPage() {
             <RatioGrid ratios={observation.ratios} />
           </SectionBlock>
 
-          <div id="interpretation" className="grid gap-6 lg:grid-cols-2">
-            <DetailList
-              title="결과에서 말할 수 있는 것"
-              items={observation.interpretation}
-            />
+          {hasItems(observation.interpretation) ||
+          hasItems(observation.caveats) ? (
+            <div id="interpretation" className="grid gap-6 lg:grid-cols-2">
+              <DetailList
+                title="결과에서 말할 수 있는 것"
+                items={observation.interpretation}
+              />
 
-            <DetailList
-              title="단정하면 안 되는 것"
-              items={observation.caveats}
-              markerClassName="bg-neutral-500"
-            />
-          </div>
+              <DetailList
+                title="단정하면 안 되는 것"
+                items={observation.caveats}
+                markerClassName="bg-neutral-500"
+              />
+            </div>
+          ) : null}
 
           <SectionBlock
+            show={Boolean(observation.comparisonPurpose)}
             id="comparison"
             eyebrow="Comparison"
             title="후속 probe와 비교하는 방식"
@@ -913,6 +948,7 @@ export default function HardwareExperimentDetailPage() {
           </SectionBlock>
 
           <SectionBlock
+            show={Boolean(observation.clockObservation)}
             id="clock"
             eyebrow="Clock Observation"
             title="last_clock 해석"
@@ -923,6 +959,7 @@ export default function HardwareExperimentDetailPage() {
           </SectionBlock>
 
           <SectionBlock
+            show={Boolean(observation.suggestedPatch)}
             id="patch"
             eyebrow="Anti-optimization"
             title="sink cancellation 개선"
@@ -930,11 +967,17 @@ export default function HardwareExperimentDetailPage() {
             <PatchBlock patch={observation.suggestedPatch} />
           </SectionBlock>
 
-          <SectionBlock id="next" eyebrow="Next" title="다음 검증">
+          <SectionBlock
+            show={Boolean(observation.nextStep)}
+            id="next"
+            eyebrow="Next"
+            title="다음 검증"
+          >
             <NextStepBlock nextStep={observation.nextStep} />
           </SectionBlock>
 
           <SectionBlock
+            show={Boolean(observation.refinementPlan)}
             id="refinement"
             eyebrow="Refinement"
             title="보강 실험 방향"
