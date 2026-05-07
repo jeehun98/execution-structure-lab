@@ -19,6 +19,16 @@ function hasItems(items) {
   return Array.isArray(items) && items.length > 0;
 }
 
+function hasObject(value) {
+  return value && typeof value === "object" && !Array.isArray(value);
+}
+
+function ratioLabel(key) {
+  return key
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (char) => char.toUpperCase());
+}
+
 function SectionBlock({ id, eyebrow, title, desc, children }) {
   if (!children) return null;
 
@@ -60,6 +70,8 @@ function SidebarCard({ title, children }) {
 }
 
 function AnchorNav({ items = [] }) {
+  if (!hasItems(items)) return null;
+
   return (
     <div className="space-y-2">
       {items.map((item) => (
@@ -174,13 +186,22 @@ function ComparisonPurposeBlock({ comparisonPurpose }) {
 
 function KeyFindingGrid({ observation }) {
   const records = observation.records ?? [];
+
+  if (!hasItems(records)) return null;
+
   const progressValues = records.map((record) => record.progress);
-  const lastClockValues = records.map((record) => record.lastClock);
+  const lastClockValues = records
+    .map((record) => record.lastClock)
+    .filter((value) => typeof value === "number");
   const sinkValues = records.map((record) => record.sink);
 
   const allProgressEqual =
     progressValues.length > 0 &&
     progressValues.every((value) => value === progressValues[0]);
+
+  const maxProgress = Math.max(...progressValues);
+  const minProgress = Math.min(...progressValues);
+  const progressSpread = maxProgress - minProgress;
 
   const clockDeltas = lastClockValues.slice(1).map((value, index) => {
     return value - lastClockValues[index];
@@ -193,34 +214,60 @@ function KeyFindingGrid({ observation }) {
   const allSinkZero =
     sinkValues.length > 0 && sinkValues.every((value) => value === 0);
 
+  const fastestRecord = records.reduce((best, record) => {
+    if (!best) return record;
+    return record.progress > best.progress ? record : best;
+  }, null);
+
+  const slowestRecord = records.reduce((best, record) => {
+    if (!best) return record;
+    return record.progress < best.progress ? record : best;
+  }, null);
+
   const items = [
     {
       label: "Warp Count",
       value: records.length,
-      desc: "동일 조건에서 기록된 warp 수",
+      desc: "기록된 warp 수",
     },
     {
       label: "Progress",
-      value: allProgressEqual ? formatNumber(progressValues[0]) : "mixed",
+      value: allProgressEqual ? formatNumber(progressValues[0]) : "diverged",
       desc: allProgressEqual
         ? "모든 warp의 progress가 동일"
-        : "warp별 progress 차이 존재",
+        : `spread ${formatNumber(progressSpread)}`,
     },
     {
-      label: "Clock Delta",
-      value: allClockDeltasEqual ? `+${clockDeltas[0]} cycles` : "mixed",
-      desc: allClockDeltasEqual
-        ? "last_clock이 고정 간격으로 증가"
-        : "last_clock 간격이 일정하지 않음",
+      label: "Fastest Path",
+      value: fastestRecord?.role ?? "—",
+      desc: fastestRecord
+        ? `progress ${formatNumber(fastestRecord.progress)}`
+        : "기록 없음",
     },
     {
       label: "Sink",
-      value: allSinkZero ? "all zero" : "non-zero",
+      value: allSinkZero ? "all zero" : "mixed",
       desc: allSinkZero
         ? "anti-optimization 관점에서 개선 필요"
         : "sink가 0으로 고정되지 않음",
     },
   ];
+
+  if (allClockDeltasEqual) {
+    items[2] = {
+      label: "Clock Delta",
+      value: `+${clockDeltas[0]} cycles`,
+      desc: "last_clock이 고정 간격으로 증가",
+    };
+  }
+
+  if (!allProgressEqual && slowestRecord) {
+    items[3] = {
+      label: "Slowest Path",
+      value: slowestRecord.role,
+      desc: `progress ${formatNumber(slowestRecord.progress)}`,
+    };
+  }
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -233,7 +280,7 @@ function KeyFindingGrid({ observation }) {
             {item.label}
           </div>
 
-          <div className="mt-3 text-xl font-semibold leading-tight text-white">
+          <div className="mt-3 break-words text-xl font-semibold leading-tight text-white">
             {item.value}
           </div>
 
@@ -256,6 +303,8 @@ function ConfigTable({ config }) {
     ["sample_period", config.samplePeriod],
     ["global_elements", config.globalElements],
   ].filter(([, value]) => value !== undefined && value !== null);
+
+  if (!hasItems(entries)) return null;
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
@@ -292,7 +341,7 @@ function RecordTable({ records = [] }) {
 
   return (
     <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/25">
-      <div className="grid min-w-[720px] grid-cols-[90px_1fr_140px_190px_90px] border-b border-white/10 px-4 py-3 text-xs uppercase tracking-[0.14em] text-neutral-500">
+      <div className="grid min-w-[860px] grid-cols-[90px_1fr_140px_190px_110px] border-b border-white/10 px-4 py-3 text-xs uppercase tracking-[0.14em] text-neutral-500">
         <div>Warp</div>
         <div>Role</div>
         <div className="text-right">Progress</div>
@@ -300,15 +349,15 @@ function RecordTable({ records = [] }) {
         <div className="text-right">Sink</div>
       </div>
 
-      <div className="min-w-[720px] divide-y divide-white/10">
+      <div className="min-w-[860px] divide-y divide-white/10">
         {records.map((record) => (
           <div
-            key={record.warpId}
-            className="grid grid-cols-[90px_1fr_140px_190px_90px] px-4 py-3 text-sm text-neutral-300"
+            key={`${record.block ?? 0}-${record.warpId}`}
+            className="grid grid-cols-[90px_1fr_140px_190px_110px] px-4 py-3 text-sm text-neutral-300"
           >
             <div>warp {record.warpId}</div>
 
-            <div>{record.role}</div>
+            <div className="font-mono text-xs">{record.role}</div>
 
             <div className="text-right tabular-nums">
               {formatNumber(record.progress)}
@@ -318,10 +367,112 @@ function RecordTable({ records = [] }) {
               {formatNumber(record.lastClock)}
             </div>
 
-            <div className="text-right tabular-nums">{record.sink}</div>
+            <div className="text-right tabular-nums">
+              {formatNumber(record.sink)}
+            </div>
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function SignatureGrid({ records = [] }) {
+  const signatureRecords = records.filter((record) => record.signature);
+
+  if (!hasItems(signatureRecords)) return null;
+
+  const maxProgress = Math.max(
+    ...signatureRecords.map((record) => record.progress)
+  );
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      {signatureRecords.map((record) => {
+        const ratio = maxProgress
+          ? ((record.progress / maxProgress) * 100).toFixed(2)
+          : "0.00";
+
+        return (
+          <div
+            key={record.role}
+            className="rounded-2xl border border-white/10 bg-black/20 p-5"
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="font-mono text-sm text-white">{record.role}</div>
+              <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-neutral-400">
+                warp {record.warpId}
+              </div>
+            </div>
+
+            <p className="mt-3 text-sm leading-6 text-neutral-400">
+              {record.signature}
+            </p>
+
+            <div className="mt-4">
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-lime-300/80"
+                  style={{ width: `${ratio}%` }}
+                />
+              </div>
+
+              <p className="mt-2 text-xs text-neutral-500">
+                max progress 대비 {ratio}%
+              </p>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function OrderingBlock({ ordering = [] }) {
+  if (!hasItems(ordering)) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+      <div className="flex flex-wrap items-center gap-2">
+        {ordering.map((role, index) => (
+          <div key={role} className="flex items-center gap-2">
+            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 font-mono text-xs text-neutral-300">
+              {role}
+            </span>
+
+            {index < ordering.length - 1 ? (
+              <span className="text-neutral-600">→</span>
+            ) : null}
+          </div>
+        ))}
+      </div>
+
+      <p className="mt-4 text-sm leading-6 text-neutral-500">
+        이 순서는 절대적인 GPU 일반 법칙이 아니라, 현재 probe 설계에서 관찰된
+        execution signature의 상대적 순서입니다.
+      </p>
+    </div>
+  );
+}
+
+function RatioGrid({ ratios }) {
+  if (!hasObject(ratios)) return null;
+
+  const entries = Object.entries(ratios);
+
+  if (!hasItems(entries)) return null;
+
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      {entries.map(([key, value]) => (
+        <div
+          key={key}
+          className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-black/20 px-4 py-3"
+        >
+          <span className="text-sm text-neutral-400">{ratioLabel(key)}</span>
+          <span className="font-mono text-sm text-white">{value}x</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -402,6 +553,132 @@ function NextStepBlock({ nextStep }) {
   );
 }
 
+function RefinementPlanBlock({ refinementPlan }) {
+  if (!refinementPlan) return null;
+
+  return (
+    <div className="rounded-2xl border border-sky-400/20 bg-sky-400/[0.06] p-6">
+      <div className="text-xs uppercase tracking-[0.16em] text-sky-300">
+        Refinement Plan
+      </div>
+
+      <h3 className="mt-2 text-lg font-semibold text-white">
+        {refinementPlan.title}
+      </h3>
+
+      {refinementPlan.summary ? (
+        <p className="mt-3 text-sm leading-6 text-neutral-300">
+          {refinementPlan.summary}
+        </p>
+      ) : null}
+
+      {hasItems(refinementPlan.items) ? (
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          {refinementPlan.items.map((item) => (
+            <div
+              key={item.version}
+              className="rounded-2xl border border-white/10 bg-black/25 p-5"
+            >
+              <div className="flex items-center gap-3">
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-neutral-400">
+                  {item.version}
+                </span>
+                <h4 className="font-semibold text-white">{item.title}</h4>
+              </div>
+
+              <p className="mt-3 text-sm leading-6 text-neutral-400">
+                {item.goal}
+              </p>
+
+              <p className="mt-3 text-sm leading-6 text-neutral-500">
+                {item.question}
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function ClockObservationBlock({ clockObservation }) {
+  if (!clockObservation) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+      <p className="text-sm leading-6 text-neutral-300">
+        {clockObservation.summary}
+      </p>
+
+      {hasItems(clockObservation.values) ? (
+        <div className="mt-4">
+          <CodeBlock>{clockObservation.values.join("\n")}</CodeBlock>
+        </div>
+      ) : null}
+
+      {clockObservation.caveat ? (
+        <p className="mt-4 text-sm leading-6 text-neutral-500">
+          {clockObservation.caveat}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function buildAnchorItems(observation) {
+  const items = [{ href: "#overview", label: "개요" }];
+
+  if (observation.probeContext) {
+    items.push({ href: "#probe-context", label: "probe 질문" });
+  }
+
+  if (observation.knownMechanisms?.items) {
+    items.push({ href: "#known-mechanisms", label: "실행 모델" });
+  }
+
+  if (hasItems(observation.notTryingToProve)) {
+    items.push({ href: "#not-proving", label: "경계" });
+  }
+
+  if (observation.records) {
+    items.push({ href: "#records", label: "records" });
+  }
+
+  if (hasItems(observation.ordering)) {
+    items.push({ href: "#signature", label: "signature" });
+  }
+
+  if (hasObject(observation.ratios)) {
+    items.push({ href: "#ratios", label: "ratios" });
+  }
+
+  if (hasItems(observation.interpretation) || hasItems(observation.caveats)) {
+    items.push({ href: "#interpretation", label: "해석" });
+  }
+
+  if (observation.comparisonPurpose) {
+    items.push({ href: "#comparison", label: "비교 방식" });
+  }
+
+  if (observation.clockObservation) {
+    items.push({ href: "#clock", label: "clock" });
+  }
+
+  if (observation.suggestedPatch) {
+    items.push({ href: "#patch", label: "patch" });
+  }
+
+  if (observation.nextStep) {
+    items.push({ href: "#next", label: "next" });
+  }
+
+  if (observation.refinementPlan) {
+    items.push({ href: "#refinement", label: "보강 계획" });
+  }
+
+  return items;
+}
+
 function NotFoundDetailPage({ experimentId }) {
   const firstObservation = hardwareObservations[0];
 
@@ -459,20 +736,7 @@ export default function HardwareExperimentDetailPage() {
     return <NotFoundDetailPage experimentId={experimentId} />;
   }
 
-  const anchorItems = [
-    { href: "#overview", label: "실험 개요" },
-    { href: "#probe-context", label: "probe 질문" },
-    { href: "#known-mechanisms", label: "알고 들어가는 실행 모델" },
-    { href: "#not-proving", label: "증명하지 않는 것" },
-    { href: "#key-findings", label: "핵심 관찰값" },
-    { href: "#condition", label: "실험 조건" },
-    { href: "#records", label: "raw records" },
-    { href: "#interpretation", label: "해석 가능 범위" },
-    { href: "#comparison", label: "후속 mode 비교" },
-    { href: "#clock", label: "last_clock 해석" },
-    { href: "#patch", label: "sink patch" },
-    { href: "#next", label: "다음 probe" },
-  ];
+  const anchorItems = buildAnchorItems(observation);
 
   return (
     <div className="space-y-10">
@@ -501,9 +765,11 @@ export default function HardwareExperimentDetailPage() {
               </span>
             ) : null}
 
-            <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
-              {observation.label}
-            </span>
+            {observation.label ? (
+              <span className="rounded-full border border-white/10 bg-black/20 px-3 py-1 text-xs text-neutral-400">
+                {observation.label}
+              </span>
+            ) : null}
           </div>
 
           <h1 className="mt-4 max-w-5xl text-3xl font-semibold leading-tight text-white lg:text-4xl">
@@ -522,13 +788,13 @@ export default function HardwareExperimentDetailPage() {
         </section>
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-[300px_minmax(0,1fr)]">
+      <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="space-y-6 xl:sticky xl:top-24 xl:self-start">
           <SidebarCard title="이 페이지에서 확인할 것">
             <AnchorNav items={anchorItems} />
           </SidebarCard>
 
-          <SidebarCard title="현재 등록된 상세 기록">
+          <SidebarCard title="등록된 상세 기록">
             <div className="space-y-3">
               {hardwareObservations.map((item) => {
                 const isActive = item.id === observation.id;
@@ -559,7 +825,6 @@ export default function HardwareExperimentDetailPage() {
             id="probe-context"
             eyebrow="Probe Question"
             title="이 실험이 실제로 묻는 것"
-            desc="자명한 CUDA 실행 모델이 아니라, workload class 차이가 progress 분포에 어떻게 드러나는지를 본다."
           >
             <ProbeContextBlock context={observation.probeContext} />
           </SectionBlock>
@@ -567,11 +832,7 @@ export default function HardwareExperimentDetailPage() {
           <SectionBlock
             id="known-mechanisms"
             eyebrow="Known Mechanisms"
-            title={
-              observation.knownMechanisms?.title ??
-              "실험 전에 알고 들어가는 GPU 실행 모델"
-            }
-            desc="이 섹션은 실험으로 새로 증명하는 내용이 아니라, 결과 해석 전에 전제로 두는 GPU 실행 모델입니다."
+            title={observation.knownMechanisms?.title}
           >
             <InfoCardGrid items={observation.knownMechanisms?.items} />
           </SectionBlock>
@@ -580,7 +841,6 @@ export default function HardwareExperimentDetailPage() {
             id="not-proving"
             eyebrow="Boundary"
             title="이 실험이 직접 증명하지 않는 것"
-            desc="progress 차이는 scheduler, dependency, memory latency, compiler scheduling, occupancy가 합쳐진 관찰값입니다."
           >
             <DetailList
               title="단정하지 않을 내용"
@@ -593,7 +853,6 @@ export default function HardwareExperimentDetailPage() {
             id="condition"
             eyebrow="Condition"
             title="실험 조건"
-            desc="후속 mode와 비교하기 위한 baseline 실행 조건입니다."
           >
             <ConfigTable config={observation.config} />
           </SectionBlock>
@@ -607,6 +866,27 @@ export default function HardwareExperimentDetailPage() {
             <div className="overflow-x-auto">
               <RecordTable records={observation.records} />
             </div>
+          </SectionBlock>
+
+          <SectionBlock
+            id="signature"
+            eyebrow="Execution Signature"
+            title="관찰된 실행 서명"
+            desc="각 workload class가 progress rate에 남긴 상대적 흔적입니다."
+          >
+            <div className="space-y-5">
+              <OrderingBlock ordering={observation.ordering} />
+              <SignatureGrid records={observation.records} />
+            </div>
+          </SectionBlock>
+
+          <SectionBlock
+            id="ratios"
+            eyebrow="Relative Ratios"
+            title="상대 progress 비율"
+            desc="이 값은 절대적인 연산 속도비가 아니라 workload iteration 기준의 상대 progress 비율입니다."
+          >
+            <RatioGrid ratios={observation.ratios} />
           </SectionBlock>
 
           <div id="interpretation" className="grid gap-6 lg:grid-cols-2">
@@ -625,8 +905,7 @@ export default function HardwareExperimentDetailPage() {
           <SectionBlock
             id="comparison"
             eyebrow="Comparison"
-            title="후속 mode와 비교하는 방식"
-            desc="mode 0은 발견용 결과라기보다 mode 1~4 해석을 위한 기준선입니다."
+            title="후속 probe와 비교하는 방식"
           >
             <ComparisonPurposeBlock
               comparisonPurpose={observation.comparisonPurpose}
@@ -637,45 +916,30 @@ export default function HardwareExperimentDetailPage() {
             id="clock"
             eyebrow="Clock Observation"
             title="last_clock 해석"
-            desc="마지막 기록 시점에서 관찰된 clock order를 분리해서 기록합니다."
           >
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-              <p className="text-sm leading-6 text-neutral-300">
-                {observation.clockObservation?.summary}
-              </p>
-
-              {hasItems(observation.clockObservation?.values) ? (
-                <div className="mt-4">
-                  <CodeBlock>
-                    {observation.clockObservation.values.join("\n")}
-                  </CodeBlock>
-                </div>
-              ) : null}
-
-              {observation.clockObservation?.caveat ? (
-                <p className="mt-4 text-sm leading-6 text-neutral-500">
-                  {observation.clockObservation.caveat}
-                </p>
-              ) : null}
-            </div>
+            <ClockObservationBlock
+              clockObservation={observation.clockObservation}
+            />
           </SectionBlock>
 
           <SectionBlock
             id="patch"
             eyebrow="Anti-optimization"
             title="sink cancellation 개선"
-            desc="sink가 0으로 고정되는 문제를 줄이기 위한 수정 후보입니다."
           >
             <PatchBlock patch={observation.suggestedPatch} />
           </SectionBlock>
 
-          <SectionBlock
-            id="next"
-            eyebrow="Next"
-            title="다음 검증"
-            desc="현재 observation 이후 바로 이어서 확인할 실험입니다."
-          >
+          <SectionBlock id="next" eyebrow="Next" title="다음 검증">
             <NextStepBlock nextStep={observation.nextStep} />
+          </SectionBlock>
+
+          <SectionBlock
+            id="refinement"
+            eyebrow="Refinement"
+            title="보강 실험 방향"
+          >
+            <RefinementPlanBlock refinementPlan={observation.refinementPlan} />
           </SectionBlock>
         </div>
       </div>
