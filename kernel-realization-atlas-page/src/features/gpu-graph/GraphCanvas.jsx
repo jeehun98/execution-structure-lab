@@ -16,11 +16,6 @@ const ROOT = {
 const COLUMN_GAP = 260;
 const ROW_GAP = 120;
 
-// 대략적인 노드 반쪽 너비.
-// 간선은 중앙-중앙으로 연결하지만,
-// 라벨 위치 계산에는 이 값을 사용한다.
-const DEFAULT_NODE_HALF_WIDTH = 56;
-
 // --- Helper Functions ---
 
 function buildChildrenMap(edges) {
@@ -33,30 +28,23 @@ function buildChildrenMap(edges) {
 
 function getReachableNodeIds(rootId, childrenMap) {
   const visited = new Set();
-
   function visit(id) {
     if (visited.has(id)) return;
-
     visited.add(id);
-
     const childEdges = childrenMap[id] ?? [];
     childEdges.forEach((edge) => visit(edge.to));
   }
-
   visit(rootId);
-
   return visited;
 }
 
 function getDepthMap(rootId, childrenMap) {
   const depthMap = new Map([[rootId, 0]]);
   const queue = [rootId];
-
   while (queue.length) {
     const current = queue.shift();
     const currentDepth = depthMap.get(current) ?? 0;
     const childEdges = childrenMap[current] ?? [];
-
     childEdges.forEach((edge) => {
       if (!depthMap.has(edge.to)) {
         depthMap.set(edge.to, currentDepth + 1);
@@ -64,7 +52,6 @@ function getDepthMap(rootId, childrenMap) {
       }
     });
   }
-
   return depthMap;
 }
 
@@ -77,10 +64,8 @@ function getLayout({ nodes, edges, rootId }) {
 
   const columns = visibleNodes.reduce((map, node) => {
     const depth = depthMap.get(node.id) ?? 0;
-
     if (!map[depth]) map[depth] = [];
     map[depth].push(node);
-
     return map;
   }, {});
 
@@ -118,67 +103,32 @@ function getLayout({ nodes, edges, rootId }) {
 
 function getParentMap(edges) {
   const parentMap = new Map();
-
   edges.forEach((edge) => {
     parentMap.set(edge.to, edge.from);
   });
-
   return parentMap;
 }
 
 function getActivePathNodeIds(focusId, edges, rootId) {
   const parentMap = getParentMap(edges);
   const activeIds = new Set();
-
   let current = focusId;
-
   while (current) {
     activeIds.add(current);
-
     if (current === rootId) break;
-
     current = parentMap.get(current);
   }
-
   return activeIds;
 }
 
-function getEdgeLabelPosition({ startX, startY, endX, endY }) {
-  const dx = endX - startX;
-  const dy = endY - startY;
-
-  const goingRight = dx >= 0;
-
-  // 라벨을 선의 정중앙이 아니라
-  // 출발 노드 바깥쪽 근처에 둔다.
-  const sourceOuterX = goingRight
-    ? startX + DEFAULT_NODE_HALF_WIDTH
-    : startX - DEFAULT_NODE_HALF_WIDTH;
-
-  const targetOuterX = goingRight
-    ? endX - DEFAULT_NODE_HALF_WIDTH
-    : endX + DEFAULT_NODE_HALF_WIDTH;
-
-  const gap = Math.abs(targetOuterX - sourceOuterX);
-
-  // 노드 사이 여백이 넓으면 조금 더 멀리,
-  // 좁으면 너무 멀리 가지 않게 제한.
-  const offsetFromSource = Math.min(Math.max(gap * 0.28, 46), 82);
-
-  const labelX = goingRight
-    ? sourceOuterX + offsetFromSource
-    : sourceOuterX - offsetFromSource;
-
-  // 수평 간선이면 위로 띄우고,
-  // 대각 간선이면 시작점과 끝점 사이를 따라가되 조금 위로 둔다.
-  const labelY =
-    Math.abs(dy) < 20
-      ? startY - 28
-      : startY + dy * 0.35 - 28;
-
+/**
+ * 변경된 부분: 
+ * 간선 라벨을 목적지 노드(toNode)의 정중앙 상단에 배치합니다.
+ */
+function getEdgeLabelPosition(toNode) {
   return {
-    x: labelX,
-    y: labelY,
+    x: toNode.x,
+    y: toNode.y - 35, // 노드 버튼 위로 띄움
   };
 }
 
@@ -223,12 +173,8 @@ function EdgePath({ edge, active }) {
   const c2x = endX - controlOffset;
   const c2y = endY;
 
-  const labelPos = getEdgeLabelPosition({
-    startX,
-    startY,
-    endX,
-    endY,
-  });
+  // 목적지 노드 기준으로 라벨 위치 결정
+  const labelPos = getEdgeLabelPosition(to);
 
   return (
     <g>
@@ -250,13 +196,13 @@ function EdgePath({ edge, active }) {
           y={labelPos.y}
           textAnchor="middle"
           dominantBaseline="middle"
-          className={`text-[11px] font-medium transition-colors ${
+          className={`text-[11px] font-bold transition-colors ${
             active ? "fill-lime-300" : "fill-neutral-500"
           }`}
           style={{
             paintOrder: "stroke",
             stroke: "rgba(0, 0, 0, 0.95)",
-            strokeWidth: 6,
+            strokeWidth: 5,
             strokeLinecap: "round",
             strokeLinejoin: "round",
           }}
@@ -285,7 +231,6 @@ export default function GraphCanvas({ onSelect }) {
 
   useEffect(() => {
     const root = layout.nodes.find((node) => node.id === ROOT_ID);
-
     if (root) {
       onSelect?.(root);
     }
@@ -298,7 +243,6 @@ export default function GraphCanvas({ onSelect }) {
 
   const selectNode = (id) => {
     const selectedNode = layout.nodes.find((node) => node.id === id);
-
     setFocus(id);
     onSelect?.(selectedNode);
   };
