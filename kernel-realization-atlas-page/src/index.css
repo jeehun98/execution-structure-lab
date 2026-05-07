@@ -12,3 +12,11 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+.graph-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.graph-scroll::-webkit-scrollbar {
+  display: none;
+}

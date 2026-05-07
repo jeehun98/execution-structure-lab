@@ -1,2 +1,12 @@
-export { warpNode } from "./warp";
-export { blockNode } from "./block";
+import block from "./block";
+import warp from "./warp";
+
+export const executionNodes = [
+  block,
+  warp,
+];
+
+export {
+  block,
+  warp,
+};

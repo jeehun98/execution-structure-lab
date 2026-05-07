@@ -1,89 +1,124 @@
-import { useEffect, useMemo, useState } from "react";
-import { buildGraph } from "./buildGraph";
+import { useMemo, useState } from "react";
+import buildGraph from "./buildGraph";
 
-const CANVAS = {
-  width: 820,
-  height: 360,
+const INITIAL_FOCUS_ID = "warp";
+
+const GRAPH_PADDING = {
+  x: 120,
+  y: 120,
 };
 
-const ROOT_ID = "warp";
-
-const ROOT = {
-  x: 100,
-  y: CANVAS.height / 2,
+const LAYER_X = {
+  concept: 120,
+  "execution-context": 340,
+  "execution-unit": 580,
+  "probe-baseline": 860,
+  probe: 860,
+  "probe-result": 1140,
+  plan: 1420,
+  "follow-up-result": 1700,
+  optimization: 1980,
 };
 
-const COLUMN_GAP = 260;
+const DEFAULT_LAYER = "probe";
 const ROW_GAP = 120;
+const MIN_GRAPH_WIDTH = 1600;
+const MIN_GRAPH_HEIGHT = 760;
 
-// --- Helper Functions ---
+// --- Normalization ---
 
-function buildChildrenMap(edges) {
-  return edges.reduce((map, edge) => {
-    if (!map[edge.from]) map[edge.from] = [];
-    map[edge.from].push(edge);
-    return map;
-  }, {});
+function normalizeEdge(edge) {
+  const from = edge.from ?? edge.source;
+  const to = edge.to ?? edge.target;
+
+  return {
+    ...edge,
+    from,
+    to,
+  };
 }
 
-function getReachableNodeIds(rootId, childrenMap) {
-  const visited = new Set();
-  function visit(id) {
-    if (visited.has(id)) return;
-    visited.add(id);
-    const childEdges = childrenMap[id] ?? [];
-    childEdges.forEach((edge) => visit(edge.to));
+function normalizeGraph(graph) {
+  return {
+    nodes: graph.nodes ?? [],
+    edges: (graph.edges ?? [])
+      .map(normalizeEdge)
+      .filter((edge) => edge.from && edge.to),
+  };
+}
+
+// --- Layout ---
+
+function getNodeLayer(node) {
+  if (node.layer) return node.layer;
+
+  if (node.kind === "concept") return "concept";
+  if (node.kind === "execution") return "execution-unit";
+  if (node.kind === "memory") return "execution-unit";
+  if (node.status === "planned") return "plan";
+
+  return DEFAULT_LAYER;
+}
+
+function getLayerOrder(layer) {
+  const keys = Object.keys(LAYER_X);
+  const index = keys.indexOf(layer);
+
+  if (index >= 0) {
+    return index;
   }
-  visit(rootId);
-  return visited;
+
+  return keys.indexOf(DEFAULT_LAYER);
 }
 
-function getDepthMap(rootId, childrenMap) {
-  const depthMap = new Map([[rootId, 0]]);
-  const queue = [rootId];
-  while (queue.length) {
-    const current = queue.shift();
-    const currentDepth = depthMap.get(current) ?? 0;
-    const childEdges = childrenMap[current] ?? [];
-    childEdges.forEach((edge) => {
-      if (!depthMap.has(edge.to)) {
-        depthMap.set(edge.to, currentDepth + 1);
-        queue.push(edge.to);
-      }
-    });
-  }
-  return depthMap;
+function sortNodesInLayer(nodes) {
+  return [...nodes].sort((a, b) => {
+    const aOrder = a.order ?? 0;
+    const bOrder = b.order ?? 0;
+
+    if (aOrder !== bOrder) {
+      return aOrder - bOrder;
+    }
+
+    return String(a.label ?? a.id).localeCompare(String(b.label ?? b.id));
+  });
 }
 
-function getLayout({ nodes, edges, rootId }) {
-  const childrenMap = buildChildrenMap(edges);
-  const reachableIds = getReachableNodeIds(rootId, childrenMap);
-  const depthMap = getDepthMap(rootId, childrenMap);
+function getLayout({ nodes, edges }) {
+  const columns = nodes.reduce((map, node) => {
+    const layer = getNodeLayer(node);
 
-  const visibleNodes = nodes.filter((node) => reachableIds.has(node.id));
+    if (!map[layer]) {
+      map[layer] = [];
+    }
 
-  const columns = visibleNodes.reduce((map, node) => {
-    const depth = depthMap.get(node.id) ?? 0;
-    if (!map[depth]) map[depth] = [];
-    map[depth].push(node);
+    map[layer].push(node);
     return map;
   }, {});
 
   const positionedNodes = [];
 
-  Object.entries(columns).forEach(([depthKey, columnNodes]) => {
-    const depth = Number(depthKey);
-    const count = columnNodes.length;
-    const startY = ROOT.y - ((count - 1) * ROW_GAP) / 2;
+  Object.entries(columns)
+    .sort(([layerA], [layerB]) => getLayerOrder(layerA) - getLayerOrder(layerB))
+    .forEach(([layer, layerNodes]) => {
+      const x = LAYER_X[layer] ?? LAYER_X[DEFAULT_LAYER];
+      const sortedNodes = sortNodesInLayer(layerNodes);
 
-    columnNodes.forEach((node, index) => {
-      positionedNodes.push({
-        ...node,
-        x: ROOT.x + depth * COLUMN_GAP,
-        y: startY + index * ROW_GAP,
+      sortedNodes.forEach((node, index) => {
+        positionedNodes.push({
+          ...node,
+          layer,
+          x,
+          y: GRAPH_PADDING.y + index * ROW_GAP,
+        });
       });
     });
-  });
+
+  const maxX = positionedNodes.reduce((max, node) => Math.max(max, node.x), 0);
+  const maxY = positionedNodes.reduce((max, node) => Math.max(max, node.y), 0);
+
+  const graphWidth = Math.max(MIN_GRAPH_WIDTH, maxX + GRAPH_PADDING.x);
+  const graphHeight = Math.max(MIN_GRAPH_HEIGHT, maxY + GRAPH_PADDING.y);
 
   const positionMap = new Map(positionedNodes.map((node) => [node.id, node]));
 
@@ -98,43 +133,58 @@ function getLayout({ nodes, edges, rootId }) {
   return {
     nodes: positionedNodes,
     edges: positionedEdges,
+    width: graphWidth,
+    height: graphHeight,
   };
 }
 
-function getParentMap(edges) {
-  const parentMap = new Map();
+// --- Selection Helpers ---
+
+function getAdjacentNodeIds(focusId, edges) {
+  const ids = new Set([focusId]);
+
   edges.forEach((edge) => {
-    parentMap.set(edge.to, edge.from);
+    if (edge.from === focusId) {
+      ids.add(edge.to);
+    }
+
+    if (edge.to === focusId) {
+      ids.add(edge.from);
+    }
   });
-  return parentMap;
+
+  return ids;
 }
 
-function getActivePathNodeIds(focusId, edges, rootId) {
-  const parentMap = getParentMap(edges);
-  const activeIds = new Set();
-  let current = focusId;
-  while (current) {
-    activeIds.add(current);
-    if (current === rootId) break;
-    current = parentMap.get(current);
-  }
-  return activeIds;
+function getRelatedNodeIds(focusNode) {
+  const ids = new Set();
+
+  const relatedNodes = focusNode?.relatedNodes ?? [];
+
+  relatedNodes.forEach((item) => {
+    if (typeof item === "string") {
+      ids.add(item);
+      return;
+    }
+
+    if (item?.id) {
+      ids.add(item.id);
+    }
+  });
+
+  return ids;
 }
 
-/**
- * 변경된 부분: 
- * 간선 라벨을 목적지 노드(toNode)의 정중앙 상단에 배치합니다.
- */
-function getEdgeLabelPosition(toNode) {
+function getEdgeLabelPosition(fromNode, toNode) {
   return {
-    x: toNode.x,
-    y: toNode.y - 35, // 노드 버튼 위로 띄움
+    x: (fromNode.x + toNode.x) / 2,
+    y: (fromNode.y + toNode.y) / 2 - 14,
   };
 }
 
 // --- Components ---
 
-function NodeButton({ node, active, pathActive, onClick }) {
+function NodeButton({ node, active, connected, related, onClick }) {
   return (
     <button
       type="button"
@@ -142,8 +192,10 @@ function NodeButton({ node, active, pathActive, onClick }) {
       className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-xl border px-4 py-2 text-sm transition ${
         active
           ? "border-lime-400 bg-neutral-950 text-white shadow-[0_0_22px_rgba(163,230,53,0.2)]"
-          : pathActive
+          : connected
           ? "border-lime-400/70 bg-neutral-950 text-white shadow-[0_0_14px_rgba(163,230,53,0.12)]"
+          : related
+          ? "border-sky-400/70 bg-neutral-950 text-white shadow-[0_0_14px_rgba(56,189,248,0.12)]"
           : "border-white/20 bg-neutral-900 text-neutral-300 hover:border-lime-400/50 hover:text-white"
       }`}
       style={{
@@ -160,6 +212,10 @@ function EdgePath({ edge, active }) {
   const from = edge.fromNode;
   const to = edge.toNode;
 
+  if (!from || !to) {
+    return null;
+  }
+
   const startX = from.x;
   const startY = from.y;
   const endX = to.x;
@@ -173,8 +229,7 @@ function EdgePath({ edge, active }) {
   const c2x = endX - controlOffset;
   const c2y = endY;
 
-  // 목적지 노드 기준으로 라벨 위치 결정
-  const labelPos = getEdgeLabelPosition(to);
+  const labelPos = getEdgeLabelPosition(from, to);
 
   return (
     <g>
@@ -215,72 +270,84 @@ function EdgePath({ edge, active }) {
 }
 
 export default function GraphCanvas({ onSelect }) {
-  const graph = useMemo(() => buildGraph(), []);
+  const graph = useMemo(() => normalizeGraph(buildGraph()), []);
 
   const layout = useMemo(
     () =>
       getLayout({
         nodes: graph.nodes,
         edges: graph.edges,
-        rootId: ROOT_ID,
       }),
     [graph]
   );
 
-  const [focus, setFocus] = useState(ROOT_ID);
+  const [focus, setFocus] = useState(INITIAL_FOCUS_ID);
 
-  useEffect(() => {
-    const root = layout.nodes.find((node) => node.id === ROOT_ID);
-    if (root) {
-      onSelect?.(root);
-    }
-  }, [layout.nodes, onSelect]);
+  const focusNode = useMemo(
+    () => layout.nodes.find((node) => node.id === focus) ?? null,
+    [focus, layout.nodes]
+  );
 
-  const activePathNodeIds = useMemo(
-    () => getActivePathNodeIds(focus, layout.edges, ROOT_ID),
+  const connectedNodeIds = useMemo(
+    () => getAdjacentNodeIds(focus, layout.edges),
     [focus, layout.edges]
+  );
+
+  const relatedNodeIds = useMemo(
+    () => getRelatedNodeIds(focusNode),
+    [focusNode]
   );
 
   const selectNode = (id) => {
     const selectedNode = layout.nodes.find((node) => node.id === id);
+
+    if (!selectedNode) {
+      return;
+    }
+
     setFocus(id);
     onSelect?.(selectedNode);
   };
 
   const isEdgeActive = (edge) => {
-    return activePathNodeIds.has(edge.from) && activePathNodeIds.has(edge.to);
+    return edge.from === focus || edge.to === focus;
   };
 
   return (
-    <div
-      className="relative mx-auto bg-black"
-      style={{
-        width: CANVAS.width,
-        height: CANVAS.height,
-      }}
-    >
-      <svg
-        className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
-        viewBox={`0 0 ${CANVAS.width} ${CANVAS.height}`}
-      >
-        {layout.edges.map((edge) => (
-          <EdgePath
-            key={edge.id}
-            edge={edge}
-            active={isEdgeActive(edge)}
-          />
-        ))}
-      </svg>
+    <div className="relative h-[calc(100vh-150px)] min-h-[620px] w-full overflow-hidden rounded-2xl border border-neutral-800 bg-black">
+      <div className="graph-scroll h-full w-full overflow-auto">
+        <div
+          className="relative"
+          style={{
+            width: layout.width,
+            height: layout.height,
+          }}
+        >
+          <svg
+            className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+            viewBox={`0 0 ${layout.width} ${layout.height}`}
+          >
+            {layout.edges.map((edge) => (
+              <EdgePath
+                key={edge.id}
+                edge={edge}
+                active={isEdgeActive(edge)}
+              />
+            ))}
+          </svg>
 
-      {layout.nodes.map((node) => (
-        <NodeButton
-          key={node.id}
-          node={node}
-          active={focus === node.id}
-          pathActive={activePathNodeIds.has(node.id)}
-          onClick={selectNode}
-        />
-      ))}
+          {layout.nodes.map((node) => (
+            <NodeButton
+              key={node.id}
+              node={node}
+              active={focus === node.id}
+              connected={connectedNodeIds.has(node.id)}
+              related={relatedNodeIds.has(node.id)}
+              onClick={selectNode}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,13 +1,12 @@
-import { mode0BaselineObservation } from "./mode0_baseline";
+import { sameWorkloadBaselineObservation } from "./same_workload_baseline";
+import { warpExecutionSignatureV0Observation } from "./warp_execution_signature_v0";
 
 export const warpSchedulerObservations = [
-  mode0BaselineObservation,
+  sameWorkloadBaselineObservation,
+  warpExecutionSignatureV0Observation,
 ];
 
-export const warpSchedulerObservationGroup = {
-  id: "warp-scheduler",
-  label: "Warp Scheduler",
-  summary:
-    "warp별 progress, last_clock, dependency chain, stall 이후 재진입 패턴을 관찰한다.",
-  observations: warpSchedulerObservations,
+export {
+  sameWorkloadBaselineObservation,
+  warpExecutionSignatureV0Observation,
 };

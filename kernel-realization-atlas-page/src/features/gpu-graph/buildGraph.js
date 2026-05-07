@@ -1,23 +1,24 @@
-import warp from "./nodes/execution/warp";
-import sameBaseline from "./nodes/experiments/sameBaseline";
-import mixedProbe from "./nodes/experiments/mixedProbe";
-
-const ALL_NODES = [warp, sameBaseline, mixedProbe];
+import { gpuGraphNodes } from "./nodes";
 
 function buildEdges(nodes) {
-  return nodes.flatMap((node) =>
-    (node.connectsTo ?? []).map((target) => ({
-      id: `${node.id}->${target.id}`,
-      from: node.id,
-      to: target.id,
-      type: target.type,
-    }))
-  );
+  return nodes.flatMap((sourceNode) => {
+    const connectsTo = sourceNode.connectsTo ?? [];
+
+    return connectsTo.map((edge) => ({
+      id: `${sourceNode.id}-${edge.type ?? "to"}-${edge.id}`,
+      source: sourceNode.id,
+      target: edge.id,
+      type: edge.type ?? "related",
+    }));
+  });
 }
 
-export function buildGraph() {
+export default function buildGraph() {
+  const nodes = gpuGraphNodes;
+  const edges = buildEdges(nodes);
+
   return {
-    nodes: ALL_NODES,
-    edges: buildEdges(ALL_NODES),
+    nodes,
+    edges,
   };
 }
