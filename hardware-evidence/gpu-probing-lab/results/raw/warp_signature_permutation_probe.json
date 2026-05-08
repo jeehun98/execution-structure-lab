@@ -1,0 +1,718 @@
+{
+  "probe_name": "warp_signature_permutation_probe",
+  "interpretation": {
+    "primary_question": "Does the progress signature follow workload pattern or warp id?",
+    "note": "This probe permutes workload pattern assignment across warp ids. Progress should be interpreted as execution signature, not absolute throughput ratio."
+  },
+  "config": {
+    "num_runs_per_permutation": 16,
+    "num_permutations": 4,
+    "warmup_runs": 4,
+    "blocks": 1,
+    "warps_per_block": 8,
+    "threads_per_block": 256,
+    "cycle_budget": 100000
+  },
+  "pattern_aggregate_stats": [
+    {
+      "pattern_id": 0,
+      "mean_progress": 584.094,
+      "variance": 1.05762,
+      "stddev": 1.02841,
+      "min_progress": 582,
+      "max_progress": 585
+    },
+    {
+      "pattern_id": 1,
+      "mean_progress": 558.82,
+      "variance": 0.854919,
+      "stddev": 0.924619,
+      "min_progress": 557,
+      "max_progress": 560
+    },
+    {
+      "pattern_id": 2,
+      "mean_progress": 476.594,
+      "variance": 0.245117,
+      "stddev": 0.495093,
+      "min_progress": 475,
+      "max_progress": 477
+    },
+    {
+      "pattern_id": 3,
+      "mean_progress": 467.719,
+      "variance": 0.174805,
+      "stddev": 0.418097,
+      "min_progress": 467,
+      "max_progress": 468
+    }
+  ],
+  "warp_permutation_stats": [
+    {
+      "permutation_id": 0,
+      "block_id": 0,
+      "warp_id": 0,
+      "pattern_id": 0,
+      "mean_progress": 582,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 582,
+      "max_progress": 582
+    },
+    {
+      "permutation_id": 0,
+      "block_id": 0,
+      "warp_id": 1,
+      "pattern_id": 1,
+      "mean_progress": 560,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 560,
+      "max_progress": 560
+    },
+    {
+      "permutation_id": 0,
+      "block_id": 0,
+      "warp_id": 2,
+      "pattern_id": 2,
+      "mean_progress": 476,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 476,
+      "max_progress": 476
+    },
+    {
+      "permutation_id": 0,
+      "block_id": 0,
+      "warp_id": 3,
+      "pattern_id": 3,
+      "mean_progress": 468,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 468,
+      "max_progress": 468
+    },
+    {
+      "permutation_id": 0,
+      "block_id": 0,
+      "warp_id": 4,
+      "pattern_id": 0,
+      "mean_progress": 583,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 583,
+      "max_progress": 583
+    },
+    {
+      "permutation_id": 0,
+      "block_id": 0,
+      "warp_id": 5,
+      "pattern_id": 1,
+      "mean_progress": 560,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 560,
+      "max_progress": 560
+    },
+    {
+      "permutation_id": 0,
+      "block_id": 0,
+      "warp_id": 6,
+      "pattern_id": 2,
+      "mean_progress": 476,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 476,
+      "max_progress": 476
+    },
+    {
+      "permutation_id": 0,
+      "block_id": 0,
+      "warp_id": 7,
+      "pattern_id": 3,
+      "mean_progress": 468,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 468,
+      "max_progress": 468
+    },
+    {
+      "permutation_id": 1,
+      "block_id": 0,
+      "warp_id": 0,
+      "pattern_id": 1,
+      "mean_progress": 558.75,
+      "variance": 0.9375,
+      "stddev": 0.968246,
+      "coefficient_of_variation": 0.00173288,
+      "min_progress": 555,
+      "max_progress": 559
+    },
+    {
+      "permutation_id": 1,
+      "block_id": 0,
+      "warp_id": 1,
+      "pattern_id": 2,
+      "mean_progress": 475.875,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.00101733,
+      "min_progress": 474,
+      "max_progress": 476
+    },
+    {
+      "permutation_id": 1,
+      "block_id": 0,
+      "warp_id": 2,
+      "pattern_id": 3,
+      "mean_progress": 467.875,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.00103473,
+      "min_progress": 466,
+      "max_progress": 468
+    },
+    {
+      "permutation_id": 1,
+      "block_id": 0,
+      "warp_id": 3,
+      "pattern_id": 0,
+      "mean_progress": 584.875,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.000827737,
+      "min_progress": 583,
+      "max_progress": 585
+    },
+    {
+      "permutation_id": 1,
+      "block_id": 0,
+      "warp_id": 4,
+      "pattern_id": 1,
+      "mean_progress": 558.812,
+      "variance": 0.527344,
+      "stddev": 0.726184,
+      "coefficient_of_variation": 0.00129951,
+      "min_progress": 556,
+      "max_progress": 559
+    },
+    {
+      "permutation_id": 1,
+      "block_id": 0,
+      "warp_id": 5,
+      "pattern_id": 2,
+      "mean_progress": 476.875,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.0010152,
+      "min_progress": 475,
+      "max_progress": 477
+    },
+    {
+      "permutation_id": 1,
+      "block_id": 0,
+      "warp_id": 6,
+      "pattern_id": 3,
+      "mean_progress": 467.875,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.00103473,
+      "min_progress": 466,
+      "max_progress": 468
+    },
+    {
+      "permutation_id": 1,
+      "block_id": 0,
+      "warp_id": 7,
+      "pattern_id": 0,
+      "mean_progress": 584.875,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.000827737,
+      "min_progress": 583,
+      "max_progress": 585
+    },
+    {
+      "permutation_id": 2,
+      "block_id": 0,
+      "warp_id": 0,
+      "pattern_id": 2,
+      "mean_progress": 477,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 477,
+      "max_progress": 477
+    },
+    {
+      "permutation_id": 2,
+      "block_id": 0,
+      "warp_id": 1,
+      "pattern_id": 3,
+      "mean_progress": 468,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 468,
+      "max_progress": 468
+    },
+    {
+      "permutation_id": 2,
+      "block_id": 0,
+      "warp_id": 2,
+      "pattern_id": 0,
+      "mean_progress": 584,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 584,
+      "max_progress": 584
+    },
+    {
+      "permutation_id": 2,
+      "block_id": 0,
+      "warp_id": 3,
+      "pattern_id": 1,
+      "mean_progress": 557,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 557,
+      "max_progress": 557
+    },
+    {
+      "permutation_id": 2,
+      "block_id": 0,
+      "warp_id": 4,
+      "pattern_id": 2,
+      "mean_progress": 477,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 477,
+      "max_progress": 477
+    },
+    {
+      "permutation_id": 2,
+      "block_id": 0,
+      "warp_id": 5,
+      "pattern_id": 3,
+      "mean_progress": 468,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 468,
+      "max_progress": 468
+    },
+    {
+      "permutation_id": 2,
+      "block_id": 0,
+      "warp_id": 6,
+      "pattern_id": 0,
+      "mean_progress": 585,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 585,
+      "max_progress": 585
+    },
+    {
+      "permutation_id": 2,
+      "block_id": 0,
+      "warp_id": 7,
+      "pattern_id": 1,
+      "mean_progress": 558,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 558,
+      "max_progress": 558
+    },
+    {
+      "permutation_id": 3,
+      "block_id": 0,
+      "warp_id": 0,
+      "pattern_id": 3,
+      "mean_progress": 467,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 467,
+      "max_progress": 467
+    },
+    {
+      "permutation_id": 3,
+      "block_id": 0,
+      "warp_id": 1,
+      "pattern_id": 0,
+      "mean_progress": 584,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 584,
+      "max_progress": 584
+    },
+    {
+      "permutation_id": 3,
+      "block_id": 0,
+      "warp_id": 2,
+      "pattern_id": 1,
+      "mean_progress": 559,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 559,
+      "max_progress": 559
+    },
+    {
+      "permutation_id": 3,
+      "block_id": 0,
+      "warp_id": 3,
+      "pattern_id": 2,
+      "mean_progress": 477,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 477,
+      "max_progress": 477
+    },
+    {
+      "permutation_id": 3,
+      "block_id": 0,
+      "warp_id": 4,
+      "pattern_id": 3,
+      "mean_progress": 467,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 467,
+      "max_progress": 467
+    },
+    {
+      "permutation_id": 3,
+      "block_id": 0,
+      "warp_id": 5,
+      "pattern_id": 0,
+      "mean_progress": 585,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 585,
+      "max_progress": 585
+    },
+    {
+      "permutation_id": 3,
+      "block_id": 0,
+      "warp_id": 6,
+      "pattern_id": 1,
+      "mean_progress": 559,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 559,
+      "max_progress": 559
+    },
+    {
+      "permutation_id": 3,
+      "block_id": 0,
+      "warp_id": 7,
+      "pattern_id": 2,
+      "mean_progress": 477,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 477,
+      "max_progress": 477
+    }
+  ],
+  "raw_runs": [
+    {
+      "permutation_id": 0,
+      "pattern_assignment": [0, 1, 2, 3, 0, 1, 2, 3],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [582, 560, 476, 468, 583, 560, 476, 468]
+        }
+      ]
+    },
+    {
+      "permutation_id": 1,
+      "pattern_assignment": [1, 2, 3, 0, 1, 2, 3, 0],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [555, 474, 466, 583, 556, 475, 466, 583]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [559, 476, 468, 585, 559, 477, 468, 585]
+        }
+      ]
+    },
+    {
+      "permutation_id": 2,
+      "pattern_assignment": [2, 3, 0, 1, 2, 3, 0, 1],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [477, 468, 584, 557, 477, 468, 585, 558]
+        }
+      ]
+    },
+    {
+      "permutation_id": 3,
+      "pattern_assignment": [3, 0, 1, 2, 3, 0, 1, 2],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [467, 584, 559, 477, 467, 585, 559, 477]
+        }
+      ]
+    }
+  ]
+}

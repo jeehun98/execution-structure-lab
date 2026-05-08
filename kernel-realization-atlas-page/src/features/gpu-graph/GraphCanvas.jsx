@@ -15,15 +15,18 @@ const LAYER_X = {
   "probe-baseline": 860,
   probe: 860,
   "probe-result": 1140,
-  plan: 1420,
-  "follow-up-result": 1700,
-  optimization: 1980,
+  "follow-up-result": 1420,
+  "attribution-result": 1700,
+  plan: 1980,
+  optimization: 2260,
 };
 
 const DEFAULT_LAYER = "probe";
 const ROW_GAP = 120;
 const MIN_GRAPH_WIDTH = 1600;
 const MIN_GRAPH_HEIGHT = 760;
+
+const DEFAULT_NODE_HALF_WIDTH = 64;
 
 // --- Normalization ---
 
@@ -175,11 +178,95 @@ function getRelatedNodeIds(focusNode) {
   return ids;
 }
 
+// --- Edge Geometry ---
+
+function getEdgeOrientation(fromNode, toNode) {
+  const dx = toNode.x - fromNode.x;
+  const dy = toNode.y - fromNode.y;
+
+  const absDx = Math.abs(dx);
+  const absDy = Math.abs(dy);
+
+  if (absDy > absDx * 1.2) {
+    return "vertical";
+  }
+
+  return "horizontal";
+}
+
 function getEdgeLabelPosition(fromNode, toNode) {
+  const dx = toNode.x - fromNode.x;
+  const dy = toNode.y - fromNode.y;
+
+  const orientation = getEdgeOrientation(fromNode, toNode);
+
+  if (orientation === "vertical") {
+    const labelSideOffset = 38;
+
+    return {
+      x: fromNode.x + labelSideOffset,
+      y: fromNode.y + dy * 0.5,
+      anchor: "start",
+    };
+  }
+
+  const goingRight = dx >= 0;
+
+  const sourceOuterX = goingRight
+    ? fromNode.x + DEFAULT_NODE_HALF_WIDTH
+    : fromNode.x - DEFAULT_NODE_HALF_WIDTH;
+
+  const targetOuterX = goingRight
+    ? toNode.x - DEFAULT_NODE_HALF_WIDTH
+    : toNode.x + DEFAULT_NODE_HALF_WIDTH;
+
+  const gap = Math.abs(targetOuterX - sourceOuterX);
+  const offsetFromSource = Math.min(Math.max(gap * 0.28, 46), 82);
+
   return {
-    x: (fromNode.x + toNode.x) / 2,
-    y: (fromNode.y + toNode.y) / 2 - 14,
+    x: goingRight
+      ? sourceOuterX + offsetFromSource
+      : sourceOuterX - offsetFromSource,
+    y: fromNode.y + dy * 0.35 - 28,
+    anchor: "middle",
   };
+}
+
+function getEdgePathD(fromNode, toNode) {
+  const startX = fromNode.x;
+  const startY = fromNode.y;
+  const endX = toNode.x;
+  const endY = toNode.y;
+
+  const dx = endX - startX;
+  const dy = endY - startY;
+
+  const absDx = Math.abs(dx);
+  const absDy = Math.abs(dy);
+
+  const orientation = getEdgeOrientation(fromNode, toNode);
+
+  if (orientation === "vertical") {
+    const directionY = Math.sign(dy || 1);
+    const controlOffset = Math.max(absDy * 0.35, 48);
+
+    const c1x = startX;
+    const c1y = startY + directionY * controlOffset;
+    const c2x = endX;
+    const c2y = endY - directionY * controlOffset;
+
+    return `M ${startX} ${startY} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${endX} ${endY}`;
+  }
+
+  const directionX = Math.sign(dx || 1);
+  const controlOffset = Math.max(absDx * 0.35, 60);
+
+  const c1x = startX + directionX * controlOffset;
+  const c1y = startY;
+  const c2x = endX - directionX * controlOffset;
+  const c2y = endY;
+
+  return `M ${startX} ${startY} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${endX} ${endY}`;
 }
 
 // --- Components ---
@@ -216,25 +303,13 @@ function EdgePath({ edge, active }) {
     return null;
   }
 
-  const startX = from.x;
-  const startY = from.y;
-  const endX = to.x;
-  const endY = to.y;
-
-  const dx = endX - startX;
-  const controlOffset = Math.max(Math.abs(dx) * 0.35, 60);
-
-  const c1x = startX + controlOffset;
-  const c1y = startY;
-  const c2x = endX - controlOffset;
-  const c2y = endY;
-
+  const pathD = getEdgePathD(from, to);
   const labelPos = getEdgeLabelPosition(from, to);
 
   return (
     <g>
       <path
-        d={`M ${startX} ${startY} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${endX} ${endY}`}
+        d={pathD}
         fill="none"
         stroke={
           active
@@ -249,7 +324,7 @@ function EdgePath({ edge, active }) {
         <text
           x={labelPos.x}
           y={labelPos.y}
-          textAnchor="middle"
+          textAnchor={labelPos.anchor ?? "middle"}
           dominantBaseline="middle"
           className={`text-[11px] font-bold transition-colors ${
             active ? "fill-lime-300" : "fill-neutral-500"

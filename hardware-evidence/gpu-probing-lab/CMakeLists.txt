@@ -185,3 +185,97 @@ target_link_libraries(probe_runner_warp_progress_divergence
 set_target_properties(probe_runner_warp_progress_divergence PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+
+# ------------------------------------------------------------
+# warp signature repeatability probe library
+# ------------------------------------------------------------
+add_library(warp_signature_repeatability_probe_lib
+    src/probes/warp_signature_repeatability_probe/host.cpp
+    src/probes/warp_signature_repeatability_probe/kernel.cu
+)
+
+target_include_directories(warp_signature_repeatability_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(warp_signature_repeatability_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(warp_signature_repeatability_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# warp signature repeatability probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_warp_signature_repeatability
+    src/main/probe_runner_warp_signature_repeatability.cpp
+)
+
+target_include_directories(probe_runner_warp_signature_repeatability
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_warp_signature_repeatability
+    PRIVATE
+        warp_signature_repeatability_probe_lib
+)
+
+set_target_properties(probe_runner_warp_signature_repeatability PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
+
+# ------------------------------------------------------------
+# warp signature permutation probe library
+# ------------------------------------------------------------
+add_library(warp_signature_permutation_probe_lib
+    src/probes/warp_signature_permutation_probe/host.cpp
+    src/probes/warp_signature_permutation_probe/kernel.cu
+)
+
+target_include_directories(warp_signature_permutation_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(warp_signature_permutation_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(warp_signature_permutation_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# warp signature permutation probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_warp_signature_permutation
+    src/main/probe_runner_warp_signature_permutation.cpp
+)
+
+target_include_directories(probe_runner_warp_signature_permutation
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_warp_signature_permutation
+    PRIVATE
+        warp_signature_permutation_probe_lib
+)
+
+set_target_properties(probe_runner_warp_signature_permutation PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)

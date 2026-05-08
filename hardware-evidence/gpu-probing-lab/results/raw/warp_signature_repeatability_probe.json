@@ -1,0 +1,355 @@
+{
+  "probe_name": "warp_signature_repeatability_probe",
+  "interpretation": {
+    "primary_question": "Does a workload-specific warp progress signature repeat across runs?",
+    "note": "This probe should be interpreted as repeatability of progress signatures, not as absolute throughput ratio."
+  },
+  "config": {
+    "num_runs": 64,
+    "warmup_runs": 4,
+    "blocks": 1,
+    "warps_per_block": 8,
+    "threads_per_block": 256,
+    "cycle_budget": 100000
+  },
+  "stats": [
+    {
+      "block_id": 0,
+      "warp_id": 0,
+      "mean_progress": 588,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 588,
+      "max_progress": 588
+    },
+    {
+      "block_id": 0,
+      "warp_id": 1,
+      "mean_progress": 560,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 560,
+      "max_progress": 560
+    },
+    {
+      "block_id": 0,
+      "warp_id": 2,
+      "mean_progress": 478,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 478,
+      "max_progress": 478
+    },
+    {
+      "block_id": 0,
+      "warp_id": 3,
+      "mean_progress": 466,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 466,
+      "max_progress": 466
+    },
+    {
+      "block_id": 0,
+      "warp_id": 4,
+      "mean_progress": 588,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 588,
+      "max_progress": 588
+    },
+    {
+      "block_id": 0,
+      "warp_id": 5,
+      "mean_progress": 561,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 561,
+      "max_progress": 561
+    },
+    {
+      "block_id": 0,
+      "warp_id": 6,
+      "mean_progress": 479,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 479,
+      "max_progress": 479
+    },
+    {
+      "block_id": 0,
+      "warp_id": 7,
+      "mean_progress": 466,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 466,
+      "max_progress": 466
+    }
+  ],
+  "raw_runs": [
+    {
+      "run_id": 0,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 1,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 2,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 3,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 4,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 5,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 6,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 7,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 8,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 9,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 10,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 11,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 12,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 13,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 14,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 15,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 16,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 17,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 18,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 19,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 20,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 21,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 22,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 23,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 24,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 25,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 26,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 27,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 28,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 29,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 30,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 31,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 32,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 33,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 34,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 35,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 36,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 37,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 38,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 39,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 40,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 41,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 42,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 43,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 44,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 45,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 46,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 47,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 48,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 49,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 50,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 51,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 52,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 53,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 54,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 55,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 56,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 57,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 58,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 59,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 60,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 61,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 62,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    },
+    {
+      "run_id": 63,
+      "warp_progress": [588, 560, 478, 466, 588, 561, 479, 466]
+    }
+  ]
+}
