@@ -9,7 +9,7 @@ export const NAV_ITEMS = [
   {
     key: "hardware",
     label: "하드웨어",
-    href: "/hardware-evidence",
+    href: "/gpu-graph-test",
     panel: "hardware",
     shortDesc: "측정된 GPU 거동",
   },

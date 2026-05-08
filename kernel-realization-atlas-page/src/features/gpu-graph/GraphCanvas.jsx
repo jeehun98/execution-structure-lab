@@ -3,6 +3,8 @@ import buildGraph from "./buildGraph";
 
 const INITIAL_FOCUS_ID = "warp";
 
+const POSITION_STORAGE_KEY = "gpu-graph-node-positions";
+
 const GRAPH_PADDING = {
   x: 120,
   y: 120,
@@ -27,6 +29,36 @@ const MIN_GRAPH_WIDTH = 1600;
 const MIN_GRAPH_HEIGHT = 760;
 
 const DEFAULT_NODE_HALF_WIDTH = 64;
+
+// --- Storage ---
+
+function loadSavedPositions() {
+  if (typeof window === "undefined") return {};
+
+  try {
+    const raw = window.localStorage.getItem(POSITION_STORAGE_KEY);
+    if (!raw) return {};
+
+    const parsed = JSON.parse(raw);
+
+    if (!parsed || typeof parsed !== "object") {
+      return {};
+    }
+
+    return parsed;
+  } catch {
+    return {};
+  }
+}
+
+function savePositionsToStorage(positions) {
+  if (typeof window === "undefined") return;
+
+  window.localStorage.setItem(
+    POSITION_STORAGE_KEY,
+    JSON.stringify(positions, null, 2)
+  );
+}
 
 // --- Normalization ---
 
@@ -87,7 +119,7 @@ function sortNodesInLayer(nodes) {
   });
 }
 
-function getLayout({ nodes, edges }) {
+function getLayout({ nodes, edges, savedPositions }) {
   const columns = nodes.reduce((map, node) => {
     const layer = getNodeLayer(node);
 
@@ -108,11 +140,13 @@ function getLayout({ nodes, edges }) {
       const sortedNodes = sortNodesInLayer(layerNodes);
 
       sortedNodes.forEach((node, index) => {
+        const savedPosition = savedPositions[node.id];
+
         positionedNodes.push({
           ...node,
           layer,
-          x,
-          y: GRAPH_PADDING.y + index * ROW_GAP,
+          x: savedPosition?.x ?? x,
+          y: savedPosition?.y ?? GRAPH_PADDING.y + index * ROW_GAP,
         });
       });
     });
@@ -271,12 +305,57 @@ function getEdgePathD(fromNode, toNode) {
 
 // --- Components ---
 
-function NodeButton({ node, active, connected, related, onClick }) {
+function NodeButton({
+  node,
+  active,
+  connected,
+  related,
+  onClick,
+  onMove,
+}) {
+  const handlePointerDown = (event) => {
+    event.preventDefault();
+
+    const startClientX = event.clientX;
+    const startClientY = event.clientY;
+
+    const startNodeX = node.x;
+    const startNodeY = node.y;
+
+    let moved = false;
+
+    const handlePointerMove = (moveEvent) => {
+      const dx = moveEvent.clientX - startClientX;
+      const dy = moveEvent.clientY - startClientY;
+
+      if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+        moved = true;
+      }
+
+      onMove(node.id, {
+        x: Math.round(startNodeX + dx),
+        y: Math.round(startNodeY + dy),
+      });
+    };
+
+    const handlePointerUp = () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+
+      if (!moved) {
+        onClick(node.id);
+      }
+    };
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+  };
+
   return (
     <button
       type="button"
-      onClick={() => onClick(node.id)}
-      className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-xl border px-4 py-2 text-sm transition ${
+      onPointerDown={handlePointerDown}
+      className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 cursor-grab whitespace-nowrap rounded-xl border px-4 py-2 text-sm transition active:cursor-grabbing ${
         active
           ? "border-lime-400 bg-neutral-950 text-white shadow-[0_0_22px_rgba(163,230,53,0.2)]"
           : connected
@@ -288,6 +367,7 @@ function NodeButton({ node, active, connected, related, onClick }) {
       style={{
         left: node.x,
         top: node.y,
+        touchAction: "none",
       }}
     >
       {node.label}
@@ -344,16 +424,33 @@ function EdgePath({ edge, active }) {
   );
 }
 
+function ToolbarButton({ children, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="rounded-lg border border-white/10 bg-black/80 px-3 py-2 text-xs text-neutral-300 shadow-lg transition hover:border-lime-400/40 hover:text-white"
+    >
+      {children}
+    </button>
+  );
+}
+
 export default function GraphCanvas({ onSelect }) {
   const graph = useMemo(() => normalizeGraph(buildGraph()), []);
+
+  const [savedPositions, setSavedPositions] = useState(() =>
+    loadSavedPositions()
+  );
 
   const layout = useMemo(
     () =>
       getLayout({
         nodes: graph.nodes,
         edges: graph.edges,
+        savedPositions,
       }),
-    [graph]
+    [graph, savedPositions]
   );
 
   const [focus, setFocus] = useState(INITIAL_FOCUS_ID);
@@ -384,13 +481,72 @@ export default function GraphCanvas({ onSelect }) {
     onSelect?.(selectedNode);
   };
 
+  const moveNode = (id, position) => {
+    setSavedPositions((prev) => {
+      const next = {
+        ...prev,
+        [id]: position,
+      };
+
+      savePositionsToStorage(next);
+
+      return next;
+    });
+  };
+
+  const resetSavedPositions = () => {
+    setSavedPositions({});
+    savePositionsToStorage({});
+  };
+
+  const copyPositionsJson = async () => {
+    const json = JSON.stringify(savedPositions, null, 2);
+
+    try {
+      await navigator.clipboard.writeText(json);
+      console.log("Copied graph positions:", json);
+    } catch {
+      console.log("Graph positions:", json);
+    }
+  };
+
+  const exportPositionsJson = () => {
+    const json = JSON.stringify(savedPositions, null, 2);
+    const blob = new Blob([json], {
+      type: "application/json",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+    anchor.download = "gpu-graph-node-positions.json";
+    anchor.click();
+
+    URL.revokeObjectURL(url);
+  };
+
   const isEdgeActive = (edge) => {
     return edge.from === focus || edge.to === focus;
   };
 
   return (
     <div className="relative h-[calc(100vh-150px)] min-h-[620px] w-full overflow-hidden rounded-2xl border border-neutral-800 bg-black">
-      <div className="graph-scroll h-full w-full overflow-auto">
+      <div className="absolute right-4 top-4 z-30 flex gap-2">
+        <ToolbarButton onClick={copyPositionsJson}>
+          copy positions
+        </ToolbarButton>
+
+        <ToolbarButton onClick={exportPositionsJson}>
+          export json
+        </ToolbarButton>
+
+        <ToolbarButton onClick={resetSavedPositions}>
+          reset layout
+        </ToolbarButton>
+      </div>
+
+      <div className="graph-scroll scrollbar-hidden h-full w-full overflow-auto">
         <div
           className="relative"
           style={{
@@ -419,6 +575,7 @@ export default function GraphCanvas({ onSelect }) {
               connected={connectedNodeIds.has(node.id)}
               related={relatedNodeIds.has(node.id)}
               onClick={selectNode}
+              onMove={moveNode}
             />
           ))}
         </div>

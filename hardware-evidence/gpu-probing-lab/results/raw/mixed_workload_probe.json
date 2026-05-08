@@ -1,0 +1,1072 @@
+{
+  "probe_name": "mixed_workload_probe",
+  "interpretation": {
+    "primary_question": "How do warp progress signatures change when heterogeneous workloads coexist in the same block?",
+    "note": "This probe compares isolated/light baseline and mixed workload compositions. Progress values are execution signatures, not absolute throughput ratios."
+  },
+  "role_map": {
+    "0": "light_alu",
+    "1": "dependent_alu",
+    "2": "shared_load",
+    "3": "dependent_global_load"
+  },
+  "scenario_map": {
+    "0": "all_light_alu_baseline",
+    "1": "light_vs_dependent_alu",
+    "2": "light_vs_shared_load",
+    "3": "light_vs_dependent_global_load",
+    "4": "mixed_all_roles"
+  },
+  "config": {
+    "num_runs_per_scenario": 16,
+    "num_scenarios": 5,
+    "warmup_runs": 4,
+    "blocks": 1,
+    "warps_per_block": 8,
+    "threads_per_block": 256,
+    "cycle_budget": 100000,
+    "global_buffer_size": 1048576
+  },
+  "role_aggregate_stats": [
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 582.25,
+      "variance": 0.1875,
+      "stddev": 0.433013,
+      "min_progress": 582,
+      "max_progress": 583
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "role_id": 1,
+      "role_name": "dependent_alu",
+      "mean_progress": 536,
+      "variance": 0,
+      "stddev": 0,
+      "min_progress": 536,
+      "max_progress": 536
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 583.891,
+      "variance": 0.00854492,
+      "stddev": 0.0924387,
+      "min_progress": 583,
+      "max_progress": 584
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "role_id": 2,
+      "role_name": "shared_load",
+      "mean_progress": 325.312,
+      "variance": 0.00390625,
+      "stddev": 0.0625,
+      "min_progress": 325,
+      "max_progress": 325
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 588.188,
+      "variance": 0.0117188,
+      "stddev": 0.108253,
+      "min_progress": 588,
+      "max_progress": 588
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "role_id": 3,
+      "role_name": "dependent_global_load",
+      "mean_progress": 106.375,
+      "variance": 0.160156,
+      "stddev": 0.400195,
+      "min_progress": 105,
+      "max_progress": 106
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 590.812,
+      "variance": 0.00390625,
+      "stddev": 0.0625,
+      "min_progress": 590,
+      "max_progress": 590
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "role_id": 1,
+      "role_name": "dependent_alu",
+      "mean_progress": 539.688,
+      "variance": 0,
+      "stddev": 0,
+      "min_progress": 539,
+      "max_progress": 539
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "role_id": 2,
+      "role_name": "shared_load",
+      "mean_progress": 325.625,
+      "variance": 0.0351562,
+      "stddev": 0.1875,
+      "min_progress": 325,
+      "max_progress": 325
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "role_id": 3,
+      "role_name": "dependent_global_load",
+      "mean_progress": 103.219,
+      "variance": 0.0244141,
+      "stddev": 0.15625,
+      "min_progress": 103,
+      "max_progress": 103
+    }
+  ],
+  "warp_scenario_stats": [
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 593,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 593,
+      "max_progress": 593
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 582,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 582,
+      "max_progress": 582
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 583,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 583,
+      "max_progress": 583
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 582,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 582,
+      "max_progress": 582
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 582,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 582,
+      "max_progress": 582
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 1,
+      "role_name": "dependent_alu",
+      "mean_progress": 536,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 536,
+      "max_progress": 536
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 1,
+      "role_name": "dependent_alu",
+      "mean_progress": 536,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 536,
+      "max_progress": 536
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 1,
+      "role_name": "dependent_alu",
+      "mean_progress": 536,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 536,
+      "max_progress": 536
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 1,
+      "role_name": "dependent_alu",
+      "mean_progress": 536,
+      "variance": 0,
+      "stddev": 0,
+      "coefficient_of_variation": 0,
+      "min_progress": 536,
+      "max_progress": 536
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 584,
+      "variance": 0.125,
+      "stddev": 0.353553,
+      "coefficient_of_variation": 0.0006054,
+      "min_progress": 583,
+      "max_progress": 585
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 583.875,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.000829155,
+      "min_progress": 583,
+      "max_progress": 585
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 583.75,
+      "variance": 0.1875,
+      "stddev": 0.433013,
+      "coefficient_of_variation": 0.000741778,
+      "min_progress": 583,
+      "max_progress": 584
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 583.938,
+      "variance": 0.0585938,
+      "stddev": 0.242061,
+      "coefficient_of_variation": 0.000414533,
+      "min_progress": 583,
+      "max_progress": 584
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 2,
+      "role_name": "shared_load",
+      "mean_progress": 325.375,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.00148789,
+      "min_progress": 325,
+      "max_progress": 326
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 2,
+      "role_name": "shared_load",
+      "mean_progress": 325.25,
+      "variance": 0.1875,
+      "stddev": 0.433013,
+      "coefficient_of_variation": 0.00133132,
+      "min_progress": 325,
+      "max_progress": 326
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 2,
+      "role_name": "shared_load",
+      "mean_progress": 325.25,
+      "variance": 0.1875,
+      "stddev": 0.433013,
+      "coefficient_of_variation": 0.00133132,
+      "min_progress": 325,
+      "max_progress": 326
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 2,
+      "role_name": "shared_load",
+      "mean_progress": 325.375,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.00148789,
+      "min_progress": 325,
+      "max_progress": 326
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 588.375,
+      "variance": 0.484375,
+      "stddev": 0.695971,
+      "coefficient_of_variation": 0.00118287,
+      "min_progress": 587,
+      "max_progress": 590
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 588.125,
+      "variance": 0.609375,
+      "stddev": 0.780625,
+      "coefficient_of_variation": 0.00132731,
+      "min_progress": 587,
+      "max_progress": 590
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 588.125,
+      "variance": 0.359375,
+      "stddev": 0.599479,
+      "coefficient_of_variation": 0.00101931,
+      "min_progress": 587,
+      "max_progress": 589
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 588.125,
+      "variance": 0.359375,
+      "stddev": 0.599479,
+      "coefficient_of_variation": 0.00101931,
+      "min_progress": 587,
+      "max_progress": 589
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 3,
+      "role_name": "dependent_global_load",
+      "mean_progress": 106.812,
+      "variance": 39.1523,
+      "stddev": 6.25718,
+      "coefficient_of_variation": 0.058581,
+      "min_progress": 96,
+      "max_progress": 116
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 3,
+      "role_name": "dependent_global_load",
+      "mean_progress": 106.688,
+      "variance": 48.4648,
+      "stddev": 6.96167,
+      "coefficient_of_variation": 0.0652529,
+      "min_progress": 95,
+      "max_progress": 118
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 3,
+      "role_name": "dependent_global_load",
+      "mean_progress": 106.188,
+      "variance": 34.7773,
+      "stddev": 5.89723,
+      "coefficient_of_variation": 0.055536,
+      "min_progress": 97,
+      "max_progress": 114
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 3,
+      "role_name": "dependent_global_load",
+      "mean_progress": 105.812,
+      "variance": 40.0273,
+      "stddev": 6.32672,
+      "coefficient_of_variation": 0.0597918,
+      "min_progress": 95,
+      "max_progress": 114
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 590.875,
+      "variance": 0.234375,
+      "stddev": 0.484123,
+      "coefficient_of_variation": 0.000819332,
+      "min_progress": 589,
+      "max_progress": 591
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role_name": "dependent_alu",
+      "mean_progress": 539.688,
+      "variance": 0.214844,
+      "stddev": 0.463512,
+      "coefficient_of_variation": 0.000858853,
+      "min_progress": 539,
+      "max_progress": 540
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role_name": "shared_load",
+      "mean_progress": 325.438,
+      "variance": 0.246094,
+      "stddev": 0.496078,
+      "coefficient_of_variation": 0.00152434,
+      "min_progress": 325,
+      "max_progress": 326
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role_name": "dependent_global_load",
+      "mean_progress": 103.062,
+      "variance": 106.684,
+      "stddev": 10.3288,
+      "coefficient_of_variation": 0.100219,
+      "min_progress": 91,
+      "max_progress": 117
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 0,
+      "role_name": "light_alu",
+      "mean_progress": 590.75,
+      "variance": 0.3125,
+      "stddev": 0.559017,
+      "coefficient_of_variation": 0.000946284,
+      "min_progress": 589,
+      "max_progress": 591
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 1,
+      "role_name": "dependent_alu",
+      "mean_progress": 539.688,
+      "variance": 0.214844,
+      "stddev": 0.463512,
+      "coefficient_of_variation": 0.000858853,
+      "min_progress": 539,
+      "max_progress": 540
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 2,
+      "role_name": "shared_load",
+      "mean_progress": 325.812,
+      "variance": 0.277344,
+      "stddev": 0.526634,
+      "coefficient_of_variation": 0.00161637,
+      "min_progress": 325,
+      "max_progress": 327
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 3,
+      "role_name": "dependent_global_load",
+      "mean_progress": 103.375,
+      "variance": 103.234,
+      "stddev": 10.1604,
+      "coefficient_of_variation": 0.0982871,
+      "min_progress": 92,
+      "max_progress": 116
+    }
+  ],
+  "raw_runs": [
+    {
+      "scenario_id": 0,
+      "scenario_name": "all_light_alu_baseline",
+      "role_assignment": [0, 0, 0, 0, 0, 0, 0, 0],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [593, 593, 593, 593, 593, 593, 593, 593]
+        }
+      ]
+    },
+    {
+      "scenario_id": 1,
+      "scenario_name": "light_vs_dependent_alu",
+      "role_assignment": [0, 0, 0, 0, 1, 1, 1, 1],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [582, 583, 582, 582, 536, 536, 536, 536]
+        }
+      ]
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "light_vs_shared_load",
+      "role_assignment": [0, 0, 0, 0, 2, 2, 2, 2],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [584, 584, 584, 584, 325, 326, 325, 325]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [585, 583, 583, 584, 325, 325, 326, 325]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [584, 584, 583, 584, 325, 325, 326, 325]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [584, 584, 584, 584, 326, 325, 326, 326]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [584, 584, 583, 584, 325, 326, 325, 325]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [584, 583, 584, 584, 325, 325, 325, 326]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [583, 583, 583, 583, 325, 325, 325, 325]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [584, 585, 584, 584, 326, 325, 325, 325]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [584, 584, 584, 584, 325, 325, 325, 326]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [584, 584, 584, 584, 325, 326, 325, 325]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [584, 584, 584, 584, 325, 325, 326, 326]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [584, 584, 584, 584, 326, 325, 325, 325]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [584, 584, 584, 584, 326, 325, 325, 326]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [584, 584, 584, 584, 326, 325, 325, 325]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [584, 584, 584, 584, 325, 325, 325, 326]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [584, 584, 584, 584, 326, 326, 325, 325]
+        }
+      ]
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "light_vs_dependent_global_load",
+      "role_assignment": [0, 0, 0, 0, 3, 3, 3, 3],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [589, 589, 589, 589, 96, 95, 97, 95]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [589, 588, 588, 588, 98, 96, 97, 97]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [590, 590, 589, 589, 98, 96, 99, 97]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [589, 589, 589, 589, 100, 101, 100, 97]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [588, 588, 588, 588, 102, 100, 102, 101]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [589, 589, 589, 589, 104, 105, 103, 105]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [588, 588, 588, 588, 105, 107, 104, 105]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [588, 588, 588, 588, 108, 108, 106, 107]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [588, 588, 588, 588, 108, 108, 108, 107]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [588, 588, 588, 588, 112, 109, 110, 109]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [588, 588, 588, 588, 111, 112, 107, 110]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [588, 588, 588, 588, 112, 111, 113, 113]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [587, 587, 587, 587, 113, 113, 113, 112]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [588, 587, 587, 587, 113, 114, 114, 111]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [588, 588, 588, 588, 113, 114, 113, 113]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [589, 587, 588, 588, 116, 118, 113, 114]
+        }
+      ]
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "mixed_all_roles",
+      "role_assignment": [0, 1, 2, 3, 0, 1, 2, 3],
+      "runs": [
+        {
+          "run_id": 0,
+          "warp_progress": [591, 540, 326, 117, 591, 540, 326, 115]
+        },
+        {
+          "run_id": 1,
+          "warp_progress": [591, 539, 325, 115, 591, 539, 326, 114]
+        },
+        {
+          "run_id": 2,
+          "warp_progress": [591, 539, 325, 115, 591, 539, 325, 114]
+        },
+        {
+          "run_id": 3,
+          "warp_progress": [591, 539, 326, 114, 591, 539, 326, 115]
+        },
+        {
+          "run_id": 4,
+          "warp_progress": [591, 540, 326, 115, 591, 540, 326, 116]
+        },
+        {
+          "run_id": 5,
+          "warp_progress": [591, 540, 325, 114, 591, 540, 325, 115]
+        },
+        {
+          "run_id": 6,
+          "warp_progress": [591, 540, 325, 110, 591, 540, 325, 114]
+        },
+        {
+          "run_id": 7,
+          "warp_progress": [591, 539, 326, 102, 591, 539, 327, 100]
+        },
+        {
+          "run_id": 8,
+          "warp_progress": [591, 539, 325, 99, 591, 539, 325, 97]
+        },
+        {
+          "run_id": 9,
+          "warp_progress": [591, 540, 325, 95, 591, 540, 326, 94]
+        },
+        {
+          "run_id": 10,
+          "warp_progress": [591, 540, 326, 93, 591, 540, 326, 94]
+        },
+        {
+          "run_id": 11,
+          "warp_progress": [589, 540, 325, 92, 589, 540, 326, 93]
+        },
+        {
+          "run_id": 12,
+          "warp_progress": [591, 540, 326, 92, 591, 540, 326, 92]
+        },
+        {
+          "run_id": 13,
+          "warp_progress": [591, 540, 325, 91, 590, 540, 326, 94]
+        },
+        {
+          "run_id": 14,
+          "warp_progress": [591, 540, 326, 93, 591, 540, 326, 93]
+        },
+        {
+          "run_id": 15,
+          "warp_progress": [591, 540, 325, 92, 590, 540, 326, 94]
+        }
+      ]
+    }
+  ]
+}

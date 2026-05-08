@@ -14,7 +14,7 @@ const layers = [
   {
     title: "하드웨어 관찰",
     desc: "GPU 성능 측정과 probing을 통해 실제 실행 특성과 병목의 단서를 수집하고, 관찰된 결과를 다시 하드웨어 메커니즘과 실행 제약 수준으로 역추적합니다.",
-    href: "/hardware-evidence",
+    href: "/gpu-graph-test",
   },
   {
     title: "공통 계산 구조",

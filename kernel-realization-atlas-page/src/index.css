@@ -20,3 +20,12 @@
 .graph-scroll::-webkit-scrollbar {
   display: none;
 }
+/* Scrollable but visually hidden scrollbar */
+.scrollbar-hidden {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / old Edge */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome / Safari / Edge */
+}

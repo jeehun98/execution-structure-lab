@@ -44,11 +44,76 @@ function ResultSummaryBlock({ resultSummary }) {
         </div>
       ) : null}
 
+      {resultSummary.interpretation ? (
+        <p className="mt-4 border-t border-white/10 pt-4 text-xs leading-6 text-neutral-400">
+          {resultSummary.interpretation}
+        </p>
+      ) : null}
+
       {resultSummary.caveat ? (
         <p className="mt-4 border-t border-white/10 pt-4 text-xs leading-6 text-neutral-500">
           {resultSummary.caveat}
         </p>
       ) : null}
+    </div>
+  );
+}
+
+function RelatedNodesBlock({ relatedNodes }) {
+  if (!Array.isArray(relatedNodes) || relatedNodes.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mt-5 rounded-2xl border border-sky-400/20 bg-sky-400/[0.05] p-4">
+      <div className="text-xs uppercase tracking-[0.16em] text-sky-300/80">
+        Related Context
+      </div>
+
+      <div className="mt-4 space-y-3">
+        {relatedNodes.map((relatedNode) => {
+          const id =
+            typeof relatedNode === "string" ? relatedNode : relatedNode.id;
+
+          const reason =
+            typeof relatedNode === "string" ? null : relatedNode.reason;
+
+          if (!id) return null;
+
+          return (
+            <div
+              key={id}
+              className="rounded-xl border border-white/10 bg-black/25 px-4 py-3"
+            >
+              <div className="text-xs font-semibold text-sky-200">
+                {id}
+              </div>
+
+              {reason ? (
+                <p className="mt-2 text-xs leading-5 text-neutral-400">
+                  {reason}
+                </p>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ProbingMeaningBlock({ probingMeaning }) {
+  if (!probingMeaning) return null;
+
+  return (
+    <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+      <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+        Probing Meaning
+      </div>
+
+      <p className="mt-3 text-xs leading-6 text-neutral-400">
+        {probingMeaning}
+      </p>
     </div>
   );
 }
@@ -70,6 +135,8 @@ export default function GraphPanel({ selectedNode }) {
   const kind = selectedNode.kind;
   const detailPath = selectedNode.detailPath;
   const resultSummary = selectedNode.resultSummary;
+  const relatedNodes = selectedNode.relatedNodes;
+  const probingMeaning = selectedNode.probingMeaning;
 
   return (
     <div>
@@ -95,6 +162,8 @@ export default function GraphPanel({ selectedNode }) {
 
       <ResultSummaryBlock resultSummary={resultSummary} />
 
+      <ProbingMeaningBlock probingMeaning={probingMeaning} />
+
       {status ? (
         <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-neutral-300">
           status:{" "}
@@ -103,6 +172,8 @@ export default function GraphPanel({ selectedNode }) {
           </span>
         </div>
       ) : null}
+
+      <RelatedNodesBlock relatedNodes={relatedNodes} />
 
       {detailPath ? (
         <Link

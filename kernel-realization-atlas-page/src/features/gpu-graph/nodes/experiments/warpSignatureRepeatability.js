@@ -73,9 +73,10 @@ const warpSignatureRepeatability = {
   connectsTo: [
     {
       id: "warp_signature_permutation",
-      type: "attribution",
+      type: "signature-attribution",
+      label: "repeatability → attribution",
     },
-  ],
+  ]
 };
 
 export default warpSignatureRepeatability;

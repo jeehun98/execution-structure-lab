@@ -9,5 +9,7 @@ C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_warp_signature_repeatability.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/warp_signature_permutation_probe_lib.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_warp_signature_permutation.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/mixed_workload_probe_lib.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_mixed_workload.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/edit_cache.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/rebuild_cache.dir

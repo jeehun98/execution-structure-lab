@@ -83,9 +83,10 @@ const warpSignaturePermutation = {
   connectsTo: [
     {
       id: "mixed_workload_probe",
-      type: "next",
+      type: "main-followup",
+      label: "attribution → main probe",
     },
-  ],
+  ]
 };
 
 export default warpSignaturePermutation;
