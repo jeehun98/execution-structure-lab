@@ -3,6 +3,7 @@ import warpExecutionSignatureV0 from "./warpExecutionSignatureV0";
 import warpSignatureRepeatability from "./warpSignatureRepeatability";
 import warpSignaturePermutation from "./warpSignaturePermutation";
 import mixedWorkloadProbe from "./mixedWorkloadProbe";
+import globalMemoryContentionAmplificationProbe from "./globalMemoryContentionAmplificationProbe";
 
 export const experimentNodes = [
   sameBaseline,
@@ -10,6 +11,7 @@ export const experimentNodes = [
   warpSignatureRepeatability,
   warpSignaturePermutation,
   mixedWorkloadProbe,
+  globalMemoryContentionAmplificationProbe,
 ];
 
 export {
@@ -18,4 +20,5 @@ export {
   warpSignatureRepeatability,
   warpSignaturePermutation,
   mixedWorkloadProbe,
+  globalMemoryContentionAmplificationProbe,
 };

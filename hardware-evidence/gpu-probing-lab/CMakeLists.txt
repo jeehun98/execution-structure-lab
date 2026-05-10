@@ -326,3 +326,50 @@ target_link_libraries(probe_runner_mixed_workload
 set_target_properties(probe_runner_mixed_workload PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+
+# ------------------------------------------------------------
+# global memory contention amplification probe library
+# ------------------------------------------------------------
+add_library(global_memory_contention_amplification_probe_lib
+    src/probes/global_memory_contention_amplification_probe/host.cpp
+    src/probes/global_memory_contention_amplification_probe/kernel.cu
+)
+
+target_include_directories(global_memory_contention_amplification_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(global_memory_contention_amplification_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(global_memory_contention_amplification_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# global memory contention amplification probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_global_memory_contention_amplification
+    src/main/probe_runner_global_memory_contention_amplification.cpp
+)
+
+target_include_directories(probe_runner_global_memory_contention_amplification
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_global_memory_contention_amplification
+    PRIVATE
+        global_memory_contention_amplification_probe_lib
+)
+
+set_target_properties(probe_runner_global_memory_contention_amplification PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)

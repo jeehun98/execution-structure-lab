@@ -7,12 +7,40 @@ const warpSignatureRepeatability = {
 
   status: "observed",
   kind: "experiment",
-  
-  // warpSignatureRepeatability.js
-  layer: "follow-up-result",
-  order: 1,
+
+  layer: "signature-validation",
+  order: 3,
 
   detailPath: "/hardware-evidence/warp_signature_repeatability",
+
+  graphSummary: {
+    intro:
+      "Warp Signature v0에서 관찰된 workload별 progress signature가 단일 run의 우연한 흔들림인지, 동일 조건 반복 실행에서도 유지되는지 확인한 validation 실험입니다.",
+
+    buildUp: [
+      {
+        id: "same_workload_baseline",
+        label: "Same Workload Baseline",
+        summary:
+          "동일 workload 조건에서 강한 warp_id progress 편향이 나타나는지 확인해 후속 signature 해석의 기준선을 만들었습니다.",
+      },
+      {
+        id: "warp_execution_signature_v0",
+        label: "Warp Signature v0",
+        summary:
+          "서로 다른 execution pattern이 동일한 cycle budget 안에서 구분 가능한 progress signature를 남긴다는 최초 observation을 만들었습니다.",
+      },
+    ],
+
+    roleInFlow:
+      "이 노드는 v0 observation을 단일 run 결과에서 반복 가능한 signature로 끌어올리는 validation 단계입니다. 새로운 workload class를 추가하는 것이 아니라, 기존 관찰값의 재현성을 확인합니다.",
+
+    keyTakeaway:
+      "핵심은 progress signature가 한 번의 launch에서 우연히 나온 값인지, 동일 kernel 구조와 동일 실행 조건에서 안정적으로 반복되는 구조적 관찰값인지 분리하는 것입니다.",
+
+    nextQuestion:
+      "반복 가능한 signature가 확인되었더라도, 그 signature가 특정 warp_id에 고정된 것인지 workload pattern을 따라가는 것인지는 아직 분리해야 합니다.",
+  },
 
   resultSummary: {
     title: "해석 요약",
@@ -59,6 +87,11 @@ const warpSignatureRepeatability = {
         "v0에서 관찰된 workload별 progress signature의 반복성을 직접 검증하는 후속 probe",
     },
     {
+      id: "same_workload_baseline",
+      reason:
+        "동일 workload 조건에서의 기준선을 바탕으로 workload별 signature의 반복성을 해석함",
+    },
+    {
       id: "warp",
       reason:
         "warp-level progress 배열이 반복 실행에서 동일하게 유지되는지 관찰함",
@@ -76,7 +109,7 @@ const warpSignatureRepeatability = {
       type: "signature-attribution",
       label: "repeatability → attribution",
     },
-  ]
+  ],
 };
 
 export default warpSignatureRepeatability;

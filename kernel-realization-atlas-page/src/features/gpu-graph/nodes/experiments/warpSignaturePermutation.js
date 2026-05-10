@@ -8,11 +8,45 @@ const warpSignaturePermutation = {
   status: "observed",
   kind: "experiment",
 
-  // warpSignaturePermutation.js
-  layer: "attribution-result",
-  order: 1,
+  layer: "signature-attribution",
+  order: 4,
 
   detailPath: "/hardware-evidence/warp_signature_permutation",
+
+  graphSummary: {
+    intro:
+      "반복 실행에서 안정적으로 재현된 warp progress signature가 특정 warp_id에 고정된 것인지, 아니면 workload pattern assignment를 따라 이동하는지 확인한 attribution 실험입니다.",
+
+    buildUp: [
+      {
+        id: "same_workload_baseline",
+        label: "Same Workload Baseline",
+        summary:
+          "동일 workload 조건에서 강한 warp_id progress 편향이 나타나는지 확인해 후속 signature 해석의 기준선을 만들었습니다.",
+      },
+      {
+        id: "warp_execution_signature_v0",
+        label: "Warp Signature v0",
+        summary:
+          "서로 다른 execution pattern이 동일한 cycle budget 안에서 구분 가능한 progress signature를 남긴다는 최초 observation을 만들었습니다.",
+      },
+      {
+        id: "warp_signature_repeatability",
+        label: "Warp Signature Repeatability",
+        summary:
+          "v0에서 관찰된 progress signature가 단일 run의 우연이 아니라 동일 조건 반복 실행에서도 유지되는지 검증했습니다.",
+      },
+    ],
+
+    roleInFlow:
+      "이 노드는 반복 가능한 signature의 귀속 대상을 확인하는 attribution 단계입니다. signature가 warp_id 또는 warp position에 고정된 것인지, workload execution pattern 자체를 따라가는지 분리합니다.",
+
+    keyTakeaway:
+      "핵심은 progress 차이가 특정 warp_id의 고정 bias가 아니라, workload assignment가 이동할 때 함께 이동하는 실행 구조의 서명인지 확인하는 것입니다.",
+
+    nextQuestion:
+      "signature가 workload pattern에 귀속됨을 확인했다면, 이제 그 signature가 isolated condition을 넘어 서로 다른 workload가 공존하는 mixed composition에서도 유지되는지 확인해야 합니다.",
+  },
 
   resultSummary: {
     title: "해석 요약",
@@ -69,6 +103,11 @@ const warpSignaturePermutation = {
         "반복 실행에서 안정적으로 재현된 signature를 대상으로 pattern attribution을 수행함",
     },
     {
+      id: "same_workload_baseline",
+      reason:
+        "동일 workload 조건에서의 기준선을 바탕으로, workload pattern 차이에 의한 signature 귀속 여부를 해석함",
+    },
+    {
       id: "warp",
       reason:
         "warp-level progress를 기준으로 workload pattern과 warp id 효과를 분리함",
@@ -83,10 +122,10 @@ const warpSignaturePermutation = {
   connectsTo: [
     {
       id: "mixed_workload_probe",
-      type: "main-followup",
-      label: "attribution → main probe",
+      type: "composition-probe",
+      label: "attribution → mixed composition",
     },
-  ]
+  ],
 };
 
 export default warpSignaturePermutation;

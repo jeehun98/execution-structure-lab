@@ -8,10 +8,51 @@ const mixedWorkloadProbe = {
   status: "observed",
   kind: "experiment",
 
-  layer: "probe-result",
-  order: 4,
+  layer: "composition-result",
+  order: 5,
 
   detailPath: "/hardware-evidence/mixed_workload_probe",
+
+  graphSummary: {
+    intro:
+      "검증된 workload execution signature가 isolated condition을 넘어, 서로 다른 workload가 같은 block 안에 공존하는 mixed composition에서도 유지되는지 확인한 실험입니다.",
+
+    buildUp: [
+      {
+        id: "same_workload_baseline",
+        label: "Same Workload Baseline",
+        summary:
+          "동일 workload 조건에서 강한 warp_id progress 편향이 나타나는지 확인해 후속 signature 해석의 기준선을 만들었습니다.",
+      },
+      {
+        id: "warp_execution_signature_v0",
+        label: "Warp Signature v0",
+        summary:
+          "서로 다른 execution pattern이 동일한 cycle budget 안에서 구분 가능한 progress signature를 남긴다는 최초 observation을 만들었습니다.",
+      },
+      {
+        id: "warp_signature_repeatability",
+        label: "Warp Signature Repeatability",
+        summary:
+          "v0에서 관찰된 progress signature가 단일 run의 우연이 아니라 동일 조건 반복 실행에서도 유지되는지 검증했습니다.",
+      },
+      {
+        id: "warp_signature_permutation",
+        label: "Warp Signature Permutation",
+        summary:
+          "반복 가능한 signature가 특정 warp_id에 고정된 것이 아니라 workload pattern assignment를 따라 이동하는지 확인했습니다.",
+      },
+    ],
+
+    roleInFlow:
+      "이 노드는 validated and attributed signature를 heterogeneous workload composition으로 확장하는 첫 번째 composition probe입니다. 앞선 검증들이 signature 자체의 신뢰도를 높였다면, 이 실험은 그 signature가 다른 workload와 공존할 때도 유지되는지 확인합니다.",
+
+    keyTakeaway:
+      "핵심은 개별 progress 수치가 아니라, isolated workload에서 관찰된 role별 signature ordering이 mixed workload 조건에서도 유지되는지와 memory-dependent workload가 variability를 키우는지 확인하는 것입니다.",
+
+    nextQuestion:
+      "mixed composition에서 dependent_global_load가 낮은 progress와 높은 variability를 보였다면, 이제 그 원인이 단순 global memory contention인지, ready warp supply와 address locality에 의해 변형되는지 분리해야 합니다.",
+  },
 
   resultSummary: {
     title: "해석 요약",
@@ -78,6 +119,11 @@ const mixedWorkloadProbe = {
         "v0에서 관찰된 execution pattern별 progress 차이가 혼합 workload 조건에서도 유지되는지 비교함",
     },
     {
+      id: "same_workload_baseline",
+      reason:
+        "동일 workload 조건에서의 기준선을 바탕으로 mixed workload 조건의 progress 차이를 해석함",
+    },
+    {
       id: "global_memory",
       reason:
         "dependent_global_load role이 가장 낮은 progress와 가장 높은 run-to-run variability를 보임",
@@ -95,14 +141,15 @@ const mixedWorkloadProbe = {
   ],
 
   connectsTo: [
-    
     {
-      id: "contention_amplification_probe",
-      type: "next",
+      id: "global_memory_contention_amplification_probe",
+      type: "memory-signature-modulation",
+      label: "global variability → memory modulation",
     },
     {
       id: "latency_hiding",
       type: "suggests",
+      label: "global stall → latency hiding",
     },
   ],
 };

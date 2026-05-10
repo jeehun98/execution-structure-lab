@@ -1,61 +1,115 @@
 import { Link } from "react-router-dom";
 
-function ResultSummaryBlock({ resultSummary }) {
-  if (!resultSummary) return null;
+function InfoSection({ title, children, tone = "neutral" }) {
+  const toneClass = {
+    neutral: "border-white/10 bg-white/[0.03]",
+    lime: "border-lime-400/20 bg-lime-400/[0.06]",
+    sky: "border-sky-400/20 bg-sky-400/[0.05]",
+    amber: "border-amber-400/20 bg-amber-400/[0.05]",
+  }[tone];
 
-  const metrics = resultSummary.metrics ?? [];
+  const titleClass = {
+    neutral: "text-neutral-500",
+    lime: "text-lime-300/80",
+    sky: "text-sky-300/80",
+    amber: "text-amber-300/80",
+  }[tone];
 
   return (
-    <div className="mt-5 rounded-2xl border border-lime-400/20 bg-lime-400/[0.06] p-4">
-      <div className="text-xs uppercase tracking-[0.16em] text-lime-300/80">
-        {resultSummary.title ?? "요약 결과"}
+    <section className={`mt-5 rounded-2xl border p-4 ${toneClass}`}>
+      <div className={`text-xs uppercase tracking-[0.16em] ${titleClass}`}>
+        {title}
       </div>
 
-      {resultSummary.conclusion ? (
-        <p className="mt-3 text-sm leading-7 text-neutral-200">
-          {resultSummary.conclusion}
-        </p>
-      ) : null}
+      <div className="mt-3">{children}</div>
+    </section>
+  );
+}
 
-      {metrics.length > 0 ? (
-        <div className="mt-4 grid gap-3">
-          {metrics.map((metric) => (
-            <div
-              key={metric.label}
+function BuildUpBlock({ buildUp }) {
+  if (!Array.isArray(buildUp) || buildUp.length === 0) {
+    return null;
+  }
+
+  return (
+    <InfoSection title="Build-up Flow" tone="sky">
+      <ol className="space-y-3">
+        {buildUp.map((item, index) => {
+          if (!item) return null;
+
+          const id = item.id;
+          const label = item.label ?? item.title ?? item.id;
+          const summary = item.summary ?? item.reason;
+
+          return (
+            <li
+              key={id ?? `${label}-${index}`}
               className="rounded-xl border border-white/10 bg-black/25 px-4 py-3"
             >
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="text-xs uppercase tracking-[0.14em] text-neutral-500">
-                  {metric.label}
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-sky-400/30 bg-sky-400/10 text-[11px] font-semibold text-sky-200">
+                  {index + 1}
                 </span>
 
-                <span className="text-sm font-semibold text-lime-200">
-                  {metric.value}
-                </span>
+                <div>
+                  <div className="text-xs font-semibold text-sky-200">
+                    {label}
+                  </div>
+
+                  {summary ? (
+                    <p className="mt-2 text-xs leading-6 text-neutral-400">
+                      {summary}
+                    </p>
+                  ) : null}
+                </div>
               </div>
+            </li>
+          );
+        })}
+      </ol>
+    </InfoSection>
+  );
+}
 
-              {metric.note ? (
-                <p className="mt-2 text-xs leading-5 text-neutral-500">
-                  {metric.note}
-                </p>
-              ) : null}
-            </div>
-          ))}
-        </div>
+function GraphSummaryBlock({ graphSummary }) {
+  if (!graphSummary) return null;
+
+  return (
+    <>
+      {graphSummary.intro ? (
+        <InfoSection title="Brief" tone="lime">
+          <p className="text-sm leading-7 text-neutral-200">
+            {graphSummary.intro}
+          </p>
+        </InfoSection>
       ) : null}
 
-      {resultSummary.interpretation ? (
-        <p className="mt-4 border-t border-white/10 pt-4 text-xs leading-6 text-neutral-400">
-          {resultSummary.interpretation}
-        </p>
+      <BuildUpBlock buildUp={graphSummary.buildUp} />
+
+      {graphSummary.roleInFlow ? (
+        <InfoSection title="Role in Flow">
+          <p className="text-sm leading-7 text-neutral-300">
+            {graphSummary.roleInFlow}
+          </p>
+        </InfoSection>
       ) : null}
 
-      {resultSummary.caveat ? (
-        <p className="mt-4 border-t border-white/10 pt-4 text-xs leading-6 text-neutral-500">
-          {resultSummary.caveat}
-        </p>
+      {graphSummary.keyTakeaway ? (
+        <InfoSection title="Key Point" tone="amber">
+          <p className="text-sm leading-7 text-neutral-300">
+            {graphSummary.keyTakeaway}
+          </p>
+        </InfoSection>
       ) : null}
-    </div>
+
+      {graphSummary.nextQuestion ? (
+        <InfoSection title="Next Question">
+          <p className="text-sm leading-7 text-neutral-400">
+            {graphSummary.nextQuestion}
+          </p>
+        </InfoSection>
+      ) : null}
+    </>
   );
 }
 
@@ -65,13 +119,9 @@ function RelatedNodesBlock({ relatedNodes }) {
   }
 
   return (
-    <div className="mt-5 rounded-2xl border border-sky-400/20 bg-sky-400/[0.05] p-4">
-      <div className="text-xs uppercase tracking-[0.16em] text-sky-300/80">
-        Related Context
-      </div>
-
-      <div className="mt-4 space-y-3">
-        {relatedNodes.map((relatedNode) => {
+    <InfoSection title="Related Context" tone="sky">
+      <div className="space-y-3">
+        {relatedNodes.map((relatedNode, index) => {
           const id =
             typeof relatedNode === "string" ? relatedNode : relatedNode.id;
 
@@ -82,7 +132,7 @@ function RelatedNodesBlock({ relatedNodes }) {
 
           return (
             <div
-              key={id}
+              key={`${id}-${index}`}
               className="rounded-xl border border-white/10 bg-black/25 px-4 py-3"
             >
               <div className="text-xs font-semibold text-sky-200">
@@ -98,7 +148,7 @@ function RelatedNodesBlock({ relatedNodes }) {
           );
         })}
       </div>
-    </div>
+    </InfoSection>
   );
 }
 
@@ -106,15 +156,33 @@ function ProbingMeaningBlock({ probingMeaning }) {
   if (!probingMeaning) return null;
 
   return (
-    <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-      <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
-        Probing Meaning
-      </div>
-
-      <p className="mt-3 text-xs leading-6 text-neutral-400">
+    <InfoSection title="Probing Meaning">
+      <p className="text-xs leading-6 text-neutral-400">
         {probingMeaning}
       </p>
-    </div>
+    </InfoSection>
+  );
+}
+
+function FallbackSummaryBlock({ description, probingMeaning }) {
+  return (
+    <>
+      {description ? (
+        <InfoSection title="Brief" tone="lime">
+          <p className="text-sm leading-7 text-neutral-300">
+            {description}
+          </p>
+        </InfoSection>
+      ) : (
+        <InfoSection title="Brief">
+          <p className="text-sm leading-7 text-neutral-600">
+            graphSummary 또는 description이 등록되지 않았습니다.
+          </p>
+        </InfoSection>
+      )}
+
+      <ProbingMeaningBlock probingMeaning={probingMeaning} />
+    </>
   );
 }
 
@@ -123,46 +191,57 @@ export default function GraphPanel({ selectedNode }) {
     return (
       <div>
         <p className="text-sm text-neutral-400">
-          노드를 선택하면 관계가 드러납니다
+          노드를 선택하면 연구 흐름과 연결 관계가 표시됩니다.
         </p>
       </div>
     );
   }
 
   const title = selectedNode.title ?? selectedNode.label;
+  const label = selectedNode.label;
   const description = selectedNode.description;
   const status = selectedNode.status;
   const kind = selectedNode.kind;
+  const layer = selectedNode.layer;
   const detailPath = selectedNode.detailPath;
-  const resultSummary = selectedNode.resultSummary;
+  const graphSummary = selectedNode.graphSummary;
   const relatedNodes = selectedNode.relatedNodes;
   const probingMeaning = selectedNode.probingMeaning;
 
   return (
     <div>
-      {kind ? (
-        <div className="mb-3 inline-flex rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-300">
-          {kind}
+      <div className="flex flex-wrap gap-2">
+        {kind ? (
+          <div className="inline-flex rounded-full border border-lime-400/20 bg-lime-400/10 px-3 py-1 text-xs text-lime-300">
+            {kind}
+          </div>
+        ) : null}
+
+        {layer ? (
+          <div className="inline-flex rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-neutral-400">
+            {layer}
+          </div>
+        ) : null}
+      </div>
+
+      {label ? (
+        <div className="mt-5 text-xs uppercase tracking-[0.18em] text-neutral-500">
+          {label}
         </div>
       ) : null}
 
-      <h2 className="text-xl font-semibold text-white">
+      <h2 className="mt-2 text-xl font-semibold leading-8 text-white">
         {title}
       </h2>
 
-      {description ? (
-        <p className="mt-4 text-sm leading-7 text-neutral-400">
-          {description}
-        </p>
+      {graphSummary ? (
+        <GraphSummaryBlock graphSummary={graphSummary} />
       ) : (
-        <p className="mt-4 text-sm leading-7 text-neutral-600">
-          description이 등록되지 않았습니다.
-        </p>
+        <FallbackSummaryBlock
+          description={description}
+          probingMeaning={probingMeaning}
+        />
       )}
-
-      <ResultSummaryBlock resultSummary={resultSummary} />
-
-      <ProbingMeaningBlock probingMeaning={probingMeaning} />
 
       {status ? (
         <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-neutral-300">
