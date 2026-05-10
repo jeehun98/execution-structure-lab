@@ -7,6 +7,7 @@ import globalMemoryContentionAmplificationProbe from "./globalMemoryContentionAm
 import latencyHidingRatioProbe from "./latencyHidingRatioProbe";
 import latencyHidingWarmupStabilityProbe from "./latencyHidingWarmupStabilityProbe ";
 import readyWarpSupplyProbe from "./readyWarpSupplyProbe";
+import sharedMemoryReadyInterferenceProbe from "./sharedMemoryReadyInterferenceProbe ";
 
 
 export const experimentNodes = [
@@ -19,6 +20,7 @@ export const experimentNodes = [
   latencyHidingRatioProbe,
   latencyHidingWarmupStabilityProbe,
   readyWarpSupplyProbe,
+  sharedMemoryReadyInterferenceProbe,
 ];
 
 export {
@@ -31,4 +33,5 @@ export {
   latencyHidingRatioProbe,
   latencyHidingWarmupStabilityProbe,
   readyWarpSupplyProbe,
+  sharedMemoryReadyInterferenceProbe,
 };

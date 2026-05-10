@@ -514,3 +514,50 @@ target_link_libraries(probe_runner_ready_warp_supply
 set_target_properties(probe_runner_ready_warp_supply PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+
+# ------------------------------------------------------------
+# shared memory ready interference probe library
+# ------------------------------------------------------------
+add_library(shared_memory_ready_interference_probe_lib
+    src/probes/shared_memory_ready_interference_probe/host.cpp
+    src/probes/shared_memory_ready_interference_probe/kernel.cu
+)
+
+target_include_directories(shared_memory_ready_interference_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(shared_memory_ready_interference_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(shared_memory_ready_interference_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# shared memory ready interference probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_shared_memory_ready_interference
+    src/main/probe_runner_shared_memory_ready_interference.cpp
+)
+
+target_include_directories(probe_runner_shared_memory_ready_interference
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_shared_memory_ready_interference
+    PRIVATE
+        shared_memory_ready_interference_probe_lib
+)
+
+set_target_properties(probe_runner_shared_memory_ready_interference PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)

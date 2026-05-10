@@ -19,5 +19,7 @@ C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_latency_hiding_warmup_stability.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/ready_warp_supply_probe_lib.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_ready_warp_supply.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/shared_memory_ready_interference_probe_lib.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_shared_memory_ready_interference.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/edit_cache.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/rebuild_cache.dir
