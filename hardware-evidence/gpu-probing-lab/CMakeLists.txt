@@ -373,3 +373,144 @@ target_link_libraries(probe_runner_global_memory_contention_amplification
 set_target_properties(probe_runner_global_memory_contention_amplification PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+
+# ------------------------------------------------------------
+# latency hiding ratio probe library
+# ------------------------------------------------------------
+add_library(latency_hiding_ratio_probe_lib
+    src/probes/latency_hiding_ratio_probe/host.cpp
+    src/probes/latency_hiding_ratio_probe/kernel.cu
+)
+
+target_include_directories(latency_hiding_ratio_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(latency_hiding_ratio_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(latency_hiding_ratio_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# latency hiding ratio probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_latency_hiding_ratio
+    src/main/probe_runner_latency_hiding_ratio.cpp
+)
+
+target_include_directories(probe_runner_latency_hiding_ratio
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_latency_hiding_ratio
+    PRIVATE
+        latency_hiding_ratio_probe_lib
+)
+
+set_target_properties(probe_runner_latency_hiding_ratio PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
+
+# ------------------------------------------------------------
+# latency hiding warmup stability probe library
+# ------------------------------------------------------------
+add_library(latency_hiding_warmup_stability_probe_lib
+    src/probes/latency_hiding_warmup_stability_probe/host.cpp
+    src/probes/latency_hiding_warmup_stability_probe/kernel.cu
+)
+
+target_include_directories(latency_hiding_warmup_stability_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(latency_hiding_warmup_stability_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(latency_hiding_warmup_stability_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# latency hiding warmup stability probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_latency_hiding_warmup_stability
+    src/main/probe_runner_latency_hiding_warmup_stability.cpp
+)
+
+target_include_directories(probe_runner_latency_hiding_warmup_stability
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_latency_hiding_warmup_stability
+    PRIVATE
+        latency_hiding_warmup_stability_probe_lib
+)
+
+set_target_properties(probe_runner_latency_hiding_warmup_stability PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
+
+# ------------------------------------------------------------
+# ready warp supply probe library
+# ------------------------------------------------------------
+add_library(ready_warp_supply_probe_lib
+    src/probes/ready_warp_supply_probe/host.cpp
+    src/probes/ready_warp_supply_probe/kernel.cu
+)
+
+target_include_directories(ready_warp_supply_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(ready_warp_supply_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(ready_warp_supply_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# ready warp supply probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_ready_warp_supply
+    src/main/probe_runner_ready_warp_supply.cpp
+)
+
+target_include_directories(probe_runner_ready_warp_supply
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_ready_warp_supply
+    PRIVATE
+        ready_warp_supply_probe_lib
+)
+
+set_target_properties(probe_runner_ready_warp_supply PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)

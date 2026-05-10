@@ -4,6 +4,10 @@ import warpSignatureRepeatability from "./warpSignatureRepeatability";
 import warpSignaturePermutation from "./warpSignaturePermutation";
 import mixedWorkloadProbe from "./mixedWorkloadProbe";
 import globalMemoryContentionAmplificationProbe from "./globalMemoryContentionAmplificationProbe";
+import latencyHidingRatioProbe from "./latencyHidingRatioProbe";
+import latencyHidingWarmupStabilityProbe from "./latencyHidingWarmupStabilityProbe ";
+import readyWarpSupplyProbe from "./readyWarpSupplyProbe";
+
 
 export const experimentNodes = [
   sameBaseline,
@@ -12,6 +16,9 @@ export const experimentNodes = [
   warpSignaturePermutation,
   mixedWorkloadProbe,
   globalMemoryContentionAmplificationProbe,
+  latencyHidingRatioProbe,
+  latencyHidingWarmupStabilityProbe,
+  readyWarpSupplyProbe,
 ];
 
 export {
@@ -21,4 +28,7 @@ export {
   warpSignaturePermutation,
   mixedWorkloadProbe,
   globalMemoryContentionAmplificationProbe,
+  latencyHidingRatioProbe,
+  latencyHidingWarmupStabilityProbe,
+  readyWarpSupplyProbe,
 };
