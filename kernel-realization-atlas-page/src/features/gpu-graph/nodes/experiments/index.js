@@ -42,6 +42,6 @@ export {
   readyWarpSupplyProbe,
   sharedMemoryReadyInterferenceProbe,
   compositionTransientProbe,
-  compositionPhaseRepeatabilityProbem,
+  compositionPhaseRepeatabilityProbe,
   schedulerPhaseProbe,
 };
