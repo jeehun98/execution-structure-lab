@@ -21,5 +21,11 @@ C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_ready_warp_supply.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/shared_memory_ready_interference_probe_lib.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_shared_memory_ready_interference.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/composition_transient_probe_lib.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_composition_transient.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/composition_phase_repeatability_probe_lib.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_composition_phase_repeatability.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/scheduler_phase_probe_lib.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_scheduler_phase.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/edit_cache.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/rebuild_cache.dir

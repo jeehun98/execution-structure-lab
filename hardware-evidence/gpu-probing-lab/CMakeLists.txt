@@ -561,3 +561,144 @@ target_link_libraries(probe_runner_shared_memory_ready_interference
 set_target_properties(probe_runner_shared_memory_ready_interference PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+
+# ------------------------------------------------------------
+# composition transient probe library
+# ------------------------------------------------------------
+add_library(composition_transient_probe_lib
+    src/probes/composition_transient_probe/host.cpp
+    src/probes/composition_transient_probe/kernel.cu
+)
+
+target_include_directories(composition_transient_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(composition_transient_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(composition_transient_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# composition transient probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_composition_transient
+    src/main/probe_runner_composition_transient.cpp
+)
+
+target_include_directories(probe_runner_composition_transient
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_composition_transient
+    PRIVATE
+        composition_transient_probe_lib
+)
+
+set_target_properties(probe_runner_composition_transient PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
+
+# ------------------------------------------------------------
+# composition phase repeatability probe library
+# ------------------------------------------------------------
+add_library(composition_phase_repeatability_probe_lib
+    src/probes/composition_phase_repeatability_probe/host.cpp
+    src/probes/composition_phase_repeatability_probe/kernel.cu
+)
+
+target_include_directories(composition_phase_repeatability_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(composition_phase_repeatability_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(composition_phase_repeatability_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# composition phase repeatability probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_composition_phase_repeatability
+    src/main/probe_runner_composition_phase_repeatability.cpp
+)
+
+target_include_directories(probe_runner_composition_phase_repeatability
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_composition_phase_repeatability
+    PRIVATE
+        composition_phase_repeatability_probe_lib
+)
+
+set_target_properties(probe_runner_composition_phase_repeatability PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
+
+# ------------------------------------------------------------
+# scheduler phase probe library
+# ------------------------------------------------------------
+add_library(scheduler_phase_probe_lib
+    src/probes/scheduler_phase_probe/host.cpp
+    src/probes/scheduler_phase_probe/kernel.cu
+)
+
+target_include_directories(scheduler_phase_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(scheduler_phase_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(scheduler_phase_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# scheduler phase probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_scheduler_phase
+    src/main/probe_runner_scheduler_phase.cpp
+)
+
+target_include_directories(probe_runner_scheduler_phase
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_scheduler_phase
+    PRIVATE
+        scheduler_phase_probe_lib
+)
+
+set_target_properties(probe_runner_scheduler_phase PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)

@@ -8,6 +8,10 @@ import latencyHidingRatioProbe from "./latencyHidingRatioProbe";
 import latencyHidingWarmupStabilityProbe from "./latencyHidingWarmupStabilityProbe ";
 import readyWarpSupplyProbe from "./readyWarpSupplyProbe";
 import sharedMemoryReadyInterferenceProbe from "./sharedMemoryReadyInterferenceProbe ";
+import compositionTransientProbe from "./compositionTransientProbe ";
+import compositionPhaseRepeatabilityProbe from "./compositionPhaseRepeatabilityProbe";
+import schedulerPhaseProbe from "./schedulerPhaseProbe ";
+
 
 
 export const experimentNodes = [
@@ -21,6 +25,9 @@ export const experimentNodes = [
   latencyHidingWarmupStabilityProbe,
   readyWarpSupplyProbe,
   sharedMemoryReadyInterferenceProbe,
+  compositionTransientProbe,
+  compositionPhaseRepeatabilityProbe,
+  schedulerPhaseProbe,
 ];
 
 export {
@@ -34,4 +41,7 @@ export {
   latencyHidingWarmupStabilityProbe,
   readyWarpSupplyProbe,
   sharedMemoryReadyInterferenceProbe,
+  compositionTransientProbe,
+  compositionPhaseRepeatabilityProbem,
+  schedulerPhaseProbe,
 };
