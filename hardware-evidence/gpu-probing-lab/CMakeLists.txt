@@ -702,3 +702,96 @@ target_link_libraries(probe_runner_scheduler_phase
 set_target_properties(probe_runner_scheduler_phase PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
 )
+# ------------------------------------------------------------
+# normalized window probe library
+# ------------------------------------------------------------
+add_library(normalized_window_probe_lib
+    src/probes/normalized_window_probe/host.cpp
+    src/probes/normalized_window_probe/kernel.cu
+)
+
+target_include_directories(normalized_window_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(normalized_window_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(normalized_window_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# normalized window probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_normalized_window
+    src/main/probe_runner_normalized_window.cpp
+)
+
+target_include_directories(probe_runner_normalized_window
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_normalized_window
+    PRIVATE
+        normalized_window_probe_lib
+)
+
+set_target_properties(probe_runner_normalized_window PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)
+
+# ------------------------------------------------------------
+# launch perturbation probe library
+# ------------------------------------------------------------
+add_library(launch_perturbation_probe_lib
+    src/probes/launch_perturbation_probe/host.cpp
+    src/probes/launch_perturbation_probe/kernel.cu
+)
+
+target_include_directories(launch_perturbation_probe_lib
+    PUBLIC
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(launch_perturbation_probe_lib
+    PUBLIC
+        probe_common
+        CUDA::cudart
+)
+
+set_target_properties(launch_perturbation_probe_lib PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+    CUDA_RESOLVE_DEVICE_SYMBOLS ON
+    ARCHIVE_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+    LIBRARY_OUTPUT_DIRECTORY ${PROBE_LIBRARY_DIR}
+)
+
+# ------------------------------------------------------------
+# launch perturbation probe runner
+# ------------------------------------------------------------
+add_executable(probe_runner_launch_perturbation
+    src/main/probe_runner_launch_perturbation.cpp
+)
+
+target_include_directories(probe_runner_launch_perturbation
+    PRIVATE
+        ${PROBE_INCLUDE_DIRS}
+)
+
+target_link_libraries(probe_runner_launch_perturbation
+    PRIVATE
+        launch_perturbation_probe_lib
+)
+
+set_target_properties(probe_runner_launch_perturbation PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${PROBE_RUNTIME_DIR}
+)

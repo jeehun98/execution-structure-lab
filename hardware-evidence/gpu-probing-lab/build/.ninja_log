@@ -4,10 +4,10 @@
 44	1333	8000990663578065	CMakeFiles/probe_common.dir/src/common/device_info.cpp.obj	5b9a7b98b0a89064
 9399	9581	8000990746238631	bin/probe_runner_global_memory_contention_amplification.exe	a93de2f40646c743
 6680	9385	8000990744249742	CMakeFiles/warp_issue_policy_probe_lib.dir/cmake_device_link.obj	f884cdbd16cd806c
-55	2127	8000990671656118	CMakeFiles/warp_issue_policy_probe_lib.dir/src/probes/warp_issue_policy_probe/host.cpp.obj	6653d269a0530625
 9374	9453	8000990745120805	lib/mixed_workload_probe_lib.lib	4c4fea8eec353e7b
-104	2054	8000990671053888	CMakeFiles/warp_signature_repeatability_probe_lib.dir/src/probes/warp_signature_repeatability_probe/host.cpp.obj	e5fb7caddc9b5d57
 4607	7154	8002641695585657	CMakeFiles/composition_transient_probe_lib.dir/cmake_device_link.obj	bed72f1afc83195c
+104	2054	8000990671053888	CMakeFiles/warp_signature_repeatability_probe_lib.dir/src/probes/warp_signature_repeatability_probe/host.cpp.obj	e5fb7caddc9b5d57
+55	2127	8000990671656118	CMakeFiles/warp_issue_policy_probe_lib.dir/src/probes/warp_issue_policy_probe/host.cpp.obj	6653d269a0530625
 6564	9253	8000990742877934	CMakeFiles/warp_signature_repeatability_probe_lib.dir/cmake_device_link.obj	52085a83650c0f41
 71	2130	8000990671671216	CMakeFiles/global_latency_hiding_probe_lib.dir/src/probes/global_latency_hiding_probe/host.cpp.obj	1e99e7cb55851365
 87	2131	8000990671741493	CMakeFiles/warp_progress_divergence_probe_lib.dir/src/probes/warp_progress_divergence_probe/host.cpp.obj	dbee66fe63c5194c
@@ -60,6 +60,7 @@
 80	1139	8001068825290959	CMakeFiles/ready_warp_supply_probe_lib.dir/src/probes/ready_warp_supply_probe/host.cpp.obj	1a567b50d67183f2
 53	3685	8001025180455383	CMakeFiles/latency_hiding_ratio_probe_lib.dir/src/probes/latency_hiding_ratio_probe/kernel.cu.obj	f78aa627d6eb44b5
 60	1090	8001064070355190	CMakeFiles/probe_runner_latency_hiding_warmup_stability.dir/src/main/probe_runner_latency_hiding_warmup_stability.cpp.obj	a10eb87c65240630
+57	1161	8003500739512344	CMakeFiles/normalized_window_probe_lib.dir/src/probes/normalized_window_probe/host.cpp.obj	d600cdefcd854e4d
 3992	6229	8001064121690347	CMakeFiles/latency_hiding_warmup_stability_probe_lib.dir/cmake_device_link.obj	d669b81f604cc243
 6307	6457	8001064123868111	bin/probe_runner_latency_hiding_warmup_stability.exe	ffc4af773d6209a1
 94	1098	8001068824879961	CMakeFiles/probe_runner_ready_warp_supply.dir/src/main/probe_runner_ready_warp_supply.cpp.obj	67ba60865c12139d
@@ -86,3 +87,14 @@
 4180	6519	8002648963458488	CMakeFiles/scheduler_phase_probe_lib.dir/cmake_device_link.obj	f9fdb8f40ed69efa
 6519	6597	8002648964270632	lib/scheduler_phase_probe_lib.lib	53b7d910e1aa1cec
 6598	6766	8002648965809942	bin/probe_runner_scheduler_phase.exe	44b78b82323a6702
+68	1090	8003500738812472	CMakeFiles/probe_runner_normalized_window.dir/src/main/probe_runner_normalized_window.cpp.obj	26815b8442e96dc1
+63	3980	8003500767500513	CMakeFiles/normalized_window_probe_lib.dir/src/probes/normalized_window_probe/kernel.cu.obj	340310af7577cdec
+3981	6351	8003500791262492	CMakeFiles/normalized_window_probe_lib.dir/cmake_device_link.obj	468d68b799f44775
+6351	6432	8003500792243267	lib/normalized_window_probe_lib.lib	cd905d1c6886200a
+6432	6582	8003500793595391	bin/probe_runner_normalized_window.exe	15444fa826a1d32c
+72	1069	8003505526751437	CMakeFiles/probe_runner_launch_perturbation.dir/src/main/probe_runner_launch_perturbation.cpp.obj	86f6d556377a4e32
+61	1166	8003505527696868	CMakeFiles/launch_perturbation_probe_lib.dir/src/probes/launch_perturbation_probe/host.cpp.obj	5ed999a398a76c5e
+66	3672	8003505552593499	CMakeFiles/launch_perturbation_probe_lib.dir/src/probes/launch_perturbation_probe/kernel.cu.obj	ba02b9bce4514384
+3673	5665	8003505572664438	CMakeFiles/launch_perturbation_probe_lib.dir/cmake_device_link.obj	35581a3fd162e7c6
+5674	5741	8003505573447533	lib/launch_perturbation_probe_lib.lib	ff672f66a76fbcca
+5742	5909	8003505574987495	bin/probe_runner_launch_perturbation.exe	3162bd9fc1511890

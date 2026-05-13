@@ -27,5 +27,9 @@ C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_composition_phase_repeatability.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/scheduler_phase_probe_lib.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_scheduler_phase.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/normalized_window_probe_lib.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_normalized_window.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/launch_perturbation_probe_lib.dir
+C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/probe_runner_launch_perturbation.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/edit_cache.dir
 C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab/build/CMakeFiles/rebuild_cache.dir

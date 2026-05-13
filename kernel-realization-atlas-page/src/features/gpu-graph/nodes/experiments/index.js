@@ -11,6 +11,8 @@ import sharedMemoryReadyInterferenceProbe from "./sharedMemoryReadyInterferenceP
 import compositionTransientProbe from "./compositionTransientProbe ";
 import compositionPhaseRepeatabilityProbe from "./compositionPhaseRepeatabilityProbe";
 import schedulerPhaseProbe from "./schedulerPhaseProbe ";
+import launchPerturbationProbe from "./launchPerturbationProbe";
+import normalizedWindowProbe from "./normalizedWindowProbe";
 
 
 
@@ -28,6 +30,8 @@ export const experimentNodes = [
   compositionTransientProbe,
   compositionPhaseRepeatabilityProbe,
   schedulerPhaseProbe,
+  normalizedWindowProbe,
+  launchPerturbationProbe,
 ];
 
 export {
@@ -44,4 +48,6 @@ export {
   compositionTransientProbe,
   compositionPhaseRepeatabilityProbe,
   schedulerPhaseProbe,
+  normalizedWindowProbe,
+  launchPerturbationProbe,
 };
