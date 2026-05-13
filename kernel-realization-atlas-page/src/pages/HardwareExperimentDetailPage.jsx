@@ -189,6 +189,33 @@ function ComparisonPurposeBlock({ comparisonPurpose }) {
 }
 
 function KeyFindingGrid({ observation }) {
+  if (hasItems(observation.keyFindings)) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {observation.keyFindings.map((item) => (
+          <div
+            key={item.label}
+            className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"
+          >
+            <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
+              {item.label}
+            </div>
+
+            <div className="mt-3 break-words text-xl font-semibold leading-tight text-white">
+              {item.value}
+            </div>
+
+            {item.desc ? (
+              <p className="mt-2 text-sm leading-6 text-neutral-400">
+                {item.desc}
+              </p>
+            ) : null}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   const records = observation.records ?? [];
 
   if (!hasItems(records)) return null;
@@ -491,6 +518,202 @@ function RatioGrid({ ratios }) {
   );
 }
 
+function CodegenImpactBlock({ impact }) {
+  if (!impact) return null;
+
+  return (
+    <div className="rounded-2xl border border-violet-400/20 bg-violet-400/[0.06] p-6">
+      <div className="text-xs uppercase tracking-[0.16em] text-violet-300">
+        Codegen Impact
+      </div>
+
+      <h3 className="mt-2 text-lg font-semibold text-white">
+        compiler decision으로 환원되는 지점
+      </h3>
+
+      <div className="mt-5 grid gap-4 md:grid-cols-2">
+        {impact.targetPattern ? (
+          <div className="rounded-xl border border-white/10 bg-black/25 p-4">
+            <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+              Target Pattern
+            </div>
+            <p className="mt-2 text-sm leading-6 text-neutral-300">
+              {impact.targetPattern}
+            </p>
+          </div>
+        ) : null}
+
+        {impact.affectedDecision ? (
+          <div className="rounded-xl border border-white/10 bg-black/25 p-4">
+            <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+              Affected Decision
+            </div>
+            <p className="mt-2 text-sm leading-6 text-neutral-300">
+              {impact.affectedDecision}
+            </p>
+          </div>
+        ) : null}
+      </div>
+
+      {impact.costSignal ? (
+        <div className="mt-5 rounded-xl border border-white/10 bg-black/25 p-4">
+          <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+            Cost Signal
+          </div>
+          <p className="mt-2 text-sm leading-6 text-neutral-300">
+            {impact.costSignal}
+          </p>
+        </div>
+      ) : null}
+
+      {impact.ruleCandidate ? (
+        <div className="mt-4 rounded-xl border border-lime-400/20 bg-lime-400/[0.05] p-4">
+          <div className="text-xs uppercase tracking-[0.14em] text-lime-300">
+            Candidate Rule
+          </div>
+          <p className="mt-2 text-sm leading-6 text-lime-100">
+            {impact.ruleCandidate}
+          </p>
+        </div>
+      ) : null}
+
+      {impact.confidence ? (
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          {Object.entries(impact.confidence).map(([key, value]) => (
+            <div
+              key={key}
+              className="rounded-xl border border-white/10 bg-black/25 p-4"
+            >
+              <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+                {key}
+              </div>
+              <div className="mt-2 text-sm font-semibold text-white">
+                {value}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      {impact.reminder ? (
+        <p className="mt-5 rounded-xl border border-white/10 bg-black/25 p-4 text-sm leading-6 text-neutral-300">
+          {impact.reminder}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function CostModelRoleBlock({ role }) {
+  if (!role) return null;
+
+  return (
+    <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/[0.06] p-6">
+      <div className="text-xs uppercase tracking-[0.16em] text-cyan-300">
+        Cost Model Role
+      </div>
+
+      <h3 className="mt-2 text-lg font-semibold text-white">
+        이 probe가 cost model에서 맡는 역할
+      </h3>
+
+      {role.role ? (
+        <div className="mt-5 rounded-xl border border-white/10 bg-black/25 p-4">
+          <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+            Role
+          </div>
+          <p className="mt-2 font-mono text-sm text-cyan-100">{role.role}</p>
+        </div>
+      ) : null}
+
+      {role.description ? (
+        <p className="mt-4 text-sm leading-6 text-neutral-300">
+          {role.description}
+        </p>
+      ) : null}
+
+      {hasItems(role.usedBy) ? (
+        <div className="mt-5">
+          <DetailList
+            title="이 기준선을 사용하는 후속 probe"
+            items={role.usedBy}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function MeasurementReliabilityBlock({ reliability }) {
+  if (!reliability) return null;
+
+  return (
+    <div className="rounded-2xl border border-amber-400/20 bg-amber-400/[0.06] p-6">
+      <div className="text-xs uppercase tracking-[0.16em] text-amber-300">
+        Measurement Reliability
+      </div>
+
+      <h3 className="mt-2 text-lg font-semibold text-white">
+        측정 신뢰도와 보강 필요성
+      </h3>
+
+      {reliability.status ? (
+        <div className="mt-5 inline-flex rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs text-amber-200">
+          {reliability.status}
+        </div>
+      ) : null}
+
+      {reliability.issue ? (
+        <p className="mt-4 text-sm leading-6 text-neutral-300">
+          {reliability.issue}
+        </p>
+      ) : null}
+
+      {reliability.impact ? (
+        <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-4">
+          <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+            Impact
+          </div>
+          <p className="mt-2 text-sm leading-6 text-neutral-300">
+            {reliability.impact}
+          </p>
+        </div>
+      ) : null}
+
+      {reliability.mitigation ? (
+        <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-4">
+          <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
+            Mitigation
+          </div>
+          <p className="mt-2 text-sm leading-6 text-neutral-300">
+            {reliability.mitigation}
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function CodegenReminderBlock({ reminder }) {
+  if (!reminder || !hasItems(reminder.items)) return null;
+
+  return (
+    <div className="rounded-2xl border border-lime-400/20 bg-lime-400/[0.06] p-6">
+      <div className="text-xs uppercase tracking-[0.16em] text-lime-300">
+        Codegen Reminder
+      </div>
+
+      <h3 className="mt-2 text-lg font-semibold text-white">
+        {reminder.title ?? "나중에 codegen rule을 만들 때 기억할 것"}
+      </h3>
+
+      <div className="mt-5">
+        <DetailList title="Reminder" items={reminder.items} />
+      </div>
+    </div>
+  );
+}
+
 function CodeBlock({ children }) {
   if (!children) return null;
 
@@ -650,10 +873,6 @@ function buildAnchorItems(observation) {
     items.push({ href: "#known-mechanisms", label: "실행 모델" });
   }
 
-  if (hasItems(observation.notTryingToProve)) {
-    items.push({ href: "#not-proving", label: "경계" });
-  }
-
   if (observation.config) {
     items.push({ href: "#condition", label: "조건" });
   }
@@ -674,12 +893,32 @@ function buildAnchorItems(observation) {
     items.push({ href: "#interpretation", label: "해석" });
   }
 
+  if (observation.codegenImpact) {
+    items.push({ href: "#codegen-impact", label: "codegen" });
+  }
+
+  if (observation.costModelRole) {
+    items.push({ href: "#cost-model-role", label: "cost model" });
+  }
+
+  if (observation.measurementReliability) {
+    items.push({ href: "#measurement-reliability", label: "reliability" });
+  }
+
+  if (observation.codegenReminder) {
+    items.push({ href: "#codegen-reminder", label: "reminder" });
+  }
+
   if (observation.comparisonPurpose) {
     items.push({ href: "#comparison", label: "비교 방식" });
   }
 
   if (observation.clockObservation) {
     items.push({ href: "#clock", label: "clock" });
+  }
+
+  if (hasItems(observation.notTryingToProve)) {
+    items.push({ href: "#not-proving", label: "경계" });
   }
 
   if (observation.suggestedPatch) {
@@ -861,19 +1100,6 @@ export default function HardwareExperimentDetailPage() {
           </SectionBlock>
 
           <SectionBlock
-            show={hasItems(observation.notTryingToProve)}
-            id="not-proving"
-            eyebrow="Boundary"
-            title="이 실험이 직접 증명하지 않는 것"
-          >
-            <DetailList
-              title="단정하지 않을 내용"
-              items={observation.notTryingToProve}
-              markerClassName="bg-neutral-500"
-            />
-          </SectionBlock>
-
-          <SectionBlock
             show={Boolean(observation.config)}
             id="condition"
             eyebrow="Condition"
@@ -937,6 +1163,44 @@ export default function HardwareExperimentDetailPage() {
           ) : null}
 
           <SectionBlock
+            show={Boolean(observation.codegenImpact)}
+            id="codegen-impact"
+            eyebrow="Codegen"
+            title="codegen 관점에서의 의미"
+          >
+            <CodegenImpactBlock impact={observation.codegenImpact} />
+          </SectionBlock>
+
+          <SectionBlock
+            show={Boolean(observation.costModelRole)}
+            id="cost-model-role"
+            eyebrow="Cost Model"
+            title="cost model에서의 역할"
+          >
+            <CostModelRoleBlock role={observation.costModelRole} />
+          </SectionBlock>
+
+          <SectionBlock
+            show={Boolean(observation.measurementReliability)}
+            id="measurement-reliability"
+            eyebrow="Reliability"
+            title="측정 신뢰도"
+          >
+            <MeasurementReliabilityBlock
+              reliability={observation.measurementReliability}
+            />
+          </SectionBlock>
+
+          <SectionBlock
+            show={Boolean(observation.codegenReminder)}
+            id="codegen-reminder"
+            eyebrow="Reminder"
+            title="codegen reminder"
+          >
+            <CodegenReminderBlock reminder={observation.codegenReminder} />
+          </SectionBlock>
+
+          <SectionBlock
             show={Boolean(observation.comparisonPurpose)}
             id="comparison"
             eyebrow="Comparison"
@@ -955,6 +1219,19 @@ export default function HardwareExperimentDetailPage() {
           >
             <ClockObservationBlock
               clockObservation={observation.clockObservation}
+            />
+          </SectionBlock>
+
+          <SectionBlock
+            show={hasItems(observation.notTryingToProve)}
+            id="not-proving"
+            eyebrow="Boundary"
+            title="이 실험이 직접 증명하지 않는 것"
+          >
+            <DetailList
+              title="단정하지 않을 내용"
+              items={observation.notTryingToProve}
+              markerClassName="bg-neutral-500"
             />
           </SectionBlock>
 

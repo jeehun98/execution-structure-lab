@@ -32,7 +32,7 @@ const sameBaseline = {
   resultSummary: {
     title: "해석 기준",
     conclusion:
-      "동일 independent ALU workload 조건에서는 warp_id 0~3 사이의 장기 progress 차이가 뚜렷하게 나타나지 않았습니다. 이 결과는 후속 execution signature v0에서 관찰되는 progress 차이를 warp_id 자체의 편향이 아니라 workload structure, dependency, memory access pattern의 차이로 해석하기 위한 기준선입니다.",
+      "동일 independent ALU workload 조건에서는 warp_id 0~3 사이의 장기 progress 차이가 뚜렷하게 나타나지 않았습니다. 이 결과는 후속 execution signature v0에서 관찰되는 progress 차이를 warp_id 자체의 편향이 아니라 workload structure, dependency, memory access pattern의 차이로 해석하기 위한 기준선입니다. codegen 관점에서는 직접적인 kernel 생성 규칙을 제공하기보다, probe-derived cost signal을 해석하기 위한 calibration baseline 역할을 합니다.",
 
     metrics: [
       {
@@ -58,10 +58,65 @@ const sameBaseline = {
     ],
 
     interpretation:
-      "이 baseline은 scheduler 정책을 직접 판정하기 위한 실험이 아니라, 동일 workload 조건에서 warp progress가 자연스럽게 정렬되는지를 확인하는 control case입니다.",
+      "이 baseline은 scheduler 정책을 직접 판정하기 위한 실험이 아니라, 동일 workload 조건에서 warp progress가 자연스럽게 정렬되는지를 확인하는 control case입니다. 따라서 후속 실험의 progress divergence를 해석할 때 zero-difference reference로 사용됩니다.",
 
     caveat:
-      "이 결과만으로 scheduler가 round-robin이거나 warp_id 순서로 issue한다고 단정할 수는 없습니다.",
+      "이 결과만으로 scheduler가 round-robin이거나 warp_id 순서로 issue한다고 단정할 수는 없습니다. 또한 sink 값이 모두 0이므로 anti-optimization 및 result-cancellation 가능성을 낮추기 위한 보강이 필요합니다.",
+  },
+
+  codegenImpact: {
+    targetPattern: "all_kernel_patterns",
+    affectedDecision: "probe_validity / cost_signal_calibration",
+
+    costSignal:
+      "동일 independent ALU workload 조건에서는 warp_id 0~3 사이의 장기 progress 차이가 뚜렷하지 않았습니다.",
+
+    ruleCandidate:
+      "후속 probe에서 관찰되는 progress divergence는 우선 warp_id 고정 편향이 아니라 workload pattern, dependency structure, memory access pattern의 차이로 해석합니다.",
+
+    confidence: {
+      observation: "high",
+      interpretation: "medium-high",
+      codegen: "low",
+    },
+
+    reminder:
+      "이 실험은 직접적인 codegen rule을 만들지 않습니다. 후속 execution signature를 cost signal로 해석하기 위한 baseline입니다.",
+  },
+
+  costModelRole: {
+    role: "calibration_baseline",
+
+    description:
+      "후속 workload-specific progress signature를 해석하기 위한 zero-difference reference입니다. 이 probe는 kernel variant를 직접 선택하지 않지만, 이후 signature probe의 progress divergence를 cost signal로 해석할 수 있는 기준선을 제공합니다.",
+
+    usedBy: [
+      "warp_execution_signature_v0",
+      "mixed_workload_probe",
+      "latency_hiding_ratio_probe",
+    ],
+  },
+
+  measurementReliability: {
+    status: "needs_patch",
+
+    issue:
+      "sink 값이 모두 0으로 기록되어 result-cancellation 가능성을 완전히 배제하기 어렵습니다.",
+
+    impact:
+      "현재 progress equality는 baseline으로 사용할 수 있지만, sink 보강 후 재측정하면 anti-optimization 측면의 신뢰도가 올라갑니다.",
+
+    mitigation:
+      "ALU result reduction을 비대칭적으로 구성해 sink가 실제 workload 결과에 의존하도록 강화합니다.",
+  },
+
+  codegenReminder: {
+    title: "Codegen reminder",
+    items: [
+      "Same Workload Baseline은 codegen rule이 아니라 calibration baseline입니다.",
+      "후속 progress 차이를 warp_id bias로 바로 해석하지 말고 workload role과 dependency structure 차이로 먼저 해석합니다.",
+      "이 baseline은 operation cost model의 절대 수치를 만들지 않고, 상대 비교를 위한 zero-difference reference를 제공합니다.",
+    ],
   },
 
   connectsTo: [
