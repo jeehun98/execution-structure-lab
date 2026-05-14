@@ -54,7 +54,7 @@ const globalMemoryContentionAmplificationProbe = {
       "이 노드는 mixed workload에서 관찰된 dependent_global_load의 variability signal을 memory-specific 조건으로 확장한 memory signature modulation 단계입니다. global-load warp 수와 address locality를 바꿔, global memory signature가 어떤 조건에서 완화되거나 증폭되는지 확인합니다.",
 
     keyTakeaway:
-      "핵심은 global-load warp 수가 늘면 progress가 단순히 감소한다는 결론이 아닙니다. global memory progress signature는 ready warp supply가 남아 있는지, 그리고 address locality나 cache reuse 가능성이 있는지에 따라 크게 달라집니다.",
+      "핵심은 global-load warp 수가 늘면 progress가 단순히 감소한다는 결론이 아닙니다. global memory progress signature는 ready warp supply가 남아 있는지, 그리고 address locality나 cache reuse 가능성이 있는지에 따라 크게 달라집니다. codegen 관점에서는 global load count만으로 memory cost를 추정하면 안 되고, ready work supply와 locality/reuse 가능성을 함께 모델링해야 합니다.",
 
     nextQuestion:
       "ready warp supply가 global memory signature를 바꾸는 신호가 관찰되었으므로, 다음 단계에서는 memory-stalled warp가 있는 동안 ready warp가 latency를 얼마나 숨기는지 latency hiding ratio로 직접 분리해야 합니다.",
@@ -63,7 +63,7 @@ const globalMemoryContentionAmplificationProbe = {
   resultSummary: {
     title: "해석 요약",
     conclusion:
-      "dependent_global_load signature는 global-load warp 수에 단순 비례해 악화되지 않았습니다. 1~4개의 global-load warp가 light_alu warp와 공존할 때는 global progress가 오히려 증가했지만, 모든 warp가 global-load로 채워진 all_global_chain 조건에서는 progress가 크게 하락했습니다. 또한 overlap address 조건은 높은 progress와 낮은 variability를 보인 반면, dispersed address 조건은 낮은 progress와 초기 run의 큰 변동성을 보였습니다. 따라서 global memory progress signature는 단순 contention보다 ready warp supply, address locality, latency hiding 조건에 의해 강하게 변형됩니다.",
+      "dependent_global_load signature는 global-load warp 수에 단순 비례해 악화되지 않았습니다. 1~4개의 global-load warp가 light_alu warp와 공존할 때는 global progress가 오히려 증가했지만, 모든 warp가 global-load로 채워진 all_global_chain 조건에서는 progress가 크게 하락했습니다. 또한 overlap address 조건은 높은 progress와 낮은 variability를 보인 반면, dispersed address 조건은 낮은 progress와 초기 run의 큰 변동성을 보였습니다. 따라서 global memory progress signature는 단순 contention보다 ready warp supply, address locality, latency hiding 조건에 의해 강하게 변형됩니다. codegen 관점에서는 memory-dependent kernel의 cost model에 load count, active ready warp supply, address locality/reuse, cold/warm transient를 분리해서 넣어야 합니다.",
 
     metrics: [
       {
@@ -115,8 +115,69 @@ const globalMemoryContentionAmplificationProbe = {
       "이 실험은 synthetic dependent global memory chain을 사용한 단일 block, 고정 launch shape 조건의 관찰입니다. 또한 role_aggregate_stats의 variance는 role 내부 warp mean 간 차이를 반영하므로, run-to-run variability는 warp_scenario_stats의 coefficient_of_variation을 함께 봐야 합니다. 따라서 결과를 절대적인 memory bandwidth나 일반적인 scheduler 정책으로 해석하기보다는, address locality와 ready warp supply가 warp-level progress signature를 어떻게 변형하는지에 대한 관찰로 읽어야 합니다.",
   },
 
+  codegenImpact: {
+    targetPattern:
+      "memory_dependent_kernel / mixed_compute_memory_kernel / global_load_chain / latency_hiding_sensitive_kernel",
+
+    affectedDecision:
+      "memory_cost_model / warp_role_composition / block_dim_and_occupancy / address_locality_strategy / latency_hiding_variant_selection",
+
+    costSignal:
+      "global memory dependent progress는 global-load warp 수에 단순 비례해 악화되지 않았습니다. light_alu ready warp가 공존하는 1~4 global 조건에서는 global progress가 증가했고, all_global_chain에서는 ready warp supply 부족으로 progress가 크게 낮아졌습니다. 또한 overlap address는 높은 progress와 낮은 variability를, dispersed address는 낮은 progress와 높은 초기 variability를 만들었습니다.",
+
+    ruleCandidate:
+      "memory-dependent kernel의 cost를 global load count만으로 추정하지 않습니다. cost model은 active ready warp supply, address locality/reuse 가능성, all-warp memory dependency 여부, run-to-run variability를 별도 신호로 포함합니다. global-load role이 많은 variant라도 ready work가 충분하고 locality가 있으면 비용이 완화될 수 있으며, 모든 warp가 memory dependency에 묶이는 variant는 latency hiding 실패 위험으로 penalty를 부여합니다.",
+
+    confidence: {
+      observation: "high",
+      interpretation: "medium-high",
+      codegen: "medium-high",
+    },
+
+    reminder:
+      "global memory cost는 load 개수만의 함수가 아닙니다. ready warp supply와 address locality가 없으면 latency가 드러나고, reuse/locality가 있으면 같은 global-load 구조도 전혀 다른 signature를 보입니다.",
+  },
+
+  costModelRole: {
+    role: "memory_signature_modulation",
+
+    description:
+      "이 probe는 mixed workload에서 관찰된 dependent_global_load signature를 global-load warp count와 address mode 조건으로 확장합니다. 결과적으로 global memory cost model에는 contention count뿐 아니라 ready warp supply, locality/reuse, cold/warm transient, variability signal이 들어가야 함을 보여줍니다.",
+
+    usedBy: [
+      "latency_hiding_ratio_probe",
+      "ready_warp_supply_probe",
+      "latency_hiding_warmup_stability_probe",
+      "shared_memory_ready_interference_probe",
+    ],
+  },
+
+  measurementReliability: {
+    status: "memory_modulation_observed",
+
+    issue:
+      "이 실험은 단일 block, 8 warps/block, synthetic dependent global chain, 고정 launch shape 조건에서 수행되었습니다. 또한 role aggregate variance와 run-to-run variance를 구분해서 해석해야 합니다.",
+
+    impact:
+      "현재 조건에서는 global memory progress가 단순 contention count보다 ready warp supply와 address locality에 의해 더 강하게 변형된다고 볼 수 있습니다. 다만 실제 AI kernel에 적용하려면 coalescing, cache line reuse, vectorized load, occupancy 조건과 연결해 추가 검증이 필요합니다.",
+
+    mitigation:
+      "후속 실험에서 ready warp supply를 직접 통제하고, latency hiding ratio를 측정하며, warmup/cold state와 address locality를 분리합니다.",
+  },
+
+  codegenReminder: {
+    title: "Codegen reminder",
+    items: [
+      "global load count만으로 memory cost를 계산하지 않습니다.",
+      "memory-heavy kernel에서는 ready warp supply와 occupancy가 latency hiding 자원입니다.",
+      "모든 warp가 memory dependency에 묶이면 latency hiding이 어려워지므로 penalty를 줍니다.",
+      "address overlap/reuse 가능성은 global memory progress를 크게 바꿀 수 있습니다.",
+      "dispersed address나 cold state에 민감한 kernel은 mean뿐 아니라 CV, min/max, transient를 함께 봅니다.",
+    ],
+  },
+
   probingMeaning:
-    "이 node는 Mixed Workload Probe에서 드러난 dependent_global_load의 낮은 progress와 높은 variability를 확장해, global memory signature가 어떤 조건에서 증폭되거나 완화되는지 확인한 실험입니다. 결과적으로 단순 contention보다 address locality와 ready warp supply가 더 강한 변형 요인으로 나타났으며, 다음 단계로 latency hiding ratio를 직접 분리해 분석해야 한다는 근거를 제공합니다.",
+    "이 node는 Mixed Workload Probe에서 드러난 dependent_global_load의 낮은 progress와 높은 variability를 확장해, global memory signature가 어떤 조건에서 증폭되거나 완화되는지 확인한 실험입니다. 결과적으로 단순 contention보다 address locality와 ready warp supply가 더 강한 변형 요인으로 나타났으며, 다음 단계로 latency hiding ratio를 직접 분리해 분석해야 한다는 근거를 제공합니다. codegen 관점에서는 memory-dependent kernel의 비용을 global load count가 아니라 ready supply, locality, variability를 포함하는 복합 cost signal로 다뤄야 함을 보여줍니다.",
 
   relatedNodes: [
     {

@@ -12,7 +12,33 @@ function formatNumber(value) {
     return String(value);
   }
 
-  return value.toLocaleString("en-US");
+  if (!Number.isFinite(value)) return String(value);
+
+  return value.toLocaleString("en-US", {
+    maximumFractionDigits: 6,
+  });
+}
+
+function formatValue(value) {
+  if (value === null || value === undefined) return "—";
+
+  if (Array.isArray(value)) {
+    return value.join(", ");
+  }
+
+  if (typeof value === "boolean") {
+    return value ? "true" : "false";
+  }
+
+  if (typeof value === "number") {
+    return formatNumber(value);
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(value);
+  }
+
+  return String(value);
 }
 
 function hasItems(items) {
@@ -25,6 +51,13 @@ function hasObject(value) {
 
 function hasSignatureRecords(records = []) {
   return records.some((record) => Boolean(record.signature));
+}
+
+function toSnakeLabel(key) {
+  return key
+    .replace(/([A-Z])/g, "_$1")
+    .replace(/__/g, "_")
+    .toLowerCase();
 }
 
 function ratioLabel(key) {
@@ -192,9 +225,9 @@ function KeyFindingGrid({ observation }) {
   if (hasItems(observation.keyFindings)) {
     return (
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {observation.keyFindings.map((item) => (
+        {observation.keyFindings.map((item, index) => (
           <div
-            key={item.label}
+            key={`${item.label}-${index}`}
             className="rounded-2xl border border-white/10 bg-white/[0.04] p-5"
           >
             <div className="text-xs uppercase tracking-[0.16em] text-neutral-500">
@@ -220,19 +253,26 @@ function KeyFindingGrid({ observation }) {
 
   if (!hasItems(records)) return null;
 
-  const progressValues = records.map((record) => record.progress);
+  const progressValues = records
+    .map((record) => record.progress)
+    .filter((value) => typeof value === "number");
+
   const lastClockValues = records
     .map((record) => record.lastClock)
     .filter((value) => typeof value === "number");
+
   const sinkValues = records.map((record) => record.sink);
 
   const allProgressEqual =
     progressValues.length > 0 &&
     progressValues.every((value) => value === progressValues[0]);
 
-  const maxProgress = Math.max(...progressValues);
-  const minProgress = Math.min(...progressValues);
-  const progressSpread = maxProgress - minProgress;
+  const maxProgress =
+    progressValues.length > 0 ? Math.max(...progressValues) : null;
+  const minProgress =
+    progressValues.length > 0 ? Math.min(...progressValues) : null;
+  const progressSpread =
+    maxProgress !== null && minProgress !== null ? maxProgress - minProgress : 0;
 
   const clockDeltas = lastClockValues.slice(1).map((value, index) => {
     return value - lastClockValues[index];
@@ -246,26 +286,28 @@ function KeyFindingGrid({ observation }) {
     sinkValues.length > 0 && sinkValues.every((value) => value === 0);
 
   const fastestRecord = records.reduce((best, record) => {
+    if (typeof record.progress !== "number") return best;
     if (!best) return record;
     return record.progress > best.progress ? record : best;
   }, null);
 
   const slowestRecord = records.reduce((best, record) => {
+    if (typeof record.progress !== "number") return best;
     if (!best) return record;
     return record.progress < best.progress ? record : best;
   }, null);
 
   let items = [
     {
-      label: "Warp Count",
+      label: "Record Count",
       value: records.length,
-      desc: "기록된 warp 수",
+      desc: "기록된 대표 record 수",
     },
     {
       label: "Progress",
       value: allProgressEqual ? formatNumber(progressValues[0]) : "diverged",
       desc: allProgressEqual
-        ? "모든 warp의 progress가 동일"
+        ? "모든 record의 progress가 동일"
         : `spread ${formatNumber(progressSpread)}`,
     },
     {
@@ -277,10 +319,10 @@ function KeyFindingGrid({ observation }) {
     },
     {
       label: "Sink",
-      value: allSinkZero ? "all zero" : "mixed",
+      value: allSinkZero ? "all zero" : "mixed / n/a",
       desc: allSinkZero
         ? "anti-optimization 관점에서 개선 필요"
-        : "sink가 0으로 고정되지 않음",
+        : "sink가 0으로 고정되지 않거나 생략됨",
     },
   ];
 
@@ -334,40 +376,36 @@ function KeyFindingGrid({ observation }) {
   );
 }
 
-function ConfigTable({ config }) {
-  if (!config) return null;
+function KeyValueTable({ title, desc, data }) {
+  if (!hasObject(data)) return null;
 
-  const entries = [
-    ["mode", config.mode],
-    ["blocks", config.blocks],
-    ["cycle_budget", config.cycleBudget],
-    ["sample_period", config.samplePeriod],
-    ["global_elements", config.globalElements],
-  ].filter(([, value]) => value !== undefined && value !== null);
+  const entries = Object.entries(data).filter(
+    ([, value]) => value !== undefined && value !== null
+  );
 
   if (!hasItems(entries)) return null;
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-      <h3 className="text-lg font-semibold text-white">실험 조건</h3>
+      {title ? <h3 className="text-lg font-semibold text-white">{title}</h3> : null}
 
-      <p className="mt-3 text-sm leading-6 text-neutral-400">
-        이 표는 해당 probe를 해석하는 데 필요한 실행 조건만 남깁니다.
-      </p>
+      {desc ? (
+        <p className="mt-3 text-sm leading-6 text-neutral-400">{desc}</p>
+      ) : null}
 
       <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
         <div className="divide-y divide-white/10">
           {entries.map(([key, value]) => (
             <div
               key={key}
-              className="grid gap-2 px-4 py-4 md:grid-cols-[180px_minmax(0,1fr)]"
+              className="grid gap-2 px-4 py-4 md:grid-cols-[220px_minmax(0,1fr)]"
             >
               <div className="text-xs uppercase tracking-[0.14em] text-neutral-500">
-                {key}
+                {toSnakeLabel(key)}
               </div>
 
-              <div className="text-sm leading-6 text-neutral-300 tabular-nums">
-                {formatNumber(value)}
+              <div className="break-words text-sm leading-6 text-neutral-300 tabular-nums">
+                {formatValue(value)}
               </div>
             </div>
           ))}
@@ -377,31 +415,162 @@ function ConfigTable({ config }) {
   );
 }
 
+function ObjectMapTable({ title, data }) {
+  if (!hasObject(data)) return null;
+
+  const entries = Object.entries(data);
+
+  if (!hasItems(entries)) return null;
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+
+      <div className="mt-4 overflow-hidden rounded-xl border border-white/10 bg-black/20">
+        <div className="divide-y divide-white/10">
+          {entries.map(([key, value]) => (
+            <div
+              key={key}
+              className="grid gap-2 px-4 py-3 md:grid-cols-[120px_minmax(0,1fr)]"
+            >
+              <div className="font-mono text-xs text-neutral-500">{key}</div>
+              <div className="font-mono text-xs leading-6 text-neutral-300">
+                {formatValue(value)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DataTable({ title, rows = [], preferredColumns = [] }) {
+  if (!hasItems(rows)) return null;
+
+  const rowObjects = rows.filter((row) => hasObject(row));
+  if (!hasItems(rowObjects)) return null;
+
+  const discoveredColumns = Array.from(
+    new Set(rowObjects.flatMap((row) => Object.keys(row)))
+  );
+
+  const columns = [
+    ...preferredColumns.filter((column) => discoveredColumns.includes(column)),
+    ...discoveredColumns.filter((column) => !preferredColumns.includes(column)),
+  ];
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+
+      <div className="mt-4 overflow-x-auto rounded-xl border border-white/10 bg-black/20">
+        <table className="min-w-full divide-y divide-white/10 text-left text-sm">
+          <thead className="bg-white/[0.03]">
+            <tr>
+              {columns.map((column) => (
+                <th
+                  key={column}
+                  className="whitespace-nowrap px-4 py-3 text-xs uppercase tracking-[0.14em] text-neutral-500"
+                >
+                  {toSnakeLabel(column)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+
+          <tbody className="divide-y divide-white/10">
+            {rowObjects.map((row, rowIndex) => (
+              <tr key={`${title}-${rowIndex}`}>
+                {columns.map((column) => (
+                  <td
+                    key={`${title}-${rowIndex}-${column}`}
+                    className="max-w-[320px] break-words px-4 py-3 text-neutral-300 tabular-nums"
+                  >
+                    {formatValue(row[column])}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function ConditionMetadataBlock({ observation }) {
+  const show =
+    hasObject(observation.roleMap) ||
+    hasObject(observation.conditionMap) ||
+    hasItems(observation.conditionParameters);
+
+  if (!show) return null;
+
+  return (
+    <div className="space-y-5">
+      <div className="grid gap-5 lg:grid-cols-2">
+        <ObjectMapTable title="Role Map" data={observation.roleMap} />
+        <ObjectMapTable title="Condition Map" data={observation.conditionMap} />
+      </div>
+
+      <DataTable
+        title="Condition Parameters"
+        rows={observation.conditionParameters}
+        preferredColumns={[
+          "conditionId",
+          "conditionName",
+          "activeBlocks",
+          "blocks",
+          "cycleBudget",
+          "scaledThreshold",
+          "normalizedThreshold",
+          "dummyBefore",
+        ]}
+      />
+    </div>
+  );
+}
+
 function RecordTable({ records = [] }) {
   if (!hasItems(records)) return null;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/25">
-      <div className="grid min-w-[860px] grid-cols-[90px_1fr_140px_190px_110px] border-b border-white/10 px-4 py-3 text-xs uppercase tracking-[0.14em] text-neutral-500">
+      <div className="grid min-w-[980px] grid-cols-[90px_90px_1fr_140px_160px_190px_110px] border-b border-white/10 px-4 py-3 text-xs uppercase tracking-[0.14em] text-neutral-500">
+        <div>Block</div>
         <div>Warp</div>
         <div>Role</div>
         <div className="text-right">Progress</div>
+        <div className="text-right">Norm</div>
         <div className="text-right">Last Clock</div>
         <div className="text-right">Sink</div>
       </div>
 
-      <div className="min-w-[860px] divide-y divide-white/10">
-        {records.map((record) => (
+      <div className="min-w-[980px] divide-y divide-white/10">
+        {records.map((record, index) => (
           <div
-            key={`${record.block ?? 0}-${record.warpId}`}
-            className="grid grid-cols-[90px_1fr_140px_190px_110px] px-4 py-3 text-sm text-neutral-300"
+            key={`${record.block ?? 0}-${record.warpId ?? "na"}-${
+              record.role ?? "record"
+            }-${index}`}
+            className="grid grid-cols-[90px_90px_1fr_140px_160px_190px_110px] px-4 py-3 text-sm text-neutral-300"
           >
-            <div>warp {record.warpId}</div>
+            <div>{formatValue(record.block ?? 0)}</div>
+
+            <div>
+              {record.warpId !== undefined && record.warpId !== null
+                ? `warp ${record.warpId}`
+                : "—"}
+            </div>
 
             <div className="font-mono text-xs">{record.role}</div>
 
             <div className="text-right tabular-nums">
               {formatNumber(record.progress)}
+            </div>
+
+            <div className="text-right tabular-nums">
+              {formatNumber(record.normalizedProgress)}
             </div>
 
             <div className="text-right tabular-nums">
@@ -423,26 +592,31 @@ function SignatureGrid({ records = [] }) {
 
   if (!hasItems(signatureRecords)) return null;
 
-  const maxProgress = Math.max(
-    ...signatureRecords.map((record) => record.progress)
+  const numericRecords = signatureRecords.filter(
+    (record) => typeof record.progress === "number"
   );
+
+  const maxProgress = hasItems(numericRecords)
+    ? Math.max(...numericRecords.map((record) => record.progress))
+    : 0;
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      {signatureRecords.map((record) => {
-        const ratio = maxProgress
-          ? ((record.progress / maxProgress) * 100).toFixed(2)
-          : "0.00";
+      {signatureRecords.map((record, index) => {
+        const ratio =
+          maxProgress && typeof record.progress === "number"
+            ? ((record.progress / maxProgress) * 100).toFixed(2)
+            : null;
 
         return (
           <div
-            key={record.role}
+            key={`${record.role}-${record.warpId ?? "na"}-${index}`}
             className="rounded-2xl border border-white/10 bg-black/20 p-5"
           >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="font-mono text-sm text-white">{record.role}</div>
               <div className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-neutral-400">
-                warp {record.warpId}
+                {record.warpId !== undefined ? `warp ${record.warpId}` : "record"}
               </div>
             </div>
 
@@ -450,18 +624,20 @@ function SignatureGrid({ records = [] }) {
               {record.signature}
             </p>
 
-            <div className="mt-4">
-              <div className="h-2 overflow-hidden rounded-full bg-white/10">
-                <div
-                  className="h-full rounded-full bg-lime-300/80"
-                  style={{ width: `${ratio}%` }}
-                />
-              </div>
+            {ratio ? (
+              <div className="mt-4">
+                <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                  <div
+                    className="h-full rounded-full bg-lime-300/80"
+                    style={{ width: `${ratio}%` }}
+                  />
+                </div>
 
-              <p className="mt-2 text-xs text-neutral-500">
-                max progress 대비 {ratio}%
-              </p>
-            </div>
+                <p className="mt-2 text-xs text-neutral-500">
+                  max progress 대비 {ratio}%
+                </p>
+              </div>
+            ) : null}
           </div>
         );
       })}
@@ -476,7 +652,7 @@ function OrderingBlock({ ordering = [] }) {
     <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
       <div className="flex flex-wrap items-center gap-2">
         {ordering.map((role, index) => (
-          <div key={role} className="flex items-center gap-2">
+          <div key={`${role}-${index}`} className="flex items-center gap-2">
             <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 font-mono text-xs text-neutral-300">
               {role}
             </span>
@@ -505,15 +681,22 @@ function RatioGrid({ ratios }) {
 
   return (
     <div className="grid gap-3 md:grid-cols-2">
-      {entries.map(([key, value]) => (
-        <div
-          key={key}
-          className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-black/20 px-4 py-3"
-        >
-          <span className="text-sm text-neutral-400">{ratioLabel(key)}</span>
-          <span className="font-mono text-sm text-white">{value}x</span>
-        </div>
-      ))}
+      {entries.map(([key, value]) => {
+        const suffix = typeof value === "number" ? "x" : "";
+
+        return (
+          <div
+            key={key}
+            className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-black/20 px-4 py-3"
+          >
+            <span className="text-sm text-neutral-400">{ratioLabel(key)}</span>
+            <span className="font-mono text-sm text-white">
+              {formatValue(value)}
+              {suffix}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -736,9 +919,7 @@ function PatchBlock({ patch }) {
       <h3 className="mt-2 text-lg font-semibold text-white">{patch.title}</h3>
 
       {patch.desc ? (
-        <p className="mt-3 text-sm leading-6 text-neutral-300">
-          {patch.desc}
-        </p>
+        <p className="mt-3 text-sm leading-6 text-neutral-300">{patch.desc}</p>
       ) : null}
 
       <div className="mt-5 grid gap-4 lg:grid-cols-2">
@@ -811,9 +992,9 @@ function RefinementPlanBlock({ refinementPlan }) {
 
       {hasItems(refinementPlan.items) ? (
         <div className="mt-5 grid gap-4 md:grid-cols-2">
-          {refinementPlan.items.map((item) => (
+          {refinementPlan.items.map((item, index) => (
             <div
-              key={item.version}
+              key={`${item.version}-${index}`}
               className="rounded-2xl border border-white/10 bg-black/25 p-5"
             >
               <div className="flex items-center gap-3">
@@ -862,6 +1043,139 @@ function ClockObservationBlock({ clockObservation }) {
   );
 }
 
+function EvidenceTablesBlock({ observation }) {
+  const hasEvidence =
+    hasItems(observation.roleAggregateStats) ||
+    hasItems(observation.warpConditionStatsHighlights) ||
+    hasItems(observation.blockConditionStatsHighlights) ||
+    hasItems(observation.batchConditionHighlights) ||
+    hasItems(observation.multiBlockCoOccurrenceHighlights) ||
+    hasItems(observation.transientEvents) ||
+    hasItems(observation.rawRunHighlights);
+
+  if (!hasEvidence) return null;
+
+  return (
+    <div className="space-y-5">
+      <DataTable
+        title="Role Aggregate Stats"
+        rows={observation.roleAggregateStats}
+        preferredColumns={[
+          "conditionId",
+          "conditionName",
+          "roleId",
+          "roleName",
+          "cycleBudget",
+          "scaledThreshold",
+          "meanProgress",
+          "meanNormalizedProgress",
+          "coefficientOfVariation",
+          "minProgress",
+          "maxProgress",
+          "minNormalizedProgress",
+          "maxNormalizedProgress",
+          "transientCount",
+          "transientRate",
+        ]}
+      />
+
+      <DataTable
+        title="Warp Condition Highlights"
+        rows={observation.warpConditionStatsHighlights}
+        preferredColumns={[
+          "conditionId",
+          "conditionName",
+          "blockId",
+          "warpId",
+          "roleName",
+          "meanProgress",
+          "meanNormalizedProgress",
+          "coefficientOfVariation",
+          "minProgress",
+          "maxProgress",
+          "transientCount",
+          "transientRate",
+        ]}
+      />
+
+      <DataTable
+        title="Block Condition Highlights"
+        rows={observation.blockConditionStatsHighlights}
+        preferredColumns={[
+          "conditionId",
+          "conditionName",
+          "blockId",
+          "globalMeanProgress",
+          "globalMinProgress",
+          "transientCount",
+          "transientRate",
+        ]}
+      />
+
+      <DataTable
+        title="Batch Condition Highlights"
+        rows={observation.batchConditionHighlights}
+        preferredColumns={[
+          "conditionId",
+          "conditionName",
+          "batchId",
+          "globalTransientRunCount",
+          "globalMinProgress",
+          "note",
+        ]}
+      />
+
+      <DataTable
+        title="Multi-block Co-occurrence"
+        rows={observation.multiBlockCoOccurrenceHighlights}
+        preferredColumns={[
+          "conditionId",
+          "conditionName",
+          "batchId",
+          "runId",
+          "affectedBlocks",
+          "minGlobalProgressByBlock",
+          "note",
+        ]}
+      />
+
+      <DataTable
+        title="Transient Events"
+        rows={observation.transientEvents}
+        preferredColumns={[
+          "conditionId",
+          "conditionName",
+          "batchId",
+          "runId",
+          "blockId",
+          "cycleBudget",
+          "scaledThreshold",
+          "minGlobalProgress",
+          "minGlobalNormalizedProgress",
+          "note",
+        ]}
+      />
+
+      <DataTable
+        title="Raw Run Highlights"
+        rows={observation.rawRunHighlights}
+        preferredColumns={[
+          "conditionId",
+          "conditionName",
+          "batchId",
+          "runId",
+          "blockId",
+          "cycleBudget",
+          "scaledThreshold",
+          "warpProgress",
+          "minGlobalProgress",
+          "note",
+        ]}
+      />
+    </div>
+  );
+}
+
 function buildAnchorItems(observation) {
   const items = [{ href: "#overview", label: "개요" }];
 
@@ -877,6 +1191,14 @@ function buildAnchorItems(observation) {
     items.push({ href: "#condition", label: "조건" });
   }
 
+  if (
+    hasObject(observation.roleMap) ||
+    hasObject(observation.conditionMap) ||
+    hasItems(observation.conditionParameters)
+  ) {
+    items.push({ href: "#condition-metadata", label: "condition map" });
+  }
+
   if (hasItems(observation.records)) {
     items.push({ href: "#records", label: "records" });
   }
@@ -887,6 +1209,18 @@ function buildAnchorItems(observation) {
 
   if (hasObject(observation.ratios)) {
     items.push({ href: "#ratios", label: "ratios" });
+  }
+
+  if (
+    hasItems(observation.roleAggregateStats) ||
+    hasItems(observation.warpConditionStatsHighlights) ||
+    hasItems(observation.blockConditionStatsHighlights) ||
+    hasItems(observation.batchConditionHighlights) ||
+    hasItems(observation.multiBlockCoOccurrenceHighlights) ||
+    hasItems(observation.transientEvents) ||
+    hasItems(observation.rawRunHighlights)
+  ) {
+    items.push({ href: "#evidence-tables", label: "evidence" });
   }
 
   if (hasItems(observation.interpretation) || hasItems(observation.caveats)) {
@@ -1105,15 +1439,32 @@ export default function HardwareExperimentDetailPage() {
             eyebrow="Condition"
             title="실험 조건"
           >
-            <ConfigTable config={observation.config} />
+            <KeyValueTable
+              title="실험 조건"
+              desc="observation.config에 등록된 모든 실행 조건을 표시합니다."
+              data={observation.config}
+            />
+          </SectionBlock>
+
+          <SectionBlock
+            show={
+              hasObject(observation.roleMap) ||
+              hasObject(observation.conditionMap) ||
+              hasItems(observation.conditionParameters)
+            }
+            id="condition-metadata"
+            eyebrow="Condition Metadata"
+            title="role / condition mapping"
+          >
+            <ConditionMetadataBlock observation={observation} />
           </SectionBlock>
 
           <SectionBlock
             show={hasItems(observation.records)}
             id="records"
-            eyebrow="Raw Records"
-            title="warp별 관찰값"
-            desc="progress, last_clock, sink를 warp별로 분리해 기록합니다."
+            eyebrow="Representative Records"
+            title="대표 record 관찰값"
+            desc="progress, normalizedProgress, last_clock, sink를 record별로 분리해 표시합니다."
           >
             <div className="overflow-x-auto">
               <RecordTable records={observation.records} />
@@ -1144,6 +1495,24 @@ export default function HardwareExperimentDetailPage() {
             desc="이 값은 절대적인 연산 속도비가 아니라 workload iteration 기준의 상대 progress 비율입니다."
           >
             <RatioGrid ratios={observation.ratios} />
+          </SectionBlock>
+
+          <SectionBlock
+            show={
+              hasItems(observation.roleAggregateStats) ||
+              hasItems(observation.warpConditionStatsHighlights) ||
+              hasItems(observation.blockConditionStatsHighlights) ||
+              hasItems(observation.batchConditionHighlights) ||
+              hasItems(observation.multiBlockCoOccurrenceHighlights) ||
+              hasItems(observation.transientEvents) ||
+              hasItems(observation.rawRunHighlights)
+            }
+            id="evidence-tables"
+            eyebrow="Evidence Tables"
+            title="세부 통계와 event evidence"
+            desc="최신 observation JS에서 추가된 aggregate stats, transient event, raw run highlight를 표시합니다."
+          >
+            <EvidenceTablesBlock observation={observation} />
           </SectionBlock>
 
           {hasItems(observation.interpretation) ||

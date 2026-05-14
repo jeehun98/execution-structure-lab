@@ -1,9 +1,9 @@
 const compositionPhaseRepeatabilityProbe = {
   id: "composition_phase_repeatability_probe",
   label: "Composition Phase Repeatability",
-  title: "composition transient의 반복성 및 귀속성 검증",
+  title: "composition transient의 반복성 및 placement sensitivity 검증",
   description:
-    "Composition Transient Probe에서 3 shared-chain + 1 light + 4 global 조건에서 강한 dependent_global_stalled transient가 나타난 이후, 해당 transient가 단발성 artifact인지, prewarm 횟수, light warp placement, seed 방식에 따라 반복되는 phase signature인지 확인한 후속 probe입니다.",
+    "Composition Transient Probe에서 3 shared-chain + 1 light + 4 global 조건에서 강한 dependent_global_stalled transient가 나타난 이후, 해당 transient가 단발성 artifact인지, prewarm 횟수, light warp placement, seed 방식에 따라 반복되는 composition-sensitive phase event인지 확인한 후속 probe입니다.",
 
   status: "observed",
   kind: "experiment",
@@ -36,16 +36,16 @@ const compositionPhaseRepeatabilityProbe = {
       "이 노드는 composition-level transient가 우연한 단발인지, 반복 가능한 phase-sensitive event인지 검증하는 단계입니다. prewarm 횟수, light warp placement, seed 방식을 바꿔 transient의 귀속 조건을 좁힙니다.",
 
     keyTakeaway:
-      "핵심은 transient가 모든 조건에서 0이 아니었다는 점입니다. prewarm을 늘려도, seed 방식을 hash로 바꿔도 transient는 사라지지 않았고, light warp placement에 따라 강도와 빈도가 달라졌습니다.",
+      "핵심은 transient가 모든 조건에서 완전히 사라지지 않았다는 점입니다. prewarm을 제거해도, prewarm을 늘려도, seed 방식을 hash로 바꿔도 transient는 반복적으로 관찰되었습니다. 또한 light warp placement에 따라 transient의 강도와 빈도가 달라졌습니다.",
 
     nextQuestion:
-      "이제 transient가 어떤 scheduler phase, warp placement, block launch phase와 연결되는지 확인해야 합니다. 다음 단계는 block 수, launch phase, dummy kernel 삽입, cycle budget 변화를 통한 rare transient event localization입니다.",
+      "이제 transient가 어떤 scheduler phase, warp placement, block launch phase와 연결되는지 확인해야 합니다. 다음 단계는 condition order shuffle, role placement rotation, dummy kernel 삽입, block 수 변화, cycle budget 변화를 통한 rare transient event localization입니다.",
   },
 
   resultSummary: {
     title: "해석 요약",
     conclusion:
-      "3 shared-chain + 1 light + 4 global composition에서 발생한 low-progress transient는 단발성 artifact가 아니었습니다. prewarm 0, 1, 3 조건과 hashed seed 조건에서도 dependent_global_stalled transient가 반복적으로 관찰되었습니다. 다만 특정 run index에 고정된 deterministic phase라기보다는, role placement와 seed 방식에 따라 빈도와 강도가 달라지는 composition-sensitive transient event로 해석하는 것이 적절합니다.",
+      "3 shared-chain + 1 light + 4 global composition에서 발생한 low-progress transient는 단발성 artifact가 아니었습니다. baseline, prewarm0, prewarm3, light warp placement permutation, hashed seed 조건 모두에서 dependent_global_stalled transient가 반복적으로 관찰되었습니다. 다만 특정 run index에 고정된 deterministic phase라기보다는, role placement와 seed 방식에 따라 빈도와 강도가 달라지는 composition-sensitive rare transient event로 해석하는 것이 적절합니다. codegen 관점에서는 평균 progress가 안정적이어도 rare tail event가 반복될 수 있으므로, kernel variant validation에 transient count, min progress, placement sensitivity를 포함해야 합니다.",
 
     metrics: [
       {
@@ -83,17 +83,83 @@ const compositionPhaseRepeatabilityProbe = {
         value: "global min 35 / transient 2",
         note: "linear run_id seed가 아니어도 transient 발생",
       },
+      {
+        label: "transient threshold",
+        value: "< 60",
+        note: "dependent_global_stalled progress가 60 미만이면 transient event로 기록",
+      },
     ],
 
     interpretation:
       "이 결과는 composition transient가 단순한 초기 warmup artifact나 특정 run_id seed에 고정된 현상이 아님을 보여줍니다. prewarm 횟수를 바꿔도, seed 방식을 hash로 바꿔도 low-progress transient가 사라지지 않았습니다. 또한 light warp placement에 따라 transient의 강도와 빈도가 달라졌기 때문에, ready-source composition과 role placement가 scheduler/memory phase와 결합해 dependent_global_stalled progress를 희박하게 흔드는 것으로 해석할 수 있습니다.",
 
     caveat:
-      "transient event는 전체 384 run당 1~3회 수준으로 희박하게 발생했습니다. 따라서 평균 progress만 보면 현상이 잘 드러나지 않고, min_progress, transient_count, batch_condition_summaries를 함께 봐야 합니다. 또한 이 결과는 단일 block synthetic workload 조건이므로 일반적인 GPU scheduler 정책으로 직접 일반화하기보다는, 특정 composition에서 나타나는 warp-level progress signature로 해석해야 합니다.",
+      "transient event는 전체 run 대비 매우 희박하게 발생합니다. 따라서 평균 progress만 보면 현상이 잘 드러나지 않고, min_progress, transient_count, transient_rate, batch_condition_summaries를 함께 봐야 합니다. 또한 이 결과는 단일 block synthetic workload 조건이므로 일반적인 GPU scheduler 정책으로 직접 일반화하기보다는, 특정 composition에서 나타나는 warp-level progress signature로 해석해야 합니다.",
+  },
+
+  codegenImpact: {
+    targetPattern:
+      "shared_memory_tiled_kernel / mixed_compute_memory_kernel / memory_latency_bound_kernel / rare_tail_risk_kernel",
+
+    affectedDecision:
+      "kernel_variant_validation / warp_role_placement / shared_memory_usage / benchmark_protocol / tail_risk_model",
+
+    costSignal:
+      "3 shared-chain + 1 light + 4 global composition에서 dependent_global_stalled transient가 여러 조건에서 반복 관찰되었습니다. prewarm0, prewarm1, prewarm3, hashed seed, light warp placement permutation 모두에서 transient가 발생했으며, 특히 light warp2 placement에서는 min progress 33과 transient count 3으로 가장 강한 tail risk가 나타났습니다.",
+
+    ruleCandidate:
+      "shared-dependent-chain과 global-stalled role이 함께 있는 kernel variant는 평균 progress만으로 선택하지 않습니다. low-progress event count, min global progress, transient rate, light warp placement sensitivity, seed sensitivity를 함께 검증합니다. transient가 반복되는 variant는 steady-state mean이 좋아도 tail-risk penalty를 부여하고, role placement rotation 또는 composition balancing을 후보 완화 전략으로 둡니다.",
+
+    confidence: {
+      observation: "high",
+      interpretation: "medium-high",
+      codegen: "medium-high",
+    },
+
+    reminder:
+      "평균이 안정적이어도 rare transient가 반복되면 codegen risk입니다. tail event는 mean이 아니라 min, count, placement sensitivity로 봐야 합니다.",
+  },
+
+  costModelRole: {
+    role: "phase_repeatability_validation",
+
+    description:
+      "이 probe는 composition_transient_probe에서 관찰된 low-progress transient가 단발성 artifact인지 반복 가능한 rare event인지 검증합니다. 결과적으로 cost model에는 평균 progress뿐 아니라 transient_count, transient_rate, min_progress, placement sensitivity가 별도 신호로 들어가야 함을 보여줍니다.",
+
+    usedBy: [
+      "scheduler_phase_probe",
+      "transient_event_localization",
+      "kernel_variant_tail_risk_model",
+      "shared_memory_layout_rule",
+    ],
+  },
+
+  measurementReliability: {
+    status: "phase_sensitive_transient_observed",
+
+    issue:
+      "transient는 반복되지만 발생 빈도가 낮고 특정 run index에 완전히 고정되어 있지는 않습니다. 따라서 deterministic phase라고 단정하기보다는 placement-sensitive rare event로 보는 것이 안전합니다.",
+
+    impact:
+      "prewarm 횟수와 seed 방식을 바꿔도 transient가 제거되지 않았기 때문에 단순 warmup artifact나 linear seed artifact 가능성은 낮아졌습니다. 다만 scheduler phase, launch order, role placement, SM state와의 결합 가능성은 여전히 남아 있습니다.",
+
+    mitigation:
+      "후속 scheduler_phase_probe에서 condition order shuffle, dummy kernel 삽입, role placement rotation, block 수 변화, cycle budget sweep을 수행해 transient event의 위치와 발생 조건을 좁힙니다.",
+  },
+
+  codegenReminder: {
+    title: "Codegen reminder",
+    items: [
+      "평균 progress만 보고 kernel variant를 선택하지 않습니다.",
+      "rare low-progress event가 반복되면 tail-risk penalty를 둡니다.",
+      "shared-dependent-chain + global-stalled composition은 placement sensitivity를 확인합니다.",
+      "prewarm을 늘려도 사라지지 않는 transient는 steady-state validation 대상입니다.",
+      "role placement rotation과 condition order shuffle을 통과한 뒤에만 hard rule로 승격합니다.",
+    ],
   },
 
   probingMeaning:
-    "이 node는 composition-level transient가 우연한 단발 현상이 아니라, 특정 ready/stalled composition에서 희박하게 반복되는 placement-sensitive phase event임을 보여줍니다. 이를 통해 latency hiding 분석을 평균 progress 중심에서 transient event structure와 role placement sensitivity 분석으로 확장합니다.",
+    "이 node는 composition-level transient가 우연한 단발 현상이 아니라, 특정 ready/stalled composition에서 희박하게 반복되는 placement-sensitive phase event임을 보여줍니다. 이를 통해 latency hiding 분석을 평균 progress 중심에서 transient event structure와 role placement sensitivity 분석으로 확장합니다. codegen 관점에서는 shared-memory-based mixed-role kernel variant의 평균 cost뿐 아니라 rare tail-risk를 별도 검증해야 함을 보여주는 validation node입니다.",
 
   relatedNodes: [
     {
