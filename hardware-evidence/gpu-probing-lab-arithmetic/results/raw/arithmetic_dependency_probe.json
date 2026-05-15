@@ -1,0 +1,415 @@
+{
+  "probe": "arithmetic_dependency_probe",
+  "description": "Compares independent arithmetic workloads and dependent arithmetic chains.",
+  "config": {
+    "blocks": 1,
+    "threads_per_block": 128,
+    "warps_per_block": 4,
+    "repeat": 10,
+    "use_clock_budget": true,
+    "clock_budget_cycles": 10000000,
+    "iterations": 100000
+  },
+  "records": [
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 57549,
+      "last_clock": 10000095,
+      "sink": 52.064957
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 53952,
+      "last_clock": 10000077,
+      "sink": 16.2097
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 57549,
+      "last_clock": 10000089,
+      "sink": 48.094864
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 50355,
+      "last_clock": 10000005,
+      "sink": 11.59307
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 57471,
+      "last_clock": 10000057,
+      "sink": 52.041336
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 53878,
+      "last_clock": 10000073,
+      "sink": 16.183447
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 57470,
+      "last_clock": 10000051,
+      "sink": 48.078262
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 50286,
+      "last_clock": 10000026,
+      "sink": 11.578527
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 54001,
+      "last_clock": 10000020,
+      "sink": 50.994915
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 50624,
+      "last_clock": 10000002,
+      "sink": 15.043647
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 53999,
+      "last_clock": 10000014,
+      "sink": 47.348778
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 47250,
+      "last_clock": 10000128,
+      "sink": 10.938654
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 57532,
+      "last_clock": 10000118,
+      "sink": 52.059807
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 53936,
+      "last_clock": 10000059,
+      "sink": 16.204023
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 57532,
+      "last_clock": 10000112,
+      "sink": 48.091293
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 50340,
+      "last_clock": 10000015,
+      "sink": 11.589909
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 57533,
+      "last_clock": 10000078,
+      "sink": 52.060112
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 53936,
+      "last_clock": 10000079,
+      "sink": 16.204023
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 57532,
+      "last_clock": 10000072,
+      "sink": 48.091293
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 50341,
+      "last_clock": 10000186,
+      "sink": 11.590119
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 54009,
+      "last_clock": 10000074,
+      "sink": 50.997311
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 50631,
+      "last_clock": 10000147,
+      "sink": 15.046063
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 54007,
+      "last_clock": 10000068,
+      "sink": 47.350456
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 47256,
+      "last_clock": 10000110,
+      "sink": 10.939919
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 57532,
+      "last_clock": 10000116,
+      "sink": 52.059807
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 53936,
+      "last_clock": 10000057,
+      "sink": 16.204023
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 57532,
+      "last_clock": 10000110,
+      "sink": 48.091293
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 50340,
+      "last_clock": 10000013,
+      "sink": 11.589909
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 57533,
+      "last_clock": 10000079,
+      "sink": 52.060112
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 53936,
+      "last_clock": 10000080,
+      "sink": 16.204023
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 57532,
+      "last_clock": 10000073,
+      "sink": 48.091293
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 50341,
+      "last_clock": 10000187,
+      "sink": 11.590119
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 57533,
+      "last_clock": 10000078,
+      "sink": 52.060112
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 53936,
+      "last_clock": 10000079,
+      "sink": 16.204023
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 57532,
+      "last_clock": 10000072,
+      "sink": 48.091293
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 50341,
+      "last_clock": 10000186,
+      "sink": 11.590119
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "independent_fma",
+      "progress": 53900,
+      "last_clock": 10000121,
+      "sink": 50.964687
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "dependent_fma_chain",
+      "progress": 50529,
+      "last_clock": 10000070,
+      "sink": 15.010836
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "independent_add",
+      "progress": 53898,
+      "last_clock": 10000115,
+      "sink": 47.327549
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "dependent_add_chain",
+      "progress": 47161,
+      "last_clock": 10000157,
+      "sink": 10.919896
+    }
+  ]
+}
