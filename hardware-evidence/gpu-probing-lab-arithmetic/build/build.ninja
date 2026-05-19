@@ -143,6 +143,109 @@ build probe_runner_arithmetic_dependency.exe: CXX_EXECUTABLE_LINKER__probe_runne
   TARGET_IMPLIB = probe_runner_arithmetic_dependency.lib
   TARGET_PDB = probe_runner_arithmetic_dependency.pdb
 
+# =============================================================================
+# Object build statements for EXECUTABLE target probe_runner_controlled_arithmetic_chain
+
+
+#############################################
+# Order-only phony target for probe_runner_controlled_arithmetic_chain
+
+build cmake_object_order_depends_target_probe_runner_controlled_arithmetic_chain: phony || .
+
+build CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\main\probe_runner_controlled_arithmetic_chain.cpp.obj: CXX_COMPILER__probe_runner_controlled_arithmetic_chain_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src\main\probe_runner_controlled_arithmetic_chain.cpp || cmake_object_order_depends_target_probe_runner_controlled_arithmetic_chain
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\main
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\
+  TARGET_PDB = probe_runner_controlled_arithmetic_chain.pdb
+
+build CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\config_loader.cpp.obj: CXX_COMPILER__probe_runner_controlled_arithmetic_chain_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src\common\config_loader.cpp || cmake_object_order_depends_target_probe_runner_controlled_arithmetic_chain
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\
+  TARGET_PDB = probe_runner_controlled_arithmetic_chain.pdb
+
+build CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\device_info.cpp.obj: CXX_COMPILER__probe_runner_controlled_arithmetic_chain_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src\common\device_info.cpp || cmake_object_order_depends_target_probe_runner_controlled_arithmetic_chain
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\
+  TARGET_PDB = probe_runner_controlled_arithmetic_chain.pdb
+
+build CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\result_writer.cpp.obj: CXX_COMPILER__probe_runner_controlled_arithmetic_chain_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src\common\result_writer.cpp || cmake_object_order_depends_target_probe_runner_controlled_arithmetic_chain
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\
+  TARGET_PDB = probe_runner_controlled_arithmetic_chain.pdb
+
+build CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe\host.cpp.obj: CXX_COMPILER__probe_runner_controlled_arithmetic_chain_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src\probes\controlled_arithmetic_chain_probe\host.cpp || cmake_object_order_depends_target_probe_runner_controlled_arithmetic_chain
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -std:c++17 -MD
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src -external:I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include" -external:W0
+  OBJECT_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\
+  TARGET_PDB = probe_runner_controlled_arithmetic_chain.pdb
+
+build CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe\kernel.cu.obj: CUDA_COMPILER__probe_runner_controlled_arithmetic_chain_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src\probes\controlled_arithmetic_chain_probe\kernel.cu || cmake_object_order_depends_target_probe_runner_controlled_arithmetic_chain
+  CONFIG = Release
+  DEP_FILE = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe\kernel.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD -Xptxas=-v
+  INCLUDES = -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\include -IC:\Users\owner\Desktop\execution-structure-lab\hardware-evidence\gpu-probing-lab-arithmetic\src -isystem "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\include"
+  OBJECT_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir
+  OBJECT_FILE_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\
+  TARGET_PDB = probe_runner_controlled_arithmetic_chain.pdb
+
+
+# =============================================================================
+# Device Link build statements for EXECUTABLE target probe_runner_controlled_arithmetic_chain
+
+
+#############################################
+# Link the executable CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\cmake_device_link.obj
+
+build CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\cmake_device_link.obj: CXX_EXECUTABLE_DEVICE_LINKER__probe_runner_controlled_arithmetic_chain_Release CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\main\probe_runner_controlled_arithmetic_chain.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\config_loader.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\device_info.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\result_writer.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe\host.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe\kernel.cu.obj | C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib
+  LANGUAGE_COMPILE_FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  LINK_LIBRARIES = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib" cudadevrt.lib cudart_static.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
+  OBJECT_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\
+  TARGET_FILE = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\cmake_device_link.obj
+  TARGET_IMPLIB = probe_runner_controlled_arithmetic_chain.lib
+  TARGET_PDB = probe_runner_controlled_arithmetic_chain.pdb
+
+# =============================================================================
+# Link build statements for EXECUTABLE target probe_runner_controlled_arithmetic_chain
+
+
+#############################################
+# Link the executable probe_runner_controlled_arithmetic_chain.exe
+
+build probe_runner_controlled_arithmetic_chain.exe: CXX_EXECUTABLE_LINKER__probe_runner_controlled_arithmetic_chain_Release CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\main\probe_runner_controlled_arithmetic_chain.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\config_loader.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\device_info.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\common\result_writer.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe\host.cpp.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\src\probes\controlled_arithmetic_chain_probe\kernel.cu.obj CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\cmake_device_link.obj | C$:\Program$ Files\NVIDIA$ GPU$ Computing$ Toolkit\CUDA\v12.6\lib\x64\cudart.lib
+  CONFIG = Release
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /O2 /Ob2 /DNDEBUG -MD
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:console
+  LINK_LIBRARIES = "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.6\lib\x64\cudart.lib"  cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_PATH = -LIBPATH:C:\PROGRA~1\NVIDIA~2\CUDA\v12.6\lib\x64
+  OBJECT_DIR = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\probe_runner_controlled_arithmetic_chain.dir\
+  TARGET_FILE = probe_runner_controlled_arithmetic_chain.exe
+  TARGET_IMPLIB = probe_runner_controlled_arithmetic_chain.lib
+  TARGET_PDB = probe_runner_controlled_arithmetic_chain.pdb
+
 
 #############################################
 # Utility command for edit_cache
@@ -172,6 +275,8 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 
 build probe_runner_arithmetic_dependency: phony probe_runner_arithmetic_dependency.exe
 
+build probe_runner_controlled_arithmetic_chain: phony probe_runner_controlled_arithmetic_chain.exe
+
 # =============================================================================
 # Folder targets.
 
@@ -180,7 +285,7 @@ build probe_runner_arithmetic_dependency: phony probe_runner_arithmetic_dependen
 #############################################
 # Folder: C:/Users/owner/Desktop/execution-structure-lab/hardware-evidence/gpu-probing-lab-arithmetic/build
 
-build all: phony probe_runner_arithmetic_dependency.exe
+build all: phony probe_runner_arithmetic_dependency.exe probe_runner_controlled_arithmetic_chain.exe
 
 # =============================================================================
 # Built-in targets

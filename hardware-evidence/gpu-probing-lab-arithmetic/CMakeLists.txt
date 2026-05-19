@@ -42,3 +42,33 @@ target_compile_options(probe_runner_arithmetic_dependency PRIVATE
 set_target_properties(probe_runner_arithmetic_dependency PROPERTIES
     CUDA_SEPARABLE_COMPILATION ON
 )
+
+add_executable(probe_runner_controlled_arithmetic_chain
+    src/main/probe_runner_controlled_arithmetic_chain.cpp
+
+    src/common/config_loader.cpp
+    src/common/device_info.cpp
+    src/common/result_writer.cpp
+
+    src/probes/controlled_arithmetic_chain_probe/host.cpp
+    src/probes/controlled_arithmetic_chain_probe/kernel.cu
+)
+
+target_include_directories(probe_runner_controlled_arithmetic_chain
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+target_link_libraries(probe_runner_controlled_arithmetic_chain
+    PRIVATE
+    CUDA::cudart
+)
+
+target_compile_options(probe_runner_controlled_arithmetic_chain PRIVATE
+    $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-v>
+)
+
+set_target_properties(probe_runner_controlled_arithmetic_chain PROPERTIES
+    CUDA_SEPARABLE_COMPILATION ON
+)

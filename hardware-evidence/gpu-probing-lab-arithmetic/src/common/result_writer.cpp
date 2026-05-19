@@ -47,7 +47,9 @@ void write_arithmetic_probe_result_json(
 
     out << "{\n";
     out << "  \"probe\": \"" << json_escape(probe_name) << "\",\n";
-    out << "  \"description\": \"Compares independent arithmetic workloads and dependent arithmetic chains.\",\n";
+    const std::string description = config.get_string("description", "Arithmetic probe result.");
+
+    out << "  \"description\": \"" << json_escape(description) << "\",\n";
 
     out << "  \"config\": {\n";
     out << "    \"blocks\": " << config.get_int("blocks", 1) << ",\n";
