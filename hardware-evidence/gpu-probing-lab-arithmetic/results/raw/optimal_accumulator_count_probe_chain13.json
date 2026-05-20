@@ -1,0 +1,815 @@
+{
+  "probe": "optimal_accumulator_count_probe",
+  "description": "Finds the accumulator count that best exposes ILP for a fixed dependent FFMA chain length.",
+  "config": {
+    "blocks": 1,
+    "threads_per_block": 256,
+    "warps_per_block": 8,
+    "repeat": 10,
+    "use_clock_budget": true,
+    "clock_budget_cycles": 10000000,
+    "iterations": 100000
+  },
+  "records": [
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 39068,
+      "last_clock": 10000155,
+      "sink": 10.568287
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 43858,
+      "last_clock": 10000195,
+      "sink": 11.695309
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 40627,
+      "last_clock": 10000008,
+      "sink": 11.696606
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 38702,
+      "last_clock": 10000081,
+      "sink": 12.547939
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 37105,
+      "last_clock": 10000091,
+      "sink": 13.586757
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 34474,
+      "last_clock": 10000148,
+      "sink": 16.427801
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 32217,
+      "last_clock": 10000304,
+      "sink": 17.789909
+    },
+    {
+      "run": 0,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 32357,
+      "last_clock": 10000090,
+      "sink": 29.205915
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 35730,
+      "last_clock": 10167149,
+      "sink": 9.5309296
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 40116,
+      "last_clock": 10167182,
+      "sink": 10.75869
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 37169,
+      "last_clock": 10166985,
+      "sink": 10.92327
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 35400,
+      "last_clock": 10166969,
+      "sink": 11.840208
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 33928,
+      "last_clock": 10166789,
+      "sink": 12.927017
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 31524,
+      "last_clock": 10166749,
+      "sink": 15.82679
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 29460,
+      "last_clock": 10166644,
+      "sink": 17.236704
+    },
+    {
+      "run": 1,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 29588,
+      "last_clock": 10166650,
+      "sink": 28.644857
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 40427,
+      "last_clock": 10000017,
+      "sink": 11.00635
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 45403,
+      "last_clock": 10000225,
+      "sink": 12.088715
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 42090,
+      "last_clock": 10000217,
+      "sink": 12.026562
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 40072,
+      "last_clock": 10000225,
+      "sink": 12.844337
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 38422,
+      "last_clock": 10000228,
+      "sink": 13.861641
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 35692,
+      "last_clock": 10000153,
+      "sink": 16.677368
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 33353,
+      "last_clock": 10000279,
+      "sink": 18.01877
+    },
+    {
+      "run": 2,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 33499,
+      "last_clock": 10000018,
+      "sink": 29.437723
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 39058,
+      "last_clock": 10000036,
+      "sink": 10.565063
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 43852,
+      "last_clock": 10000092,
+      "sink": 11.693781
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 40633,
+      "last_clock": 10000198,
+      "sink": 11.697954
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 38700,
+      "last_clock": 10000187,
+      "sink": 12.547508
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 37101,
+      "last_clock": 10000183,
+      "sink": 13.585923
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 34468,
+      "last_clock": 10000139,
+      "sink": 16.426577
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 32212,
+      "last_clock": 10000127,
+      "sink": 17.788902
+    },
+    {
+      "run": 3,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 32350,
+      "last_clock": 10000003,
+      "sink": 29.204496
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 37913,
+      "last_clock": 10000117,
+      "sink": 10.206005
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 42566,
+      "last_clock": 10000225,
+      "sink": 11.369491
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 39431,
+      "last_clock": 10000086,
+      "sink": 11.427996
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 37558,
+      "last_clock": 10000087,
+      "sink": 12.301748
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 36006,
+      "last_clock": 10000072,
+      "sink": 13.357885
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 33453,
+      "last_clock": 10000094,
+      "sink": 16.219353
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 31261,
+      "last_clock": 10000145,
+      "sink": 17.597969
+    },
+    {
+      "run": 4,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 31399,
+      "last_clock": 10000188,
+      "sink": 29.011667
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 38913,
+      "last_clock": 10000119,
+      "sink": 10.518324
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 43686,
+      "last_clock": 10000151,
+      "sink": 11.651512
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 40488,
+      "last_clock": 10000185,
+      "sink": 11.665388
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 38554,
+      "last_clock": 10000100,
+      "sink": 12.516006
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 36962,
+      "last_clock": 10000206,
+      "sink": 13.556925
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 34338,
+      "last_clock": 10000019,
+      "sink": 16.400045
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 32089,
+      "last_clock": 10000247,
+      "sink": 17.764189
+    },
+    {
+      "run": 5,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 32229,
+      "last_clock": 10000152,
+      "sink": 29.17996
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 40443,
+      "last_clock": 10000057,
+      "sink": 11.011507
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 45414,
+      "last_clock": 10000036,
+      "sink": 12.091515
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 42066,
+      "last_clock": 10000162,
+      "sink": 12.021126
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 40074,
+      "last_clock": 10000004,
+      "sink": 12.84477
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 38420,
+      "last_clock": 10000275,
+      "sink": 13.861222
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 35690,
+      "last_clock": 10000285,
+      "sink": 16.676958
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 33358,
+      "last_clock": 10000221,
+      "sink": 18.019779
+    },
+    {
+      "run": 6,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 33498,
+      "last_clock": 10000008,
+      "sink": 29.437519
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 38147,
+      "last_clock": 10000088,
+      "sink": 10.278532
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 42826,
+      "last_clock": 10000155,
+      "sink": 11.434827
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 39681,
+      "last_clock": 10000084,
+      "sink": 11.484144
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 37796,
+      "last_clock": 10000020,
+      "sink": 12.352749
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 36235,
+      "last_clock": 10000005,
+      "sink": 13.405495
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 33662,
+      "last_clock": 10000140,
+      "sink": 16.262056
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 31460,
+      "last_clock": 10000246,
+      "sink": 17.637918
+    },
+    {
+      "run": 7,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 31597,
+      "last_clock": 10000089,
+      "sink": 29.051805
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 37994,
+      "last_clock": 10000067,
+      "sink": 10.231111
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 42660,
+      "last_clock": 10000129,
+      "sink": 11.393112
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 39520,
+      "last_clock": 10000092,
+      "sink": 11.447985
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 37652,
+      "last_clock": 10000235,
+      "sink": 12.321873
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 36093,
+      "last_clock": 10000121,
+      "sink": 13.375972
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 33527,
+      "last_clock": 10000018,
+      "sink": 16.234472
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 31337,
+      "last_clock": 10000082,
+      "sink": 17.613226
+    },
+    {
+      "run": 8,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 31470,
+      "last_clock": 10000034,
+      "sink": 29.026058
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 0,
+      "role_id": 0,
+      "role": "chain13_acc1_effective1",
+      "progress": 40449,
+      "last_clock": 10000178,
+      "sink": 11.013441
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 1,
+      "role_id": 1,
+      "role": "chain13_acc2_effective2",
+      "progress": 45414,
+      "last_clock": 10000142,
+      "sink": 12.091515
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 2,
+      "role_id": 2,
+      "role": "chain13_acc3_effective3",
+      "progress": 42069,
+      "last_clock": 10000114,
+      "sink": 12.021806
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 3,
+      "role_id": 3,
+      "role": "chain13_acc4_effective4",
+      "progress": 40077,
+      "last_clock": 10000008,
+      "sink": 12.84542
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 4,
+      "role_id": 4,
+      "role": "chain13_acc5_effective5",
+      "progress": 38418,
+      "last_clock": 10000167,
+      "sink": 13.860804
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 5,
+      "role_id": 5,
+      "role": "chain13_acc7_effective7",
+      "progress": 35694,
+      "last_clock": 10000225,
+      "sink": 16.677778
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 6,
+      "role_id": 6,
+      "role": "chain13_acc8_effective8",
+      "progress": 33355,
+      "last_clock": 10000044,
+      "sink": 18.019175
+    },
+    {
+      "run": 9,
+      "block_id": 0,
+      "warp_id": 7,
+      "role_id": 7,
+      "role": "chain13_acc16_effective13",
+      "progress": 33499,
+      "last_clock": 10000017,
+      "sink": 29.437723
+    }
+  ]
+}

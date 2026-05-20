@@ -14,6 +14,8 @@ import { schedulerPhaseProbeObservation } from "./scheduler_phase_probe";
 import { normalizedWindowProbeObservation } from "./normalized_window_probe";
 import { launchPerturbationProbeObservation } from "./launchPerturbationProbeObservation";
 
+import { addFmaInstructionShapeProbeObservation } from "./add_fma_instruction_shape_probe";
+
 
 export const warpSchedulerObservations = [
   sameWorkloadBaselineObservation,
@@ -31,6 +33,8 @@ export const warpSchedulerObservations = [
   schedulerPhaseProbeObservation,
   normalizedWindowProbeObservation,
   launchPerturbationProbeObservation,
+
+  addFmaInstructionShapeProbeObservation,
 ];
 
 export {
@@ -49,4 +53,6 @@ export {
   schedulerPhaseProbeObservation,
   normalizedWindowProbeObservation,
   launchPerturbationProbeObservation,
+
+  addFmaInstructionShapeProbeObservation,
 };  

@@ -14,6 +14,8 @@ import schedulerPhaseProbe from "./schedulerPhaseProbe ";
 import launchPerturbationProbe from "./launchPerturbationProbe";
 import normalizedWindowProbe from "./normalizedWindowProbe";
 
+import addFmaInstructionShapeProbe from "./addFmaInstructionShapeProbe";
+
 
 
 export const experimentNodes = [
@@ -32,6 +34,8 @@ export const experimentNodes = [
   schedulerPhaseProbe,
   normalizedWindowProbe,
   launchPerturbationProbe,
+
+  addFmaInstructionShapeProbe,
 ];
 
 export {
@@ -50,4 +54,6 @@ export {
   schedulerPhaseProbe,
   normalizedWindowProbe,
   launchPerturbationProbe,
+
+  addFmaInstructionShapeProbe,
 };

@@ -14,61 +14,121 @@ endif()
 
 find_package(CUDAToolkit REQUIRED)
 
-include_directories(
+# ------------------------------------------------------------
+# Common include paths
+# ------------------------------------------------------------
+
+set(GPU_PROBING_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-add_executable(probe_runner_arithmetic_dependency
-    src/main/probe_runner_arithmetic_dependency.cpp
+# ------------------------------------------------------------
+# Common source files shared by all probe runners
+# ------------------------------------------------------------
 
+set(GPU_PROBING_COMMON_SOURCES
     src/common/config_loader.cpp
     src/common/device_info.cpp
     src/common/result_writer.cpp
-
-    src/probes/arithmetic_dependency_probe/host.cpp
-    src/probes/arithmetic_dependency_probe/kernel.cu
 )
 
-target_link_libraries(probe_runner_arithmetic_dependency
-    PRIVATE
-    CUDA::cudart
+# ------------------------------------------------------------
+# Helper function for adding one probe runner
+#
+# Usage:
+#   add_probe_runner(
+#       NAME controlled_arithmetic_chain
+#       CUDA_OPTIONS -Xptxas=-v
+#   )
+#
+# This expects:
+#   src/main/probe_runner_<NAME>.cpp
+#   src/probes/<NAME>_probe/host.cpp
+#   src/probes/<NAME>_probe/kernel.cu
+#
+# Output target:
+#   probe_runner_<NAME>
+# ------------------------------------------------------------
+
+function(add_probe_runner)
+    set(options)
+    set(oneValueArgs NAME)
+    set(multiValueArgs CUDA_OPTIONS EXTRA_SOURCES EXTRA_LIBS)
+
+    cmake_parse_arguments(PROBE
+        "${options}"
+        "${oneValueArgs}"
+        "${multiValueArgs}"
+        ${ARGN}
+    )
+
+    if(NOT PROBE_NAME)
+        message(FATAL_ERROR "add_probe_runner requires NAME")
+    endif()
+
+    set(target_name probe_runner_${PROBE_NAME})
+    set(probe_dir src/probes/${PROBE_NAME}_probe)
+
+    add_executable(${target_name}
+        src/main/probe_runner_${PROBE_NAME}.cpp
+
+        ${GPU_PROBING_COMMON_SOURCES}
+
+        ${probe_dir}/host.cpp
+        ${probe_dir}/kernel.cu
+
+        ${PROBE_EXTRA_SOURCES}
+    )
+
+    target_include_directories(${target_name}
+        PRIVATE
+        ${GPU_PROBING_INCLUDE_DIRS}
+    )
+
+    target_link_libraries(${target_name}
+        PRIVATE
+        CUDA::cudart
+        ${PROBE_EXTRA_LIBS}
+    )
+
+    if(PROBE_CUDA_OPTIONS)
+        target_compile_options(${target_name}
+            PRIVATE
+            $<$<COMPILE_LANGUAGE:CUDA>:${PROBE_CUDA_OPTIONS}>
+        )
+    endif()
+
+    set_target_properties(${target_name} PROPERTIES
+        CUDA_SEPARABLE_COMPILATION ON
+    )
+endfunction()
+
+# ------------------------------------------------------------
+# Probe runners
+# ------------------------------------------------------------
+
+add_probe_runner(
+    NAME arithmetic_dependency
+    CUDA_OPTIONS --use_fast_math
 )
 
-target_compile_options(probe_runner_arithmetic_dependency PRIVATE
-    $<$<COMPILE_LANGUAGE:CUDA>:--use_fast_math>
+add_probe_runner(
+    NAME controlled_arithmetic_chain
+    CUDA_OPTIONS -Xptxas=-v
 )
 
-set_target_properties(probe_runner_arithmetic_dependency PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
+add_probe_runner(
+    NAME irregular_fma_dependency_shape
+    CUDA_OPTIONS -Xptxas=-v
 )
 
-add_executable(probe_runner_controlled_arithmetic_chain
-    src/main/probe_runner_controlled_arithmetic_chain.cpp
-
-    src/common/config_loader.cpp
-    src/common/device_info.cpp
-    src/common/result_writer.cpp
-
-    src/probes/controlled_arithmetic_chain_probe/host.cpp
-    src/probes/controlled_arithmetic_chain_probe/kernel.cu
+add_probe_runner(
+    NAME chain7_tail_distribution
+    CUDA_OPTIONS -Xptxas=-v
 )
 
-target_include_directories(probe_runner_controlled_arithmetic_chain
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-)
-
-target_link_libraries(probe_runner_controlled_arithmetic_chain
-    PRIVATE
-    CUDA::cudart
-)
-
-target_compile_options(probe_runner_controlled_arithmetic_chain PRIVATE
-    $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-v>
-)
-
-set_target_properties(probe_runner_controlled_arithmetic_chain PROPERTIES
-    CUDA_SEPARABLE_COMPILATION ON
+add_probe_runner(
+    NAME optimal_accumulator_count
+    CUDA_OPTIONS -Xptxas=-v
 )
