@@ -12,6 +12,13 @@ void print_device_info() {
     cudaDeviceProp prop{};
     CUDA_CHECK(cudaGetDeviceProperties(&prop, device));
 
+    int clock_rate_khz = 0;
+    CUDA_CHECK(cudaDeviceGetAttribute(
+        &clock_rate_khz,
+        cudaDevAttrClockRate,
+        device
+    ));
+
     std::cout << "=== CUDA Device Info ===\n";
     std::cout << "Device ID: " << device << "\n";
     std::cout << "Name: " << prop.name << "\n";
@@ -22,6 +29,6 @@ void print_device_info() {
     std::cout << "Shared Mem Per Block: " << prop.sharedMemPerBlock << "\n";
     std::cout << "Shared Mem Per Block Opt-in: " << prop.sharedMemPerBlockOptin << "\n";
     std::cout << "Regs Per Block: " << prop.regsPerBlock << "\n";
-    std::cout << "Clock Rate kHz: " << prop.clockRate << "\n";
+    std::cout << "Clock Rate kHz: " << clock_rate_khz << "\n";
     std::cout << "========================\n";
 }
