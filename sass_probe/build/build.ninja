@@ -274,6 +274,84 @@ build bin\fma_f32.exe: CUDA_EXECUTABLE_LINKER__fma_f32_Release CMakeFiles\fma_f3
   TARGET_IMPLIB = fma_f32.lib
   TARGET_PDB = bin\fma_f32.pdb
 
+# =============================================================================
+# Object build statements for EXECUTABLE target fma_contract_f32
+
+
+#############################################
+# Order-only phony target for fma_contract_f32
+
+build cmake_object_order_depends_target_fma_contract_f32: phony || .
+
+build CMakeFiles\fma_contract_f32.dir\kernels\01_arithmetic\fma_contract_f32.cu.obj: CUDA_COMPILER__fma_contract_f32_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\sass_probe\kernels\01_arithmetic\fma_contract_f32.cu || cmake_object_order_depends_target_fma_contract_f32
+  CONFIG = Release
+  DEP_FILE = CMakeFiles\fma_contract_f32.dir\kernels\01_arithmetic\fma_contract_f32.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD -O3 --generate-line-info -Xptxas=-v
+  OBJECT_DIR = CMakeFiles\fma_contract_f32.dir
+  OBJECT_FILE_DIR = CMakeFiles\fma_contract_f32.dir\kernels\01_arithmetic
+  TARGET_COMPILE_PDB = CMakeFiles\fma_contract_f32.dir\
+  TARGET_PDB = bin\fma_contract_f32.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target fma_contract_f32
+
+
+#############################################
+# Link the executable bin\fma_contract_f32.exe
+
+build bin\fma_contract_f32.exe: CUDA_EXECUTABLE_LINKER__fma_contract_f32_Release CMakeFiles\fma_contract_f32.dir\kernels\01_arithmetic\fma_contract_f32.cu.obj
+  CONFIG = Release
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO
+  LINK_LIBRARIES = cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\fma_contract_f32.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\fma_contract_f32.dir\
+  TARGET_FILE = bin\fma_contract_f32.exe
+  TARGET_IMPLIB = fma_contract_f32.lib
+  TARGET_PDB = bin\fma_contract_f32.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target fma_contract_f32_no_fmad
+
+
+#############################################
+# Order-only phony target for fma_contract_f32_no_fmad
+
+build cmake_object_order_depends_target_fma_contract_f32_no_fmad: phony || .
+
+build CMakeFiles\fma_contract_f32_no_fmad.dir\kernels\01_arithmetic\fma_contract_f32.cu.obj: CUDA_COMPILER__fma_contract_f32_no_fmad_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\sass_probe\kernels\01_arithmetic\fma_contract_f32.cu || cmake_object_order_depends_target_fma_contract_f32_no_fmad
+  CONFIG = Release
+  DEP_FILE = CMakeFiles\fma_contract_f32_no_fmad.dir\kernels\01_arithmetic\fma_contract_f32.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD -O3 --generate-line-info --fmad=false -Xptxas=-v
+  OBJECT_DIR = CMakeFiles\fma_contract_f32_no_fmad.dir
+  OBJECT_FILE_DIR = CMakeFiles\fma_contract_f32_no_fmad.dir\kernels\01_arithmetic
+  TARGET_COMPILE_PDB = CMakeFiles\fma_contract_f32_no_fmad.dir\
+  TARGET_PDB = bin\fma_contract_f32_no_fmad.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target fma_contract_f32_no_fmad
+
+
+#############################################
+# Link the executable bin\fma_contract_f32_no_fmad.exe
+
+build bin\fma_contract_f32_no_fmad.exe: CUDA_EXECUTABLE_LINKER__fma_contract_f32_no_fmad_Release CMakeFiles\fma_contract_f32_no_fmad.dir\kernels\01_arithmetic\fma_contract_f32.cu.obj
+  CONFIG = Release
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO
+  LINK_LIBRARIES = cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\fma_contract_f32_no_fmad.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\fma_contract_f32_no_fmad.dir\
+  TARGET_FILE = bin\fma_contract_f32_no_fmad.exe
+  TARGET_IMPLIB = fma_contract_f32_no_fmad.lib
+  TARGET_PDB = bin\fma_contract_f32_no_fmad.pdb
+
 
 #############################################
 # Utility command for edit_cache
@@ -309,6 +387,14 @@ build copy_global: phony bin\copy_global.exe
 
 build copy_global.exe: phony bin\copy_global.exe
 
+build fma_contract_f32: phony bin\fma_contract_f32.exe
+
+build fma_contract_f32.exe: phony bin\fma_contract_f32.exe
+
+build fma_contract_f32_no_fmad: phony bin\fma_contract_f32_no_fmad.exe
+
+build fma_contract_f32_no_fmad.exe: phony bin\fma_contract_f32_no_fmad.exe
+
 build fma_f32: phony bin\fma_f32.exe
 
 build fma_f32.exe: phony bin\fma_f32.exe
@@ -333,7 +419,7 @@ build stg_basic.exe: phony bin\stg_basic.exe
 #############################################
 # Folder: C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build
 
-build all: phony bin\ldg_basic.exe bin\stg_basic.exe bin\copy_global.exe bin\add_f32.exe bin\mul_f32.exe bin\fma_f32.exe
+build all: phony bin\ldg_basic.exe bin\stg_basic.exe bin\copy_global.exe bin\add_f32.exe bin\mul_f32.exe bin\fma_f32.exe bin\fma_contract_f32.exe bin\fma_contract_f32_no_fmad.exe
 
 # =============================================================================
 # Built-in targets

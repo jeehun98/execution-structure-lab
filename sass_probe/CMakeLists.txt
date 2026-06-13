@@ -32,3 +32,32 @@ add_probe(copy_global kernels/00_memory/copy_global.cu)
 add_probe(add_f32 kernels/01_arithmetic/add_f32.cu)
 add_probe(mul_f32 kernels/01_arithmetic/mul_f32.cu)
 add_probe(fma_f32 kernels/01_arithmetic/fma_f32.cu)
+
+add_executable(fma_contract_f32
+    kernels/01_arithmetic/fma_contract_f32.cu
+)
+
+set_target_properties(fma_contract_f32 PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+target_compile_options(fma_contract_f32 PRIVATE
+    $<$<COMPILE_LANGUAGE:CUDA>:-O3>
+    $<$<COMPILE_LANGUAGE:CUDA>:--generate-line-info>
+    $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-v>
+)
+
+add_executable(fma_contract_f32_no_fmad
+    kernels/01_arithmetic/fma_contract_f32.cu
+)
+
+set_target_properties(fma_contract_f32_no_fmad PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+target_compile_options(fma_contract_f32_no_fmad PRIVATE
+    $<$<COMPILE_LANGUAGE:CUDA>:-O3>
+    $<$<COMPILE_LANGUAGE:CUDA>:--generate-line-info>
+    $<$<COMPILE_LANGUAGE:CUDA>:--fmad=false>
+    $<$<COMPILE_LANGUAGE:CUDA>:-Xptxas=-v>
+)

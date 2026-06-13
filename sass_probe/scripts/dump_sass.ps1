@@ -10,7 +10,11 @@ $targets = @(
 
     @{ name = "add_f32";     group = "01_arithmetic" },
     @{ name = "mul_f32";     group = "01_arithmetic" },
-    @{ name = "fma_f32";     group = "01_arithmetic" }
+    @{ name = "fma_f32";     group = "01_arithmetic" },
+
+    # FMA contraction experiments
+    @{ name = "fma_contract_f32";          group = "01_arithmetic" },
+    @{ name = "fma_contract_f32_no_fmad";  group = "01_arithmetic" }
 )
 
 foreach ($t in $targets) {

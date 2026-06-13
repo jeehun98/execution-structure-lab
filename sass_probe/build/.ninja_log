@@ -1,15 +1,19 @@
 # ninja log v5
-58	4508	8026185651714870	CMakeFiles/copy_global.dir/kernels/00_memory/copy_global.cu.obj	9b3e7f33750e2bff
-51	4527	8026185651724787	CMakeFiles/stg_basic.dir/kernels/00_memory/stg_basic.cu.obj	2b04a66918ce8f78
+69	4255	8026187042090767	CMakeFiles/copy_global.dir/kernels/00_memory/copy_global.cu.obj	9b3e7f33750e2bff
+60	4242	8026187042001148	CMakeFiles/stg_basic.dir/kernels/00_memory/stg_basic.cu.obj	2b04a66918ce8f78
 45	4646	8026185653079580	CMakeFiles/ldg_basic.dir/kernels/00_memory/ldg_basic.cu.obj	a105adb0945afec5
-64	4735	8026185653962773	CMakeFiles/add_f32.dir/kernels/01_arithmetic/add_f32.cu.obj	ba44f3b24dc311c5
 99	283	8026186635653747	bin/fma_f32.exe	31b9249d3428453c
 110	4210	8026186537270819	CMakeFiles/fma_f32.dir/kernels/01_arithmetic/fma_f32.cu.obj	e56ef9723bb837af
+64	4735	8026185653962773	CMakeFiles/add_f32.dir/kernels/01_arithmetic/add_f32.cu.obj	ba44f3b24dc311c5
 86	267	8026186635500600	bin/mul_f32.exe	41588d4d36fd3c67
 102	4212	8026186537290454	CMakeFiles/mul_f32.dir/kernels/01_arithmetic/mul_f32.cu.obj	cd94cceb4b7a7b1f
 4648	4839	8026185655179891	bin/ldg_basic.exe	dd710c1b5c105ffe
 92	285	8026186498097031	bin/add_f32.exe	5d969229b23fab65
-60	4242	8026187042001148	CMakeFiles/stg_basic.dir/kernels/00_memory/stg_basic.cu.obj	2b04a66918ce8f78
-69	4255	8026187042090767	CMakeFiles/copy_global.dir/kernels/00_memory/copy_global.cu.obj	9b3e7f33750e2bff
 4244	4422	8026187043902773	bin/stg_basic.exe	ffe7abd9d6483e3
 4256	4427	8026187043947168	bin/copy_global.exe	abc17806332cab84
+44	623	8030285288162200	build.ninja	bef1ddd8210f43fe
+44	623	8030285288162200	C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/cmake_install.cmake	bef1ddd8210f43fe
+33	4722	8030285335364205	CMakeFiles/fma_contract_f32.dir/kernels/01_arithmetic/fma_contract_f32.cu.obj	3529e8b8023e9481
+4724	4947	8030285337679230	bin/fma_contract_f32.exe	12ec29b8b47d228a
+31	4079	8030285555033432	CMakeFiles/fma_contract_f32_no_fmad.dir/kernels/01_arithmetic/fma_contract_f32.cu.obj	41a85c9e384dcc0d
+4080	4255	8030285556855544	bin/fma_contract_f32_no_fmad.exe	b6deff71709dc3df
