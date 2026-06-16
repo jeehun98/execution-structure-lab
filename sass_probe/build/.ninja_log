@@ -1,27 +1,3 @@
-# ninja log v7
-25	4356	8030681511896613	CMakeFiles/ldg_basic.dir/kernels/00_memory/ldg_basic.cu.obj	38a96bc10bcf9aa5
-36	4440	8030681512009416	CMakeFiles/stg_basic.dir/kernels/00_memory/stg_basic.cu.obj	6517607b4291e5e3
-57	4469	8030681512215596	CMakeFiles/add_f32.dir/kernels/01_arithmetic/add_f32.cu.obj	5c76f9851187bdfc
-4476	5016	8030681556402567	bin/add_f32.exe	a8a21290097905e9
-4402	5027	8030681555675693	bin/ldg_basic.exe	df96d70de63400b4
-4452	5081	8030681556167152	bin/stg_basic.exe	a0afe006f26fef5e
-83	5130	8030681512472179	CMakeFiles/fma_f32.dir/kernels/01_arithmetic/fma_f32.cu.obj	6a76a0b0e9afe9b5
-108	5155	8030681512727811	CMakeFiles/clamp_f32.dir/kernels/02_control/clamp_f32.cu.obj	6af0a71c31f31c77
-46	5265	8030681512114978	CMakeFiles/copy_global.dir/kernels/00_memory/copy_global.cu.obj	7741ccc1ad4aa104
-95	5316	8030681512592414	CMakeFiles/relu_f32.dir/kernels/02_control/relu_f32.cu.obj	38d020534619ce54
-5162	5470	8030681563263789	bin/clamp_f32.exe	1451ead79de7913f
-5140	5484	8030681563050381	bin/fma_f32.exe	efb41fe9175a4287
-69	5520	8030681512351826	CMakeFiles/mul_f32.dir/kernels/01_arithmetic/mul_f32.cu.obj	5c67468bc8a53c7b
-121	5544	8030681512863149	CMakeFiles/reduce_sum_f32.dir/kernels/03_reduction/reduce_sum_f32.cu.obj	824516fe38f0cddc
-135	5565	8030681512998979	CMakeFiles/softmax_small_f32.dir/kernels/05_nn_ops/softmax_small_f32.cu.obj	99636bbe5e8c89ed
-5276	5585	8030681564412109	bin/copy_global.exe	6f638d6c729e5ba1
-150	5594	8030681513154855	CMakeFiles/online_softmax_f32.dir/kernels/05_nn_ops/online_softmax_f32.cu.obj	773055f9c6f4ae3b
-5325	5682	8030681564903091	bin/relu_f32.exe	969e26048c70fb11
-5529	5788	8030681566945026	bin/mul_f32.exe	85f3d60b38a1e7ea
-5550	5828	8030681567150713	bin/reduce_sum_f32.exe	ea8317e5b2b68bda
-5570	5829	8030681567340958	bin/softmax_small_f32.exe	2809093ece888a73
-5604	5845	8030681567688896	bin/online_softmax_f32.exe	d7e44347e2e622bf
-162	6255	8030681513270154	CMakeFiles/fma_contract_f32.dir/kernels/01_arithmetic/fma_contract_f32.cu.obj	eaf4d3227ffc2d29
-193	6278	8030681513584286	CMakeFiles/fma_contract_f32_no_fmad.dir/kernels/01_arithmetic/fma_contract_f32.cu.obj	aadb7aec6fcef476
-6264	6441	8030681574289590	bin/fma_contract_f32.exe	6c2686f0cc11abb
-6284	6457	8030681574490136	bin/fma_contract_f32_no_fmad.exe	8e3e697eb0f7f07c
+# ninja log v5
+43	6942	8032910606629219	CMakeFiles/flashattention_toy_f32.dir/kernels/05_nn_ops/flashattention_toy_f32.cu.obj	2146f764242a83b7
+6947	7165	8032910609046864	bin/flashattention_toy_f32.exe	66ca2dd3a0ba4738

@@ -19,6 +19,8 @@ $targets = @(
 
     @{ name = "softmax_small_f32";  group = "05_nn_ops" },
     @{ name = "online_softmax_f32"; group = "05_nn_ops" }
+
+    @{ name = "flashattention_toy_f32"; group = "05_nn_ops" }
 )
 foreach ($t in $targets) {
     $name = $t.name

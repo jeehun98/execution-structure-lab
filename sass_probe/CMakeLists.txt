@@ -143,3 +143,7 @@ add_probe(softmax_small_f32
 add_probe(online_softmax_f32
     kernels/05_nn_ops/online_softmax_f32.cu
 )
+
+add_probe(flashattention_toy_f32
+    kernels/05_nn_ops/flashattention_toy_f32.cu
+)
