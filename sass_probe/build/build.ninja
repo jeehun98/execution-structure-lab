@@ -586,6 +586,84 @@ build bin\flashattention_toy_f32.exe: CUDA_EXECUTABLE_LINKER__flashattention_toy
   TARGET_IMPLIB = flashattention_toy_f32.lib
   TARGET_PDB = bin\flashattention_toy_f32.pdb
 
+# =============================================================================
+# Object build statements for EXECUTABLE target attention_prob_materialization_f32
+
+
+#############################################
+# Order-only phony target for attention_prob_materialization_f32
+
+build cmake_object_order_depends_target_attention_prob_materialization_f32: phony || .
+
+build CMakeFiles\attention_prob_materialization_f32.dir\kernels\05_nn_ops\attention_prob_materialization_f32.cu.obj: CUDA_COMPILER__attention_prob_materialization_f32_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\sass_probe\kernels\05_nn_ops\attention_prob_materialization_f32.cu || cmake_object_order_depends_target_attention_prob_materialization_f32
+  CONFIG = Release
+  DEP_FILE = CMakeFiles\attention_prob_materialization_f32.dir\kernels\05_nn_ops\attention_prob_materialization_f32.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD -O3 -lineinfo -Xptxas=-v -Xptxas=-O3 --use_fast_math -Xcompiler=/utf-8
+  OBJECT_DIR = CMakeFiles\attention_prob_materialization_f32.dir
+  OBJECT_FILE_DIR = CMakeFiles\attention_prob_materialization_f32.dir\kernels\05_nn_ops
+  TARGET_COMPILE_PDB = CMakeFiles\attention_prob_materialization_f32.dir\
+  TARGET_PDB = bin\attention_prob_materialization_f32.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target attention_prob_materialization_f32
+
+
+#############################################
+# Link the executable bin\attention_prob_materialization_f32.exe
+
+build bin\attention_prob_materialization_f32.exe: CUDA_EXECUTABLE_LINKER__attention_prob_materialization_f32_Release CMakeFiles\attention_prob_materialization_f32.dir\kernels\05_nn_ops\attention_prob_materialization_f32.cu.obj
+  CONFIG = Release
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO
+  LINK_LIBRARIES = cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\attention_prob_materialization_f32.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\attention_prob_materialization_f32.dir\
+  TARGET_FILE = bin\attention_prob_materialization_f32.exe
+  TARGET_IMPLIB = attention_prob_materialization_f32.lib
+  TARGET_PDB = bin\attention_prob_materialization_f32.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target attention_score_shared_f32
+
+
+#############################################
+# Order-only phony target for attention_score_shared_f32
+
+build cmake_object_order_depends_target_attention_score_shared_f32: phony || .
+
+build CMakeFiles\attention_score_shared_f32.dir\kernels\05_nn_ops\attention_score_shared_f32.cu.obj: CUDA_COMPILER__attention_score_shared_f32_unscanned_Release C$:\Users\owner\Desktop\execution-structure-lab\sass_probe\kernels\05_nn_ops\attention_score_shared_f32.cu || cmake_object_order_depends_target_attention_score_shared_f32
+  CONFIG = Release
+  DEP_FILE = CMakeFiles\attention_score_shared_f32.dir\kernels\05_nn_ops\attention_score_shared_f32.cu.obj.d
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG -std=c++17 "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD -O3 -lineinfo -Xptxas=-v -Xptxas=-O3 --use_fast_math -Xcompiler=/utf-8
+  OBJECT_DIR = CMakeFiles\attention_score_shared_f32.dir
+  OBJECT_FILE_DIR = CMakeFiles\attention_score_shared_f32.dir\kernels\05_nn_ops
+  TARGET_COMPILE_PDB = CMakeFiles\attention_score_shared_f32.dir\
+  TARGET_PDB = bin\attention_score_shared_f32.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target attention_score_shared_f32
+
+
+#############################################
+# Link the executable bin\attention_score_shared_f32.exe
+
+build bin\attention_score_shared_f32.exe: CUDA_EXECUTABLE_LINKER__attention_score_shared_f32_Release CMakeFiles\attention_score_shared_f32.dir\kernels\05_nn_ops\attention_score_shared_f32.cu.obj
+  CONFIG = Release
+  FLAGS = -D_WINDOWS -Xcompiler=" /EHsc" -Xcompiler="-O2 -Ob2" -DNDEBUG "--generate-code=arch=compute_86,code=[compute_86,sm_86]" -Xcompiler=-MD
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO
+  LINK_LIBRARIES = cudadevrt.lib  cudart_static.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\attention_score_shared_f32.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\attention_score_shared_f32.dir\
+  TARGET_FILE = bin\attention_score_shared_f32.exe
+  TARGET_IMPLIB = attention_score_shared_f32.lib
+  TARGET_PDB = bin\attention_score_shared_f32.pdb
+
 
 #############################################
 # Utility command for edit_cache
@@ -616,6 +694,14 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 build add_f32: phony bin\add_f32.exe
 
 build add_f32.exe: phony bin\add_f32.exe
+
+build attention_prob_materialization_f32: phony bin\attention_prob_materialization_f32.exe
+
+build attention_prob_materialization_f32.exe: phony bin\attention_prob_materialization_f32.exe
+
+build attention_score_shared_f32: phony bin\attention_score_shared_f32.exe
+
+build attention_score_shared_f32.exe: phony bin\attention_score_shared_f32.exe
 
 build clamp_f32: phony bin\clamp_f32.exe
 
@@ -677,7 +763,7 @@ build stg_basic.exe: phony bin\stg_basic.exe
 #############################################
 # Folder: C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build
 
-build all: phony bin\ldg_basic.exe bin\stg_basic.exe bin\copy_global.exe bin\add_f32.exe bin\mul_f32.exe bin\fma_f32.exe bin\fma_contract_f32.exe bin\fma_contract_f32_no_fmad.exe bin\relu_f32.exe bin\clamp_f32.exe bin\reduce_sum_f32.exe bin\softmax_small_f32.exe bin\online_softmax_f32.exe bin\flashattention_toy_f32.exe
+build all: phony bin\ldg_basic.exe bin\stg_basic.exe bin\copy_global.exe bin\add_f32.exe bin\mul_f32.exe bin\fma_f32.exe bin\fma_contract_f32.exe bin\fma_contract_f32_no_fmad.exe bin\relu_f32.exe bin\clamp_f32.exe bin\reduce_sum_f32.exe bin\softmax_small_f32.exe bin\online_softmax_f32.exe bin\flashattention_toy_f32.exe bin\attention_prob_materialization_f32.exe bin\attention_score_shared_f32.exe
 
 # =============================================================================
 # Built-in targets

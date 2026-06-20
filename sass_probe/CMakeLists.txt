@@ -147,3 +147,15 @@ add_probe(online_softmax_f32
 add_probe(flashattention_toy_f32
     kernels/05_nn_ops/flashattention_toy_f32.cu
 )
+
+add_probe(attention_prob_materialization_f32
+    kernels/05_nn_ops/attention_prob_materialization_f32.cu
+    CUDA_OPTIONS
+        -Xcompiler=/utf-8
+)
+
+add_probe(attention_score_shared_f32
+    kernels/05_nn_ops/attention_score_shared_f32.cu
+    CUDA_OPTIONS
+        -Xcompiler=/utf-8
+)

@@ -12,5 +12,7 @@ C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/CMakeFiles/reduc
 C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/CMakeFiles/softmax_small_f32.dir
 C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/CMakeFiles/online_softmax_f32.dir
 C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/CMakeFiles/flashattention_toy_f32.dir
+C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/CMakeFiles/attention_prob_materialization_f32.dir
+C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/CMakeFiles/attention_score_shared_f32.dir
 C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/CMakeFiles/edit_cache.dir
 C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/CMakeFiles/rebuild_cache.dir
