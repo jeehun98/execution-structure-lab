@@ -1,9 +1,13 @@
 # ninja log v5
 43	6942	8032910606629219	CMakeFiles/flashattention_toy_f32.dir/kernels/05_nn_ops/flashattention_toy_f32.cu.obj	2146f764242a83b7
-6947	7165	8032910609046864	bin/flashattention_toy_f32.exe	66ca2dd3a0ba4738
-49	693	8035477131204492	build.ninja	bef1ddd8210f43fe
-33	6087	8035420933380206	CMakeFiles/attention_prob_materialization_f32.dir/kernels/05_nn_ops/attention_prob_materialization_f32.cu.obj	676e755bcdcb8ca8
-49	693	8035477131142514	C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/cmake_install.cmake	bef1ddd8210f43fe
-6088	6320	8035420935793116	bin/attention_prob_materialization_f32.exe	9ff15bf386f725db
-54	6039	8035477233197731	CMakeFiles/attention_score_shared_f32.dir/kernels/05_nn_ops/attention_score_shared_f32.cu.obj	5ca6cae6c57e88
 6040	6222	8035477235136551	bin/attention_score_shared_f32.exe	59cc0592501e42f5
+54	6039	8035477233197731	CMakeFiles/attention_score_shared_f32.dir/kernels/05_nn_ops/attention_score_shared_f32.cu.obj	5ca6cae6c57e88
+6947	7165	8032910609046864	bin/flashattention_toy_f32.exe	66ca2dd3a0ba4738
+33	6087	8035420933380206	CMakeFiles/attention_prob_materialization_f32.dir/kernels/05_nn_ops/attention_prob_materialization_f32.cu.obj	676e755bcdcb8ca8
+49	693	8039802307906538	build.ninja	bef1ddd8210f43fe
+49	693	8039802307849072	C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/cmake_install.cmake	bef1ddd8210f43fe
+6088	6320	8035420935793116	bin/attention_prob_materialization_f32.exe	9ff15bf386f725db
+48	305	8039802307906538	build.ninja	bef1ddd8210f43fe
+48	305	8039802307906538	C:/Users/owner/Desktop/execution-structure-lab/sass_probe/build/cmake_install.cmake	bef1ddd8210f43fe
+33	4734	8039802355321425	CMakeFiles/relu_f32.dir/kernels/02_control/relu_f32.cu.obj	4392ed7287159d48
+4737	4965	8039802357680270	bin/relu_f32.exe	8b44c794e1afaafc
